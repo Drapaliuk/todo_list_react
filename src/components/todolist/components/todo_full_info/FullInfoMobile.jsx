@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function FullInfoMobile() {
+export function FullInfoMobile() {
 return (
 <div class="todo-full-info todo-full-info_theme_dark desktop">
     <div class="todo-full-text">

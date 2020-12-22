@@ -1,12 +1,12 @@
 import React from 'react'
-import {Bar, TodoLists, FullInfo} from './components';
+import {Bar, TodoList, FullInfo} from './components';
 
 export function Application() {
 
 return (
 <div class="container">
     <Bar />
-    <TodoLists />
+    <TodoList />
     <FullInfo />
 </div>
 )

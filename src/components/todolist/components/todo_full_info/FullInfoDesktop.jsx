@@ -1,4 +1,5 @@
 import React from 'react'
+import { Comment, SubTask } from './components'
 
 export function FullInfo() {
 return (
@@ -54,55 +55,14 @@ return (
                 <input class="todo-subtasks__add-form-input" type="text" placeholder="add subtask" />
             </form>
             <ul class="todo-subtasks__list">
-                <li class="todo-subtasks__list-item">
-                    <div class="todo-subtask">
-                        <input class="todo-subtask__check-input-subtask" type="checkbox" />
-                        <span class="todo-subtask__text">Some subtask</span>
-                        <button class="delete-btn delete-btn_todo_subtask">
-                            <svg class="delete-btn__icon">
-                                <use href="./src/img/sprite.svg#icon-cancel"></use>
-                            </svg>
-                        </button>
-                    </div>
-
-                </li>
-                <li class="todo-subtasks__list-item">
-                    <div class="todo-subtask">
-                        <input class="todo-subtask__check-input-subtask" type="checkbox" />
-                        <span class="todo-subtask__text">Some subtask</span>
-                        <button class="delete-btn delete-btn_todo_subtask">
-                            <svg class="delete-btn__icon">
-                                <use href="./src/img/sprite.svg#icon-cancel"></use>
-                            </svg>
-                        </button>
-                    </div>
-                </li>
+                <SubTask />
             </ul>
         </div>
 
         <textarea class="todo-note" name="" id="" cols="30" rows="10" placeholder="Add note"></textarea>
 
         <ul class="todo-comments-list">
-            <li class="todo-comments-list__item">
-                <div class="todo-comment">
-                    <span class="todo-comment__text">Some comment</span>
-                    <button class="delete-btn delete-btn_todo_subtask">
-                        <svg class="delete-btn__icon">
-                            <use href="./src/img/sprite.svg#icon-cancel"></use>
-                        </svg>
-                    </button>
-                </div>
-            </li>
-            <li class="todo-comments-list__item">
-                <div class="todo-comment">
-                    <span class="todo-comment__text">Some comment</span>
-                    <button class="delete-btn delete-btn_todo_subtask">
-                        <svg class="delete-btn__icon">
-                            <use href="./src/img/sprite.svg#icon-cancel"></use>
-                        </svg>
-                    </button>
-                </div>
-            </li>
+            <Comment />
         </ul>
     </div>
 

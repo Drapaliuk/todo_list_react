@@ -1,13 +1,15 @@
 import './App.css';
 // import Authorization from './components/authorization/Authorization';
 import {Route, BrowserRouter, Redirect} from 'react-router-dom';
-import { Application, Authorization } from './components';
+import { Application, Authorization, Introduction } from './components';
 function App() {
   return (
         <BrowserRouter >
+            <Route exact path = '/' component = {Introduction} />
             <Route path = '/auth' component = {Authorization}/>
-            <Route exact path = '/' component = {Application} />
-            {/* <Redirect to = '/auth/introduction' /> */}
+            <Route path = '/tasks' component = {Application}/>
+
+            
         </BrowserRouter>
   );
 }

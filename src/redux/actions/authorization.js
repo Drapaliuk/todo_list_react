@@ -45,3 +45,13 @@ export const logOut = () => {
     localStorageManipulator.deleteToken()
     return isAuthorization(false)
 }
+
+export const registration = async (login, password) => dispatch => {
+    const {responseCode, token, refreshToken} = await authAPI.registration(login, password);
+    if(responseCode === 0) {
+        return dispatch(isAuthorization(false))
+    }
+    localStorageManipulator.saveToken(token);
+    localStorageManipulator.saveRefreshToken(refreshToken);
+    dispatch(isAuthorization(true));
+}

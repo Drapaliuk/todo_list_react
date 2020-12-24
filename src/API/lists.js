@@ -1,1 +1,6 @@
-const { default: Axios } = require("axios");
+import axios from 'axios';
+const instance = axios.create({baseURL: 'http://localhost:4000/auth'});
+
+export const listsAPI = {
+    
+}

@@ -1,7 +1,9 @@
-import { IS_AUTHORIZATION } from '../../acctions_types';
+import { IS_AUTHORIZATION } from '../../actions_types';
+import { IS_FETCHING_CHECK_AUTH } from '../../actions_types/authorization';
 
 const initialState = {
-    isAuthorization: false
+    isAuthorization: false,
+    isFetchingCheckAuth: true,
 }
 
 export const authorization = (prevState = initialState, action) => {
@@ -10,6 +12,11 @@ export const authorization = (prevState = initialState, action) => {
             return {
                 ...prevState,
                 isAuthorization: action.payload
+            }
+        case IS_FETCHING_CHECK_AUTH: 
+            return {
+                ...prevState,
+                isFetchingCheckAuth: action.payload
             }
         default: return prevState
     }

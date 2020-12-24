@@ -2,16 +2,12 @@ import React from 'react'
 
 
 export const RenderField = ({input, meta, ...attributes}) => {
-    const {touched, invalid, error, visited} = meta;
-    const isInvalid = touched && error;
+    const {touched, invalid, error} = meta;
+    const isInvalid = touched && invalid;
     const [isVisibleMessage, setVisibleMessage] = React.useState(false);
-    const [isVisibleMessageSwitch, setVisibleMessageSwitch] = React.useState(false);
-    const onSwitchMessage = () => setVisibleMessage(!isVisibleMessage)
-    console.log('isInvalid', isInvalid)
-    
-    if(isInvalid) {
-        // setVisibleMessageSwitch(true)
-    }
+    const onShowInvalidMessage = () => setVisibleMessage(!isVisibleMessage)
+
+    console.log(attributes.type, isInvalid)
 
     return  (<div class="login__input-wrapper">
         <label for="login-password">
@@ -22,16 +18,16 @@ export const RenderField = ({input, meta, ...attributes}) => {
         <input className="login__passsword" {...input} {...attributes} />
 
         {
-            isVisibleMessage &&
+            isVisibleMessage || isInvalid &&
             <div class="login__valid-message">
                 <div class="triangle-right"></div>
                 <div class="triangle-down"></div>
-                Пароль має бути не менше 6 символів
+                {error.message}
             </div>
         }
         {
-            isVisibleMessageSwitch &&
-            <button onClick = {onSwitchMessage} class="authorization__show-invalid-message">
+            isInvalid &&
+            <button onClick = {onShowInvalidMessage} class="authorization__show-invalid-message">
                 error
                 {/* <svg class="authorization__invalid-icon">
                     <use href="#icon-warning-sign"></use>

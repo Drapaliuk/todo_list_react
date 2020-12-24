@@ -1,8 +1,6 @@
 export const required = value => {
-    console.log('Req', value)
-    return value ? undefined : 'Required'
+    return value ? undefined : {name: 'Required', message: 'This field is required!'}
 };
 export const minLength = value => {
-    console.log(value)
-    return  value && value.length < 10 ? `Must be 10 characters or more` : undefined
+    return  value && value.length < 10 ? {name: 'Too short', message: 'Must be 10 characters or more'} : undefined
 }

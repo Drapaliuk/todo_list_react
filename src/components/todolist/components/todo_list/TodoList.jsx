@@ -4,7 +4,7 @@ import { CompletedTask, MobileHeader, TodoListSettings, UncompletedTask } from '
 export function TodoList() {
 return (
         <section className="todo-section todo-section_theme_dark">
-            <MobileHeader />
+            {/* <MobileHeader /> */}
 
             <input className="add-todo add-todo_theme_dark" type="text" placeholder="+ Add todo" />
 

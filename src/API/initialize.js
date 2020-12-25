@@ -1,9 +1,10 @@
-import axios from 'axios';
+import {instance} from './configs/instance'
 
-const instance = axios.create({baseURL: 'http://localhost:4000'})
+console.log('!!!', instance.defaults)
 
 export const initializeAPI = {
     initialize: (token, refreshToken) => {
+        console.log('!!!!!!!!!!!!!!!!!')
         return instance.post('/initialize', {refreshToken}, {headers: {Authorization: token}})
     },
     

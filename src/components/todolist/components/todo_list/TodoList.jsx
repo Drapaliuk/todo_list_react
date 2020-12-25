@@ -1,5 +1,6 @@
 import React from 'react'
-import { CompletedTask, MobileHeader, TodoListSettings, UncompletedTask } from './components'
+import { Route } from 'react-router-dom'
+import { CompletedTask, MobileHeader,EditListLabelDesktop, TodoListSettings, UncompletedTask } from './components'
 
 export function TodoList() {
 return (
@@ -7,7 +8,7 @@ return (
             {/* <MobileHeader /> */}
 
             <input className="add-todo add-todo_theme_dark" type="text" placeholder="+ Add todo" />
-
+            <Route exact path = '/tasks/edit-list'  component = {EditListLabelDesktop} />
             <ul className="todo-list">
                 <UncompletedTask />
             </ul>

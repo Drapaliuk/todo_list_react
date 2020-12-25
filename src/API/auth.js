@@ -1,25 +1,23 @@
-import axios from 'axios';
-
-const instance = axios.create({baseURL: 'http://localhost:4000/auth'})
+import {instance} from './configs/instance';
 
 export const authAPI = {
     checkAuth: token => {
-        return instance.get('/check', {headers: {Authorization: token}})
+        return instance.get('/auth/check', {headers: {Authorization: token}})
     },
     
     login: (login, password) => {
-        return instance.post('/login', {login, password})
+        return instance.post('/auth/login', {login, password})
     },
     
     registration: (login, password) => {
-        return instance.post('/registration', {login, password})
+        return instance.post('/auth/registration', {login, password})
     },
     
     logout: token => {
-        return instance.delete('/logout', {headers: {Authorization: token}})
+        return instance.delete('/auth/logout', {headers: {Authorization: token}})
     },
     
     refreshToken: (token, refreshToken) => {
-        return instance.post('refreshToken', refreshToken,{headers: {Authorization: token}})
+        return instance.post('/auth/refreshToken', refreshToken,{headers: {Authorization: token}})
     }
 }

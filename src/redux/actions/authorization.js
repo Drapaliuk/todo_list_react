@@ -13,11 +13,13 @@ export const login = (login, password) => async dispatch => {
     if(responseCode === 0) {
         return dispatch(isAuthorization(false))
     }
+    // localStorageManipulator.saveAuthToken(token);
+    // localStorageManipulator.saveRefreshToken(refreshToken);
 
-    localStorageManipulator.saveAuthToken(token);
-    localStorageManipulator.saveRefreshToken(refreshToken);
+    localStorageManipulator.saveTokens(token, refreshToken);
+    
     dispatch(isAuthorization(true));
-    return dispatch(fetchingCheckAuth(false))
+    return dispatch(fetchingCheckAuth(false));
 
 }
 

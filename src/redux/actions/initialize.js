@@ -17,16 +17,18 @@ export const initialize = () => async dispatch => {
     const refreshToken = localStorageManipulator.getRefreshToken();
 
     const response = await initializeAPI.initialize(token, refreshToken);
-    const {responseCode, newToken, newRefreshToken, payload} = response.data;
+    const {responseCode, shouldUpdateTokens, payload} = response.data;
+    console.log('response.data', response.data)
+    console.log('should', shouldUpdateTokens)
+    console.log('payload', payload)
     if(responseCode === 0) {
         dispatch(isAuthorization(false));
         dispatch(isInitialized(false));
         dispatch(fetchingInitData(false));
         return
     }
-    localStorageManipulator.saveToken(newToken);
-    localStorageManipulator.saveRefreshToken(newRefreshToken);
 
+    if(shouldUpdateTokens) localStorageManipulator.saveTokens(shouldUpdateTokens)
 
     const {tasks, biography, settings} = payload;
 

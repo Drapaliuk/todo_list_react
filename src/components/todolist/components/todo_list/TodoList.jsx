@@ -1,16 +1,33 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
+import { saveNewTask } from '../../../../redux/actions/tasks/tasks';
+import { getSelectedListId, getTasks } from '../../../../redux/selectors';
 import { CompletedTask, MobileHeader,EditListLabelDesktop, TodoListSettings, UncompletedTask } from './components'
+import { NewTaskInput } from './components/new_task_input/NewTaskInput';
 
 export function TodoList() {
-return (
+    console.log('todo list rerender')
+    const dispatch = useDispatch();
+    const selectedListId = useSelector(state => getSelectedListId(state))
+    const tasks = useSelector(state => getTasks(state));
+    console.log('tasks', tasks)
+    const onSaveTask = text => event => {
+        const KEY_ENTER = 13;
+        if(event.keyCode === KEY_ENTER) {
+            dispatch(saveNewTask(selectedListId, text))
+        }
+    }
+    
+    return (
         <section className="todo-section todo-section_theme_dark">
-            {/* <MobileHeader /> */}
-
-            <input className="add-todo add-todo_theme_dark" type="text" placeholder="+ Add todo" />
+            <NewTaskInput onSaveTask = {onSaveTask}  />
             <Route exact path = '/tasks/edit-list'  component = {EditListLabelDesktop} />
             <ul className="todo-list">
-                <UncompletedTask />
+                {
+                    tasks.map(task => <UncompletedTask text = {task.text} />)
+                }
+                
             </ul>
             <div className="visible-completed-todo visible-completed-todo_theme_dark">
                 <button className="visible-completed-todo__btn">completed item</button>
@@ -26,5 +43,5 @@ return (
             </ul>
             <TodoListSettings />
         </section>
-)
+    )
 }

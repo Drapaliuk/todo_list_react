@@ -1,5 +1,6 @@
 import { listsAPI } from "../../../API";
-import { INITIALIZED_TASKS, SAVE_NEW_LIST, SELECT_TASKS_LIST, DELETE_TASKS_LIST } from "../../actions_types";
+import { tasksAPI } from "../../../API/tasks";
+import { INITIALIZED_TASKS, SAVE_NEW_LIST, SELECT_TASKS_LIST, DELETE_TASKS_LIST, CLEAR_SELECTED_LIST, SAVE_NEW_TASK } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
 export const saveNewList = newListName => async dispatch => {
@@ -7,7 +8,14 @@ export const saveNewList = newListName => async dispatch => {
     dispatch({type: SAVE_NEW_LIST, payload: list})
 }
 export const selectTasksList = listId => ({type: SELECT_TASKS_LIST, payload: listId});
+
 export const deleteTasksList = listId => async dispatch => {
-    const { responseCode } = (await listsAPI.deleteList(listId)).data;
-    if(responseCode === 1) return dispatch({type: DELETE_TASKS_LIST})
+    const {deletedListId} = (await listsAPI.deleteList(listId)).data;
+    return dispatch({type: DELETE_TASKS_LIST, payload: deletedListId})
 }
+
+export const clearSelectedList = () => ({type: CLEAR_SELECTED_LIST})
+export const saveNewTask = (selectedListId, text) => async dispatch => {
+    const {savedTask, listId} = (await tasksAPI.saveNewTask(selectedListId, text)).data;
+    return dispatch({type: SAVE_NEW_TASK, payload: {savedTask, listId}})
+} 

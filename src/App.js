@@ -27,7 +27,7 @@ function App() {
 
   return (
         <BrowserRouter >
-            {isAuthorization && <Redirect to = '/tasks' />}
+            {/* {isAuthorization && <Redirect to = '/tasks' />} */}
             <Route exact path = '/' component = {Introduction} />
             <Route path = '/auth' component = {Authorization}/>
             <Route path = '/tasks' component = {Application}/>

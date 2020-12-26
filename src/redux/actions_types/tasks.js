@@ -6,3 +6,4 @@ export const CLEAR_SELECTED_LIST = 'tasks/CLEAR_SELECTED_LIST';
 export const SAVE_NEW_TASK = 'tasks/SAVE_NEW_TASK';
 export const CHANGE_TASK = 'tasks/CHANGE_TASK';
 export const SELECT_TASK = 'tasks/SELECT_TASK';
+export const CHANGE_TASKS_LIST_SETTINGS = 'tasks/CHANGE_TASKS_LIST_SETTINGS';

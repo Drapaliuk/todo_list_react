@@ -1,6 +1,15 @@
 import { listsAPI } from "../../../API";
 import { tasksAPI } from "../../../API/tasks";
-import { INITIALIZED_TASKS, SAVE_NEW_LIST, SELECT_TASKS_LIST, DELETE_TASKS_LIST, CLEAR_SELECTED_LIST, SAVE_NEW_TASK, CHANGE_TASK, SELECT_TASK } from "../../actions_types";
+import { INITIALIZED_TASKS,
+         SAVE_NEW_LIST,
+         SELECT_TASKS_LIST,
+         DELETE_TASKS_LIST,
+         CLEAR_SELECTED_LIST,
+         SAVE_NEW_TASK,
+         CHANGE_TASK,
+         SELECT_TASK,
+         CHANGE_TASKS_LIST_SETTINGS
+        } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
 export const saveNewList = newListName => async dispatch => {
@@ -26,4 +35,9 @@ export const changeTask = (selectedListId, selectedTaskId, newValue) => async di
     dispatch({type: CHANGE_TASK, payload: data})
 }
 
-export const selectTask = payload => ({type: SELECT_TASK, payload})
+export const selectTask = payload => ({type: SELECT_TASK, payload});
+export const changeListSettings = (selectedListId, newValue) => async dispatch => {
+    const {data} = await listsAPI.changeSettings(selectedListId, newValue)
+    dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload: data})
+}
+

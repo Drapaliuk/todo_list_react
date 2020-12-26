@@ -14,7 +14,7 @@ export const listsAPI = {
         return instance.put('/lists', {listId, newName})
     },
 
-    changeSettings: (listId, newValues) => {
-        return instance.put('/lists/settings', {listId, ...newValues})
+    changeSettings: (selectedListId, newValue) => {
+        return instance.put('/lists/settings', {selectedListId, newValue})
     }
 }

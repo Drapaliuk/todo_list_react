@@ -1,5 +1,5 @@
 import { act } from "react-dom/test-utils"
-import { CHANGE_TASK, CLEAR_SELECTED_LIST, DELETE_TASKS_LIST, INITIALIZED_TASKS, SAVE_NEW_LIST, SAVE_NEW_TASK, SELECT_TASK, SELECT_TASKS_LIST } from "../../actions_types"
+import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, DELETE_TASKS_LIST, INITIALIZED_TASKS, SAVE_NEW_LIST, SAVE_NEW_TASK, SELECT_TASK, SELECT_TASKS_LIST } from "../../actions_types"
 
 const initialState = {
     tasksLists: [],
@@ -44,7 +44,6 @@ export const tasks = (prevState = initialState, action) => { //один раз �
                 selectedList: false
             }
         case SAVE_NEW_TASK: 
-            
             return {
                 ...prevState,
                 tasksLists: prevState.tasksLists.map(list => {
@@ -65,7 +64,7 @@ export const tasks = (prevState = initialState, action) => { //один раз �
                         list.tasks.map(task => {
                             if(task._id === payload.taskId) {
                                 const [key] = Object.keys(payload.changedValue)
-                                task[key] = payload.changedValue[key]
+                                task[key] = payload.changedValue[key] //!
                                 return task
                             }
                             return task
@@ -80,6 +79,32 @@ export const tasks = (prevState = initialState, action) => { //один раз �
                 ...prevState,
                 selectedTask: prevState.selectedList.tasks.find(task => task._id === payload)
             }
+
+        case CHANGE_TASKS_LIST_SETTINGS:
+            console.log('payload', payload)
+            return {
+                ...prevState,
+                tasksLists: prevState.tasksLists.map(list => {
+                    if(list._id === payload.listId) {
+                        const [key] = Object.keys(payload.changedValue)
+                        list.settings[key] = payload.changedValue[key]
+                        return list
+                    }
+                    return list
+                }) 
+            }
+        // case CHANGE_TASKS_LIST_SETTINGS:
+        //     console.log('payload', payload)
+        //     return {
+        //         ...prevState,
+        //         tasksLists: prevState.tasksLists.map(list => {
+        //             if(list._id === payload.listId) {
+        //                 const [changedValueKey] = Object.keys(payload.changedValue)
+        //                 return {...list, settings: {...list.settings, [changedValueKey]: payload.changedValue[changedValueKey] }}
+        //             }
+        //             return list
+        //         }) 
+        //     }
 
         default:
             return prevState

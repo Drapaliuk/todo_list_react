@@ -10,4 +10,3 @@ export function SettingsOption({value, handler, Icon}) {
         </li>
     )
 }
-

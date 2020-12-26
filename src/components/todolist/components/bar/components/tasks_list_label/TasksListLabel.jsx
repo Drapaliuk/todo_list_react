@@ -3,15 +3,19 @@ import { MobileEditListLabel } from '../mobile_edit_list_label/MobileEditListLab
 import { FaClipboardList } from 'react-icons/fa';
 import { BiPencil } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
+import classNames from 'classnames';
 
-export function TasksListLabel({name, tasksAmount, id, onSelectList}) {
+export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedListId}) {
+    const isItSelectedList = id === selectedListId
     return (
-        <li onClick = {onSelectList(id)} key = {id} class="bar-section__labels-list-item">
+        <li onClick = {onSelectList(id)} class={classNames("bar-section__labels-list-item", {'bar-section__labels-list-item_selected': isItSelectedList})}>
             <div class="todo-list-label todo-list-label_with_correct_btn">
                 <FaClipboardList className = 'todo-list-label__icon' />
                 <span class="todo-list-label__name">{name} </span>
-                <span class="todo-list-label__task-amount">{tasksAmount}</span>
-                <NavLink onClick = {onSelectList(id)} to = '/tasks/edit-list' className = "todo-list-label__correct-btn">
+                <span class= {classNames("todo-list-label__task-amount", {'todo-list-label__task-amount_selected': isItSelectedList})}  >{tasksAmount}</span>
+                <NavLink onClick = {onSelectList(id)} 
+                         to = '/tasks/edit-list' 
+                         className = {classNames("todo-list-label__correct-btn", {'todo-list-label__correct-btn_selected': isItSelectedList})}>
                     <BiPencil className = 'todo-list-label__icon' />
                 </NavLink>
             </div>

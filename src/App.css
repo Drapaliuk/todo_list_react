@@ -739,6 +739,10 @@ header {
   background-color: rgba(44, 149, 242, 0.65);
 }
 
+.bar-section__labels-list-item.bar-section__labels-list-item_selected {
+  background-color: rgba(44, 149, 242, 0.35);
+} 
+
 @media (max-width: 767px) {
   .bar-section__labels-list-item:hover {
     background-color: transparent;
@@ -810,6 +814,10 @@ header {
   transition: all .3s linear;
 }
 
+.todo-list-label__correct-btn.todo-list-label__correct-btn_selected {
+  transform: none;
+}
+
 @media (max-width: 767px) {
   .todo-list-label__correct-btn {
     padding-right: 20px;
@@ -832,6 +840,10 @@ header {
   right: 10px;
   display: flex;
   transition: all .3s linear;
+}
+
+.todo-list-label__task-amount.todo-list-label__task-amount_selected {
+  right: 40px;
 }
 
 @media (max-width: 767px) {

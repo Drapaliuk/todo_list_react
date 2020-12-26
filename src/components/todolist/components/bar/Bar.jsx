@@ -1,11 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { saveNewList, selectTasksList } from '../../../../redux/actions/tasks/tasks';
-import { getTasksLists } from '../../../../redux/selectors';
+import { getSelectedListId, getTasksLists } from '../../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, FolderLabels, Header, Notification, TasksListLabel } from './components'
 
 export function Bar() {
     const dispatch = useDispatch();
+    const selectedListId = useSelector(state => getSelectedListId(state))
     const [isVisibleNewList, setVisibleNewList] = React.useState(false);
     const [newListName, setNewListName] = React.useState('');
     const tasksLists = useSelector(state => getTasksLists(state));
@@ -26,10 +27,12 @@ export function Bar() {
                 {
                     tasksLists.map(({name, tasks, _id}) => {
                         const tasksAmount = tasks.filter(task => !task.hasDone).length
-                        return <TasksListLabel id = {_id} 
+                        return <TasksListLabel key = {_id}
+                                               id = {_id} 
                                                name = {name} 
                                                tasksAmount = {tasksAmount} 
                                                onSelectList = {onSelectList}
+                                               selectedListId = {selectedListId}
                                 />
                     })
                 }

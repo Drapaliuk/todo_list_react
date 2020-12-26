@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
 import { changeTask, saveNewTask, selectTask } from '../../../../redux/actions/tasks/tasks';
@@ -12,18 +12,18 @@ export function TodoList() {
     const dispatch = useDispatch();
 
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const selectedTaskId = useSelector(state => getSelectedTaskId(state)); //?
 
-    console.log('selectedTaskId', selectedTaskId)
 
     const uncompletedTasks = useSelector(state => getUncompletedTasks(state));
     const completedTasks = useSelector(state => getCompletedTasks(state));
 
+
+
     const onSelectTask = id => () => dispatch(selectTask(id))
-    const onComplete =  (newValue, selectedTaskId) => {
-        dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: newValue}))
-        
-    }
+    const onComplete =  (newValue, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: newValue}))
+    const onPinTask =  (newValue, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isPinned: newValue}))
+    const onMakeImportant =  (newValue, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: newValue}))
+
 
     const onSaveTask = text => event => {
         const KEY_ENTER = 13;
@@ -33,11 +33,27 @@ export function TodoList() {
     }
     
     return (
+
         <section className="todo-section todo-section_theme_dark">
             <NewTaskInput onSaveTask = {onSaveTask}  />
             <Route exact path = '/tasks/edit-list'  component = {EditListLabelDesktop} />
-            <UncompletedTasksList uncompletedTasks = {uncompletedTasks} onComplete = {onComplete} onSelectTask = {onSelectTask} />
-            <CompletedTasksList completedTasks = {completedTasks} onSelectTask = {onSelectTask} />
+            {
+                
+                <Fragment>
+                    <UncompletedTasksList uncompletedTasks = {uncompletedTasks} 
+                                      onComplete = {onComplete} 
+                                      onSelectTask = {onSelectTask} 
+                                      onPin = {onPinTask}
+                                      onMakeImportant = {onMakeImportant}
+                                      />
+                    <CompletedTasksList completedTasks = {completedTasks} 
+                                    onSelectTask = {onSelectTask}
+                                    onComplete = {onComplete}
+                                    />
+                </Fragment>
+            }
+            
+            
             <TodoListSettings />
         </section>
     )

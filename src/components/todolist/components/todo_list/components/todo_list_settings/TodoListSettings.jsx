@@ -1,5 +1,12 @@
 import React from 'react';
 import {SettingsOption} from './SettingsOption'
+import {GoMute} from 'react-icons/go';
+import {AiOutlinePicture, AiFillStar} from 'react-icons/ai';
+import {BsCalendar, BsThreeDots} from 'react-icons/bs';
+import {BiSortAZ, BiSort} from 'react-icons/bi';
+// import {} from 'react-icons/';
+// import {} from 'react-icons/';
+// import {} from 'react-icons/';
 
 
 export function TodoListSettings() {
@@ -23,29 +30,25 @@ export function TodoListSettings() {
         {
             isVisibleSettings &&
             <ul className="options">
-                <SettingsOption value = 'Don`t disturbe'/>
-                <SettingsOption value = 'Theme of list'/>
+                <SettingsOption value = 'Don`t disturbe' Icon = {GoMute} />
+                <SettingsOption value = 'Theme of list' Icon = {AiOutlinePicture} />
             </ul>
         }
         {
             isVisibleSorting &&
             <ul className="options">
-                <SettingsOption value = 'Sort Alphabetically'/>
-                <SettingsOption value = 'Sort bt Creation Date'/>
-                <SettingsOption value = 'Sort by Priority'/>
+                <SettingsOption value = 'Sort Alphabetically' Icon = {BiSortAZ} />
+                <SettingsOption value = 'Sort bt Creation Date' Icon = {BsCalendar} />
+                <SettingsOption value = 'Sort by Priority' Icon = {AiFillStar} />
             </ul>
         }
         <div className="todo-list-settings__panel todo-list-settings__panel_theme_dark">
             <button onClick = {onVisibleSorting} className="todo-list-settings__part-btn">
-                <svg className="todo-list-settings__icon">
-                    <use href="./src/img/sprite.svg#icon-descendant"></use>
-                </svg>
+                <BiSort className="todo-list-settings__icon"/>
                 sort
             </button>
             <button onClick = {onVisibleSettings} className="todo-list-settings__part-btn todo-list-settings__part-btn_active">
-                <svg className="todo-list-settings__icon">
-                    <use href="./src/img/sprite.svg#icon-more"></use>
-                </svg>
+                <BsThreeDots className="todo-list-settings__icon"/>
                 more
             </button>
         </div>

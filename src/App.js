@@ -19,7 +19,6 @@ function App() {
   }, []);
 
   if(isFetchingInitData) {
-    
     return <div className = "authorization">
       <h1>Loading</h1>
     </div>

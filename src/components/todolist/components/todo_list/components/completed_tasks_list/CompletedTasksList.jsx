@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { CompletedTask } from './CompletedTask';
 
-export function CompletedTasksList({completedTasks}) {
+export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
     const [isVisibleCompletedTasks, setVisibleCompletedTasks] = React.useState(false);
     const onVisibleCompletedTasks = () => setVisibleCompletedTasks(!isVisibleCompletedTasks)
 
@@ -19,7 +19,14 @@ export function CompletedTasksList({completedTasks}) {
             {
                 isVisibleCompletedTasks &&
                 <ul className="todo-list">
-                    {completedTasks.map(task => <CompletedTask text = {task.text} />)}
+                    {completedTasks.map(({text, _id}) => {
+                        return <CompletedTask key = {_id}
+                                              text = {text}
+                                              onSelectTask = {onSelectTask}
+                                              onComplete = {onComplete}
+                                              taskId = {_id}    
+                        />
+                    })}
                 </ul>
             }
         </Fragment>

@@ -25,9 +25,10 @@ export function Bar() {
                 {/* <FolderLabels /> */}
                 {
                     tasksLists.map(({name, tasks, _id}) => {
+                        const tasksAmount = tasks.filter(task => !task.hasDone).length
                         return <TasksListLabel id = {_id} 
                                                name = {name} 
-                                               tasksAmount = {tasks.length} 
+                                               tasksAmount = {tasksAmount} 
                                                onSelectList = {onSelectList}
                                 />
                     })

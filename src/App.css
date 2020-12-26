@@ -891,7 +891,8 @@ header {
 
 .pin-btn_active {
   fill: #e4002b;
-  stroke: none; }
+  stroke: #e4002b;
+}
 
 .importantly-btn__icon {
   width: 21px;

@@ -7,11 +7,11 @@ export const tasksAPI = {
         return instance.post('/tasks', {selectedListId, text})
     },
 
-    changeTask: (listId, taskId, newValue) => {
-        return instance.put('/tasks', {listId, taskId, newValue})
+    changeTask: (selectedListId, selectedTaskId, newValue) => {
+        return instance.put('/tasks', {selectedListId, selectedTaskId, newValue})
     },
 
     deleteTask: (listId, taskId) => {
         return instance.put('/tasks')
-    },
+    }
 }

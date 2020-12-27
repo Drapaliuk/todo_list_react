@@ -1,17 +1,27 @@
 import React from 'react'
 
-export function NewTaskInput({onSaveTask}) {
-    const [newTaskText, setNewTaskText] = React.useState('');
-    const onWriteTaskText = event => setNewTaskText(event.target.value);
+export function NewTaskInput({onSave}) {
+    const [taskText, setTaskText] = React.useState('');
+    const writeTextHandler = event => setTaskText(event.target.value);
+    const saveTaskHandler = event => {
+        const KEY_ENTER = 13;
+        if(event.keyCode === KEY_ENTER) {
+            onSave(taskText)
+            setTaskText('')
+        }
+    }
 
     return (
-        <input className="add-todo add-todo_theme_dark" 
+        <div className = 'add-todo add-todo_theme_dark'>
+            <input className="" 
                    type="text" 
                    placeholder="+ Add todo" 
-                   onChange = {onWriteTaskText}
-                   onKeyDown = {onSaveTask(newTaskText)}
-                   value = {newTaskText}  
-        />
+                   onChange = {writeTextHandler}
+                   onKeyDown = {saveTaskHandler}
+                   value = {taskText}  
+            />
+        </div>
+        
     )
 }
 

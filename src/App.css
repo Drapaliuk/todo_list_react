@@ -45,6 +45,10 @@ body img {
   height: 100vh;
 }
 
+.container.container_full_info_closed {
+  grid-template-columns: 1fr 5fr;
+}
+
 @media (max-width: 767px) {
   .container {
     grid-template-columns: 1fr;

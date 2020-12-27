@@ -16,38 +16,30 @@ export function TodoList() {
     const completedTasks = useSelector(state => getCompletedTasks(state));
 
     const onSelectTask = id => () => dispatch(selectTask(id))
-    const onComplete =  (newValue, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: newValue}))
-    const onPinTask =  (newValue, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isPinned: newValue}))
-    const onMakeImportant =  (newValue, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: newValue}))
-    
-    const sortByHandler = sortBy => () => {
-        if(sortBy === currentSortBy) return dispatch(changeListSettings(selectedListId, {sortBy: ''}))
-
-        dispatch(changeListSettings(selectedListId, {'sortBy': sortBy}))
-    }
-
-    const onSaveTask = text => event => {
-        const KEY_ENTER = 13;
-        if(event.keyCode === KEY_ENTER) {
-            dispatch(saveNewTask(selectedListId, text))
-        }
-    }
+    const onComplete =  (isComplete, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
+    const onPinTask =  (isPinned, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isPinned: isPinned}))
+    const onMakeImportant =  (isImportant, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: isImportant}))
+    const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {'sortBy': sortBy}))
+    const onSaveTask = text => dispatch(saveNewTask(selectedListId, text))
     
     return (
         <section className="todo-section todo-section_theme_dark">
-            <NewTaskInput onSaveTask = {onSaveTask}  />
+            <NewTaskInput onSave = {onSaveTask}  />
             <Route exact path = '/tasks/edit-list'  component = {EditListLabelDesktop} />
             <UncompletedTasksList uncompletedTasks = {uncompletedTasks} 
-                                onComplete = {onComplete} 
-                                onSelectTask = {onSelectTask} 
-                                onPin = {onPinTask}
-                                onMakeImportant = {onMakeImportant}
+                                  onComplete = {onComplete} 
+                                  onSelectTask = {onSelectTask} 
+                                  onPin = {onPinTask}
+                                  onMakeImportant = {onMakeImportant}
                                 />
             <CompletedTasksList completedTasks = {completedTasks} 
-                            onSelectTask = {onSelectTask}
-                            onComplete = {onComplete}
+                                onSelectTask = {onSelectTask}
+                                onComplete = {onComplete}
                             />
-            <TodoListSettings sortByHandler = {sortByHandler} currentSortBy = {currentSortBy} />
+            <TodoListSettings onSortTasks = {onSortTasks} 
+                              currentSortBy = {currentSortBy} 
+                              
+                              />
         </section>
     )
 }

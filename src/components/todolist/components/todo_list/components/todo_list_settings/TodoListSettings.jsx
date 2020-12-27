@@ -6,7 +6,7 @@ import { Sorting } from './Sorting';
 import { Settings } from './Settings';
 
 
-export function TodoListSettings({sortByHandler, currentSortBy}) {
+export function TodoListSettings({onSortTasks, currentSortBy}) {
     const [isVisibleSorting, setVisibleSorting] = React.useState(false);
     const [isVisibleSettings, setVisibleSettings] = React.useState(false);
     
@@ -20,6 +20,12 @@ export function TodoListSettings({sortByHandler, currentSortBy}) {
         setVisibleSorting(false)
     }
     
+    const sortByHandler = sortBy => () => {
+        if(sortBy === currentSortBy) return onSortTasks('')
+        onSortTasks(sortBy)
+    }
+
+
     return (
         <div className="todo-list-settings">
             { isVisibleSettings && <Settings />}

@@ -1,68 +1,44 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { getSelectedTask } from '../../../../redux/selectors'
+import { useDispatch, useSelector } from 'react-redux'
+import { changeTask, saveNewTask } from '../../../../redux/actions/tasks/tasks'
+import { getSelectedListId, getSelectedTask, getSelectedTaskId, getSelectedTaskText } from '../../../../redux/selectors'
+import { ChangeText } from './ChangeText'
 import { Comment, SubTask } from './components'
+import { DueTime } from './components/DueTime'
+import { Notes } from './components/Note'
+import { Reminder } from './components/Remind'
+import { Subtasks } from './components/Subtasks'
 
 export function FullInfo() {
-    const selectedTask = useSelector(state => getSelectedTask(state))
-    const [newTaskText, setNewTaskText] = React.useState(selectedTask.text);
-    const onWriteNewTaskText = event => setNewTaskText(event.target.value)
-    console.log('selectedTask', selectedTask.text)
+    const dispatch = useDispatch();
 
-return (
+    const {text, hasDone, isImportant} = useSelector(state => getSelectedTask(state))
+    const selectedListId = useSelector(state => getSelectedListId(state))
+    const selectedTaskId = useSelector(state => getSelectedTaskId(state))
+
+    const onComplete =  isComplete => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
+    const onMakeImportant =  isImportant => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: isImportant}))
+    const onSaveNewText = newText => dispatch(changeTask(selectedListId, selectedTaskId, {text: newText}))
+
+    
+ 
+
+    return (
         <div class="todo-full-info todo-full-info_theme_dark desktop">
-            <div class="todo-full-text">
-                <input  type="checkbox" class="todo-full-text__check-input-todo" />
-                <textarea onChange = {onWriteNewTaskText}  value = {newTaskText} class="todo-full-text__text" name="" placeholder="fulltext"></textarea>
-                <button class="todo-full-text__importantly-btn importantly-btn importantly-btn_todo importantly-btn_active">
-                    <svg class="todo-full-text__icon importantly-btn__icon">
-                        <use href="./src/img/sprite.svg#icon-star"></use>
-                    </svg>
-                </button>
-            </div>
-
+            <ChangeText initialText = {text} 
+                        hasDone = {hasDone}
+                        isImportant = {isImportant}
+                        onSave = {onSaveNewText} 
+                        onComplete = {onComplete} 
+                        onMakeImportant = {onMakeImportant}  
+                    />
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">
-                    <li class="todo-additional-option__time-options-item">
-                        <div class="todo-due-date todo-remind">
-                            <svg class="todo-due-date__icon todo-remind__icon">
-                                <use href="./src/img/sprite.svg#icon-calendara_bw"></use>
-                            </svg>
-                            <input class="todo-due-date__input todo-remind__input" placeholder="Встановити термін" />
-
-                            <button class="delete-btn delete-btn_todo_time_option">
-                                <svg class="delete-btn__icon">
-                                    <use href="./src/img/sprite.svg#icon-cancel"></use>
-                                </svg>
-                            </button>
-                        </div>
-                    </li>
-
-                    <li class="todo-additional-option__time-options-item">
-                        <div class="todo-remind">
-                            <svg class="todo-remind__icon">
-                                <use href="./src/img/sprite.svg#icon-alarm-clock"></use>
-                            </svg>
-                            <input class="todo-remind__input" placeholder="Нагадати" />
-                            <button class="delete-btn delete-btn_todo_time_option">
-                                <svg class="delete-btn__icon">
-                                    <use href="./src/img/sprite.svg#icon-cancel"></use>
-                                </svg>
-                            </button>
-                        </div>
-                    </li>
+                    <DueTime />
+                    <Reminder />
                 </ul>
-                <div class="todo-subtasks">
-                    <form class="todo-subtasks__add-form">
-                        <button class="todo-subtasks__add-form-btn" type="submit">+</button>
-                        <input class="todo-subtasks__add-form-input" type="text" placeholder="add subtask" />
-                    </form>
-                    <ul class="todo-subtasks__list">
-                        <SubTask />
-                    </ul>
-                </div>
-
-                <textarea class="todo-note" name="" id="" cols="30" rows="10" placeholder="Add note"></textarea>
+                <Subtasks />
+                <Notes />
 
                 <ul class="todo-comments-list">
                     <Comment />

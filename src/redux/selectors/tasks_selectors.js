@@ -20,7 +20,22 @@ export const getUncompletedTasks = (sortBy = 'isPinned') => state => {
 
 export const getCompletedTasks = state => state.tasks?.selectedList?.tasks?.filter(task => task.hasDone)
 export const getSelectedTaskId = state => state.tasks.selectedTask._id;
-export const getSelectedTask = state => state.tasks.selectedTask;
+// export const getSelectedTask = state => state.tasks.selectedTask;
+
+
+export const getSelectedTaskText = state => {
+    const selectedList = state.tasks.tasksLists.find(list => list._id === getSelectedListId(state));
+    const task = selectedList.tasks.find(task => task._id === getSelectedTaskId(state));
+    return task.text
+}
+export const getSelectedTask = state => {
+    const selectedList = state.tasks.tasksLists.find(list => list._id === getSelectedListId(state));
+    const task = selectedList.tasks.find(task => task._id === getSelectedTaskId(state));
+    return task
+}
+
+
+
 export const getSortByValue = state => {
     const selectedListId = state.tasks.selectedList._id;
     const list = state.tasks.tasksLists.find(list => list._id === selectedListId)

@@ -27,9 +27,15 @@ export const tasks = (prevState = initialState, action) => { //один раз �
 
         case SELECT_TASKS_LIST:
             const listId = payload
+            const selectedList = prevState.tasksLists.find(list => list._id === listId);
+            console.log(selectedList.tasks.find(task => !task.hasDone))
+            // const selectedTask = selectedList.tasks.length === 0 ? false : Boolean(selectedList.tasks.find(task => !task.hasDone))
+            //Без буліана на працює, вимагає тільк фолс
+            const selectedTask = selectedList.tasks[0] || false
             return {
                 ...prevState,
-                selectedList: prevState.tasksLists.find(list => list._id === listId)
+                selectedList, 
+                selectedTask
             }
         case DELETE_TASKS_LIST:
             return {

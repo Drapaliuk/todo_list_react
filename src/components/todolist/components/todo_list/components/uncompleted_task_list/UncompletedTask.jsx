@@ -8,7 +8,8 @@ export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, 
 
     const completeHandler = event => {
         const isCompleted = event.target.checked;
-        if(isCompleted) return onComplete(true, taskId)
+        // if(isCompleted) return onComplete(true, taskId)
+        onComplete(isCompleted, taskId)
     }
 
     const pinHandler = () => onPin(!isPinned, taskId)

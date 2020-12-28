@@ -3,11 +3,11 @@ import {BsTrash} from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, Redirect } from 'react-router-dom';
 import { clearSelectedList, deleteTasksList } from '../../../../../../redux/actions/tasks/tasks';
-import { getSelectedListId, getSelectedListName } from '../../../../../../redux/selectors'
+import { getSelectedListId } from '../../../../../../redux/selectors'
 export function EditListLabelDesktop() {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const selectedListName = useSelector(state => getSelectedListName(state));
+    // const selectedListName = useSelector(state => getSelectedListName(state));
     const [newName, setNewName] = React.useState('')
 
     const onDeleteList = () => dispatch(deleteTasksList(selectedListId));
@@ -18,7 +18,7 @@ export function EditListLabelDesktop() {
 
     return (
         <div className="edit-list-label edit-list-label_theme-dark">
-        <h2 className="edit-list-label__header">Edit: {selectedListName}</h2>
+        <h2 className="edit-list-label__header">Edit: {'a'}</h2>
         <input className='new-edited-name edit-list-label__new-name' 
                type="text" 
                placeholder="new list name"

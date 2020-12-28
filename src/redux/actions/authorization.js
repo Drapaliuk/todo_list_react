@@ -10,16 +10,12 @@ export const login = (login, password) => async dispatch => {
     dispatch(fetchingCheckAuth(true))
     const {responseCode, token, refreshToken} = await authAPI.registration(login, password);
 
-    if(responseCode === 0) {
-        return dispatch(isAuthorization(false))
-    }
-    // localStorageManipulator.saveAuthToken(token);
-    // localStorageManipulator.saveRefreshToken(refreshToken);
+    if(responseCode === 0) return dispatch(isAuthorization(false))
 
     localStorageManipulator.saveTokens(token, refreshToken);
     
     dispatch(isAuthorization(true));
-    return dispatch(fetchingCheckAuth(false));
+    dispatch(fetchingCheckAuth(false));
 
 }
 
@@ -51,8 +47,7 @@ export const checkAuth = () => async dispatch => {
 }
 
 export const logOut = () => {
-    localStorageManipulator.deleteRefreshToken()
-    localStorageManipulator.deleteToken()
+    localStorageManipulator.deleteTokens()
     return isAuthorization(false)
 }
 

@@ -1,25 +1,29 @@
 import React from 'react'
+import {AiOutlineSave} from 'react-icons/ai'
+import { KEY_ENTER } from '../../../../../../service/keyboard_codes';
 
 export function NewTaskInput({onSave}) {
     const [taskText, setTaskText] = React.useState('');
     const writeTextHandler = event => setTaskText(event.target.value);
-    const saveTaskHandler = event => {
-        const KEY_ENTER = 13;
-        if(event.keyCode === KEY_ENTER) {
+    const saveTaskHandler = ({keyCode}) => {
+        if(keyCode === KEY_ENTER) {
             onSave(taskText)
             setTaskText('')
         }
     }
 
     return (
-        <div className = 'add-todo add-todo_theme_dark'>
-            <input className="" 
+        <div className = 'add-todo-wrapper'>
+            <input className="add-todo" 
                    type="text" 
                    placeholder="+ Add todo" 
                    onChange = {writeTextHandler}
                    onKeyDown = {saveTaskHandler}
                    value = {taskText}  
             />
+            {/* <div className="add-todo__advise">
+                press Enter to <AiOutlineSave />
+            </div> */}
         </div>
         
     )

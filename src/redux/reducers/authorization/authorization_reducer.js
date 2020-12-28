@@ -18,6 +18,7 @@ export const authorization = (prevState = initialState, action) => {
                 ...prevState,
                 isFetchingCheckAuth: action.payload
             }
+        
         default: return prevState
     }
 }

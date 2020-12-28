@@ -1,8 +1,8 @@
-import { INITIALIZED_SETTINGS } from "../../actions_types"
+import { DEFAULT_SETTINGS, INITIALIZED_SETTINGS } from "../../actions_types"
 
 const initialState = {
-    theme: 'light',
-    language: 'eng'
+    theme: '',
+    language: ''
 }
 
 export const settings = (prevState = initialState, action) => {
@@ -14,6 +14,12 @@ export const settings = (prevState = initialState, action) => {
                 theme,
                 language
             }
+        case DEFAULT_SETTINGS: 
+            return {
+                theme: '',
+                language: ''
+            }
+        
         default:
             return prevState
     }

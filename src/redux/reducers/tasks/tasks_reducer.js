@@ -1,53 +1,53 @@
-import { act } from "react-dom/test-utils"
-import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, DELETE_TASKS_LIST, INITIALIZED_TASKS, SAVE_NEW_LIST, SAVE_NEW_TASK, SELECT_TASK, SELECT_TASKS_LIST } from "../../actions_types"
+import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, DEFAULT_TASKS, DELETE_TASKS_LIST, INITIALIZED_TASKS, SAVE_NEW_LIST, SAVE_NEW_TASK, SELECT_TASK, SELECT_TASKS_LIST } from "../../actions_types"
 
 const initialState = {
     tasksLists: [],
-    selectedList: false,
-    selectedTask: false
+    selectedListId: '',
+    selectedTaskId: ''
 }
 
-export const tasks = (prevState = initialState, action) => { //один раз потрібно деструктуризувати пейлоад
+export const tasks = (prevState = initialState, action) => {
     const {payload, type} = action;
+
     switch(type)  {
         case INITIALIZED_TASKS:
             const tasksCopy = [...payload]
+            console.log('tasksCopy', tasksCopy)
             return {
                 ...prevState,
                 tasksLists: tasksCopy,
-                selectedList: tasksCopy[0]
+                selectedListId: tasksCopy[0]?._id || ''
             }
 
         case SAVE_NEW_LIST: 
-            console.log(SAVE_NEW_LIST, 'a')
             return {
                 ...prevState,
-                tasksLists: [...prevState.tasksLists, {...payload}]
+                tasksLists: [...prevState.tasksLists, {...payload}],
+                selectedListId: payload._id,
+                selectedTaskId: ''
             }
 
         case SELECT_TASKS_LIST:
-            const listId = payload
-            const selectedList = prevState.tasksLists.find(list => list._id === listId);
-            console.log(selectedList.tasks.find(task => !task.hasDone))
-            // const selectedTask = selectedList.tasks.length === 0 ? false : Boolean(selectedList.tasks.find(task => !task.hasDone))
-            //Без буліана на працює, вимагає тільк фолс
-            const selectedTask = selectedList.tasks[0] || false
+            const selectedListId = prevState.tasksLists.find(list => list._id === payload.listId);
+            const [selectedTaskId = ''] = selectedListId.tasks.filter(task => (!task.hasDone && task.isPinned )|| (!task.hasDone && !task.isPinned))
+            
             return {
                 ...prevState,
-                selectedList, 
-                selectedTask
+                selectedListId: payload.listId, 
+                // selectedTaskId: selectedListId.tasks[0]?._id || ''
+                selectedTaskId: selectedTaskId._id
             }
         case DELETE_TASKS_LIST:
             return {
                 ...prevState,
                 tasksLists: prevState.tasksLists.filter(({_id}) => _id !== payload ),
-                selectedList: false
+                selectedListId: ''
 
             }
         case CLEAR_SELECTED_LIST:
             return {
                 ...prevState,
-                selectedList: false
+                selectedListId: ''
             }
         case SAVE_NEW_TASK: 
             return {
@@ -81,9 +81,10 @@ export const tasks = (prevState = initialState, action) => { //один раз �
             }
 
         case SELECT_TASK: 
+        console.log(prevState.selectedTaskId)
             return {
                 ...prevState,
-                selectedTask: prevState.selectedList.tasks.find(task => task._id === payload)
+                selectedTaskId: prevState.selectedTaskId ? '' : payload.taskId
             }
 
         case CHANGE_TASKS_LIST_SETTINGS:
@@ -98,6 +99,12 @@ export const tasks = (prevState = initialState, action) => { //один раз �
                     }
                     return list
                 }) 
+            }
+        case DEFAULT_TASKS:
+            return {
+                tasksLists: [],
+                selectedListId: '',
+                selectedTaskId: ''
             }
         // case CHANGE_TASKS_LIST_SETTINGS:
         //     console.log('payload', payload)

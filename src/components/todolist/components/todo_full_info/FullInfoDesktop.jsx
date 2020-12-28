@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeTask, saveNewTask } from '../../../../redux/actions/tasks/tasks'
-import { getSelectedListId, getSelectedTask, getSelectedTaskId, getSelectedTaskText } from '../../../../redux/selectors'
+import { getSelectedListId, getSelectedTask, getSelectedTaskId, getSelectedTaskProperty, getSelectedTaskText } from '../../../../redux/selectors'
 import { ChangeText } from './ChangeText'
 import { Comment, SubTask } from './components'
 import { DueTime } from './components/DueTime'
@@ -12,7 +12,7 @@ import { Subtasks } from './components/Subtasks'
 export function FullInfo() {
     const dispatch = useDispatch();
 
-    const {text, hasDone, isImportant} = useSelector(state => getSelectedTask(state))
+    const {text, hasDone, isImportant} = useSelector(state => getSelectedTaskProperty(state))
     const selectedListId = useSelector(state => getSelectedListId(state))
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
 

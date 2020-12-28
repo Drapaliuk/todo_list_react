@@ -7,3 +7,4 @@ export const SAVE_NEW_TASK = 'tasks/SAVE_NEW_TASK';
 export const CHANGE_TASK = 'tasks/CHANGE_TASK';
 export const SELECT_TASK = 'tasks/SELECT_TASK';
 export const CHANGE_TASKS_LIST_SETTINGS = 'tasks/CHANGE_TASKS_LIST_SETTINGS';
+export const DEFAULT_TASKS = 'tasks/DEFAULT_TASKS';

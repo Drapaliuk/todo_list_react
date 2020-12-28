@@ -1,15 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { getSelectedTask, getSelectedTaskId } from '../../redux/selectors';
+import { getSelectedTaskId, isCreatedTasksLists } from '../../redux/selectors';
 import {Bar, TodoList, FullInfo} from './components';
 import classNames from 'classnames';
 
 export function Application() {
 const isSelectedTask = useSelector(state => getSelectedTaskId(state));
+const isCreatedTasksListsValue = useSelector(state => isCreatedTasksLists(state))
+
 return (
     <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
-        <Bar />
-        <TodoList />
+        <Bar isCreatedTasksLists = {isCreatedTasksListsValue} />
+        <TodoList isCreatedTasksLists = {isCreatedTasksListsValue} />
         
         {isSelectedTask && <FullInfo />}
     </div>

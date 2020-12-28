@@ -1,5 +1,6 @@
 import React from 'react'
 import { AiOutlineStar } from 'react-icons/ai';
+import { KEY_ENTER } from '../../../../service/keyboard_codes';
 
 export function ChangeText({initialText, onSave, onComplete, onMakeImportant, onImportant, hasDone, isImportant}) {
     const [newTaskText, setNewTaskText] = React.useState('');
@@ -8,9 +9,8 @@ export function ChangeText({initialText, onSave, onComplete, onMakeImportant, on
     }, [initialText])
     
     const newTextHandler = event => setNewTaskText(event.target.value)
-    const saveNewTextHandler = event => {
-        const ENTER_KEY = 13
-        if(event.keyCode === ENTER_KEY && event.ctrlKey) {
+    const saveNewTextHandler = ({keyCode, ctrlKey}) => {
+        if(keyCode === KEY_ENTER && ctrlKey) {
             onSave(newTaskText)
         }
     }

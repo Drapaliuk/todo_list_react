@@ -1,30 +1,42 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { saveNewList, selectTasksList } from '../../../../redux/actions/tasks/tasks';
+import { batch, useDispatch, useSelector } from 'react-redux';
+import { defaultBiography, defaultSettings, isInitialized } from '../../../../redux/actions';
+import { logOut } from '../../../../redux/actions/authorization';
+import { saveNewList, selectTasksList, defaultTasks } from '../../../../redux/actions/tasks/tasks';
 import { getSelectedListId, getTasksLists } from '../../../../redux/selectors';
-import { CreateNewList, DefaultAppLabels, FolderLabels, Header, Notification, TasksListLabel } from './components'
+import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './components'
 
-export function Bar() {
+export function Bar({isCreatedTasksLists}) {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state))
     const [isVisibleNewList, setVisibleNewList] = React.useState(false);
-    const [newListName, setNewListName] = React.useState('');
     const tasksLists = useSelector(state => getTasksLists(state));
 
     const onVisibleNewList = () => setVisibleNewList(!isVisibleNewList)
-    const onSaveNewList = () => dispatch(saveNewList(newListName))
+    const onSaveNewList = newListName => dispatch(saveNewList(newListName))
     const onSelectList = listId => () => dispatch(selectTasksList(listId))
-
+    
+    const onLogOut = () => {
+        batch(() => {
+            dispatch(defaultTasks())
+            dispatch(defaultBiography())
+            dispatch(defaultSettings())
+            dispatch(isInitialized())
+            dispatch(logOut())
+        })
+        
+    };
 
     return (
         <section class="bar-section bar-section_theme_dark">
-            <Header />
-            {/* <Notification /> */}
+            <Header onLogOut = {onLogOut} />
 
             <ul class="bar-section__labels-list">
                 <DefaultAppLabels />
-                {/* <FolderLabels /> */}
+                
                 {
+                    isCreatedTasksLists
+                    &&
                     tasksLists.map(({name, tasks, _id}) => {
                         const tasksAmount = tasks.filter(task => !task.hasDone).length
                         return <TasksListLabel key = {_id}
@@ -37,9 +49,9 @@ export function Bar() {
                     })
                 }
                 {isVisibleNewList && 
-                    <CreateNewList newListName = {newListName} 
-                                   setNewListName = {setNewListName} 
-                                   onSaveNewList = {onSaveNewList}/>
+                    <CreateNewList onSave = {onSaveNewList}
+                                   onVisible = {onVisibleNewList}
+                                   />
                 }
             </ul>
             <button onClick = {onVisibleNewList} class="bar-section__add-new-folder-btn">+</button>

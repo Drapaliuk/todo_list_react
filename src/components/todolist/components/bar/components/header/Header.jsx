@@ -1,11 +1,12 @@
 import React from 'react'
 
-export function Header() {
+export function Header({onLogOut}) {
     return (
         <header>
         <button class="user-photo">
             <img src="./src/img/logo.jpg" alt="user photo" />
         </button>
+        <button onClick = {() => onLogOut()}>logout</button>
         <div>
             <button class="settings-btn">
                 <svg class="icon icon-settings">

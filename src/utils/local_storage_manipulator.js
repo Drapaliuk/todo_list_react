@@ -16,5 +16,10 @@ export const localStorageManipulator = {
     saveTokens: (token, refreshToken) => {
         localStorage.setItem('token', token)
         localStorage.setItem('refresh_token', refreshToken)
+    },
+
+    deleteTokens: () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('refresh_token')
     }
 }

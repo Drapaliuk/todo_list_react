@@ -11,7 +11,6 @@ export const biography = (prevState = initialState, action) => {
     switch(action.type) {
         case INITIALIZE_BIOGRAPHY:
             const {name, surname, birthDay} = action.payload
-            console.log(action)
             return {
                 ...prevState,
                 name,

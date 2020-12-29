@@ -12,7 +12,6 @@ export const tasks = (prevState = initialState, action) => {
     switch(type)  {
         case INITIALIZED_TASKS:
             const tasksCopy = [...payload]
-            console.log('tasksCopy', tasksCopy)
             return {
                 ...prevState,
                 tasksLists: tasksCopy,
@@ -81,14 +80,12 @@ export const tasks = (prevState = initialState, action) => {
             }
 
         case SELECT_TASK: 
-        console.log(prevState.selectedTaskId)
             return {
                 ...prevState,
                 selectedTaskId: prevState.selectedTaskId ? '' : payload.taskId
             }
 
         case CHANGE_TASKS_LIST_SETTINGS:
-            console.log('payload', payload)
             return {
                 ...prevState,
                 tasksLists: prevState.tasksLists.map(list => {
@@ -107,7 +104,6 @@ export const tasks = (prevState = initialState, action) => {
                 selectedTaskId: ''
             }
         // case CHANGE_TASKS_LIST_SETTINGS:
-        //     console.log('payload', payload)
         //     return {
         //         ...prevState,
         //         tasksLists: prevState.tasksLists.map(list => {

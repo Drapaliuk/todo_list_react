@@ -32,7 +32,6 @@ export const saveNewTask = (selectedListId, text) => async dispatch => {
 
 export const changeTask = (selectedListId, selectedTaskId, newValue) => async dispatch => {
     const data = (await tasksAPI.changeTask(selectedListId, selectedTaskId, newValue)).data
-    console.log('data', data)
     dispatch({type: CHANGE_TASK, payload: data})
 }
 

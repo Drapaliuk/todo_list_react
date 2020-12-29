@@ -25,8 +25,6 @@ export function Sorting({sortByHandler, currentSortBy}) {
         }
     ]
 
-    console.log('SORTING', currentSortBy)
-
     return (
         <ul className="options">
             {

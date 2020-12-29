@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { getSelectedTaskId, isCreatedTasksLists } from '../../redux/selectors';
 import {Bar, TodoList, FullInfo} from './components';
 import classNames from 'classnames';
+import IconUser from '../../assets/svg/User';
 
 export function Application() {
 const isSelectedTask = useSelector(state => getSelectedTaskId(state));

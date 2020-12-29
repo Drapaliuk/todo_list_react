@@ -4,10 +4,14 @@ import { changeTask, saveNewTask } from '../../../../redux/actions/tasks/tasks'
 import { getSelectedListId, getSelectedTask, getSelectedTaskId, getSelectedTaskProperty, getSelectedTaskText } from '../../../../redux/selectors'
 import { ChangeText } from './ChangeText'
 import { Comment, SubTask } from './components'
+import { DateOption } from './components/DateOption'
 import { DueTime } from './components/DueTime'
 import { Notes } from './components/Note'
 import { Reminder } from './components/Remind'
 import { Subtasks } from './components/Subtasks'
+import { BiTimeFive } from 'react-icons/bi'
+import { BsAlarm } from 'react-icons/bs'
+import { FiRepeat } from 'react-icons/fi'
 
 export function FullInfo() {
     const dispatch = useDispatch();
@@ -15,13 +19,17 @@ export function FullInfo() {
     const {text, hasDone, isImportant} = useSelector(state => getSelectedTaskProperty(state))
     const selectedListId = useSelector(state => getSelectedListId(state))
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
+    const ids = [selectedListId, selectedTaskId]
 
-    const onComplete =  isComplete => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
-    const onMakeImportant =  isImportant => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: isImportant}))
-    const onSaveNewText = newText => dispatch(changeTask(selectedListId, selectedTaskId, {text: newText}))
+    const onComplete =  isComplete => dispatch(changeTask(...ids, {hasDone: isComplete}))
+    const onMakeImportant =  isImportant => dispatch(changeTask(...ids, {isImportant: isImportant}))
+    const onSaveNewText = newText => dispatch(changeTask(...ids, {text: newText}))
 
+    const onSaveDueDate = date => dispatch(changeTask(...ids, {term: date}))
+    const onSaveRemindDate = date => dispatch(changeTask(...ids, {remind: date}))
+    const onSaveRepeatTask = (from, to) => dispatch(changeTask(...ids, {repeat: {from, to}}))
     
- 
+    
 
     return (
         <div class="todo-full-info todo-full-info_theme_dark desktop">
@@ -32,10 +40,13 @@ export function FullInfo() {
                         onComplete = {onComplete} 
                         onMakeImportant = {onMakeImportant}  
                     />
+
+            
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">
-                    <DueTime />
-                    <Reminder />
+                    <DateOption onSave = {onSaveDueDate} placeholder = 'due date' Icon = {BiTimeFive} />
+                    <DateOption onSave = {onSaveRemindDate} placeholder = 'remind' Icon = {BsAlarm} />
+                    <DateOption onSave = {onSaveRepeatTask} placeholder = 'repeat task' Icon = {FiRepeat} />
                 </ul>
                 <Subtasks />
                 <Notes />

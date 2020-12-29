@@ -7,7 +7,6 @@ export const RenderField = ({input, meta, ...attributes}) => {
     const [isVisibleMessage, setVisibleMessage] = React.useState(false);
     const [isVisibleMessageSwitch, setVisibleMessageSwitch] = React.useState(false);
     const onSwitchMessage = () => setVisibleMessage(!isVisibleMessage)
-    console.log('isInvalid', isInvalid)
     
     if(isInvalid) {
         // setVisibleMessageSwitch(true)

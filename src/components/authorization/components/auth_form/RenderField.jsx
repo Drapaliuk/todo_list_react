@@ -7,7 +7,6 @@ export const RenderField = ({input, meta, ...attributes}) => {
     const [isVisibleMessage, setVisibleMessage] = React.useState(false);
     const onShowInvalidMessage = () => setVisibleMessage(!isVisibleMessage)
 
-    console.log(attributes.type, isInvalid)
 
     return  (<div class="login__input-wrapper">
         <label for="login-password">

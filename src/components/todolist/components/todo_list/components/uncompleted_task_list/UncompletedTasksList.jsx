@@ -1,7 +1,11 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { UncompletedTask } from './UncompletedTask';
 
 export function UncompletedTasksList({uncompletedTasks, onSelectTask, onComplete, onPin, onMakeImportant}) {
+
+    console.log('uncompletedTasks', uncompletedTasks)
+
+
     return (
         <ul className="todo-list">
             {uncompletedTasks.map(({text, _id, isPinned, isImportant}) => {

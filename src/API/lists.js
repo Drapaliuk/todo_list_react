@@ -7,7 +7,7 @@ export const listsAPI = {
     },
 
     deleteList: listId => {
-        return instance.delete('/lists', {data: {listId}})
+        return instance.delete('/lists', {body: {listId}})
     },
 
     renameList: (listId, newName) => {

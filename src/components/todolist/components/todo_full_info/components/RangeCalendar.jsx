@@ -2,24 +2,26 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
  
-export const RangeCalendar = ({onSave, placeholder, initialDate}) => {
+export const RangeCalendar = ({onManipulation, placeholder, initialDate}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   React.useEffect(() => {
-        setStartDate(initialDate.start)
-        setEndDate(initialDate.end)
+        setStartDate(initialDate?.start)
+        setEndDate(initialDate?.end)
     }, [initialDate])
 
   const dateChangeHandler = dates => {
-    const [start, end] = dates;
-    console.log('dates', dates)
+    const [start = null, end = null] = dates;
     setStartDate(start)
     setEndDate(end)
-    onSave({start: start?.getTime(), end: end?.getTime()})
+    onManipulation({start: start?.getTime(), end: end?.getTime()})
   }
 
   const CustomInput = ({value, onClick}) => {
+    React.useEffect(() => {
+
+    }, [value])
     return <input value = {value} onClick = {onClick} class="todo-due-date__input todo-remind__input" placeholder={placeholder} />
   }
 

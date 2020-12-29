@@ -2,21 +2,18 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
  
-export const Calendar = ({onSave, placeholder, initialDate}) => {
-  const [selectedDate, selectDate] = useState('');
+export const Calendar = ({onManipulation, placeholder, initialDate}) => {
+  const [selectedDate, selectDate] = useState(null);
+
+
   React.useEffect(() => {
       selectDate(initialDate)
     }, [initialDate])
     
   const dateChangeHandler = date => {
-    // onSave(date.getTime())
     selectDate(date)
+    onManipulation(date?.getTime())
   }
-
-  const calendarCloseHandler = () => {
-    if(selectedDate) return onSave(selectedDate.getTime())
-  }
-
 
   const CustomInput = ({value, onClick}) => {
     return <input value = {value} onClick = {onClick} class="todo-due-date__input todo-remind__input" placeholder={placeholder} />
@@ -36,15 +33,16 @@ export const Calendar = ({onSave, placeholder, initialDate}) => {
 
   return (
     <DatePicker 
-                customInput = {<CustomInput />}
+                customInput = {<CustomInput onChange = {() => console.log('change!!')} />}
                 shouldCloseOnSelect={false} 
                 selected={selectedDate} 
                 onChange={dateChangeHandler} 
                 // dateFormat ="MM/dd/yyyy h:mm"
                 // dateFormat ="MM/dd/yyyy"
-                onCalendarClose = {calendarCloseHandler}
+                // onCalendarClose = {calendarCloseHandler}
                 timeFormat = "HH"
                 showTimeInput
+                isClearable
                 />
                 
   );

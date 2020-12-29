@@ -9,7 +9,7 @@ export const tasksAPI = {
         return instance.put('/tasks', {selectedListId, selectedTaskId, newValue})
     },
 
-    deleteTask: (listId, taskId) => {
-        return instance.put('/tasks')
-    }
+    deleteTask: (selectedListId, selectedTaskId) => {
+        return instance.delete('/tasks', {data: {selectedListId, selectedTaskId}})
+    },
 }

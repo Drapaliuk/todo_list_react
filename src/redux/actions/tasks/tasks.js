@@ -9,7 +9,9 @@ import { INITIALIZED_TASKS,
          CHANGE_TASK,
          SELECT_TASK,
          CHANGE_TASKS_LIST_SETTINGS,
-         DEFAULT_TASKS
+         DEFAULT_TASKS,
+         DELETE_TASK,
+         CLOSE_FULL_INFO
         } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
@@ -41,4 +43,16 @@ export const changeListSettings = (selectedListId, newValue) => async dispatch =
     dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload: data})
 }
 
-export const defaultTasks = () => ({type: DEFAULT_TASKS})
+export const defaultTasks = () => ({type: DEFAULT_TASKS});
+export const deleteTask = (selectedListId, selectedTaskId) => async dispatch => {
+    console.log('DELETE TASK ACTION')
+    console.log(selectedListId, selectedTaskId)
+    const {listId, taskId} = (await tasksAPI.deleteTask(selectedListId, selectedTaskId)).data
+
+    console.log('listId', listId, 'taskId', taskId)
+
+    dispatch({type: DELETE_TASK, payload: {listId, taskId}})
+}
+
+export const closeFullInfo = () => ({type: CLOSE_FULL_INFO})
+

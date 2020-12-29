@@ -1,9 +1,12 @@
-import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, DEFAULT_TASKS, DELETE_TASKS_LIST, INITIALIZED_TASKS, SAVE_NEW_LIST, SAVE_NEW_TASK, SELECT_TASK, SELECT_TASKS_LIST } from "../../actions_types"
+import { listsAPI } from "../../../API";
+import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, SAVE_NEW_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK } from "../../actions_types"
 
 const initialState = {
     tasksLists: [],
     selectedListId: '',
-    selectedTaskId: ''
+    selectedTaskId: '',
+    selectedSubtaskId: '',
+    selectedCommentId: ''
 }
 
 export const tasks = (prevState = initialState, action) => {
@@ -61,6 +64,9 @@ export const tasks = (prevState = initialState, action) => {
                 })
 
             }
+
+
+
         case CHANGE_TASK:
             return {
                 ...prevState,
@@ -70,6 +76,8 @@ export const tasks = (prevState = initialState, action) => {
                             if(task._id === payload.taskId) {
                                 const [key] = Object.keys(payload.changedValue)
                                 task[key] = payload.changedValue[key] //!
+                                // console.log(key, payload.changedValue[key])
+                                // return {...task, [key]: payload.changedValue[key]}
                                 return task
                             }
                             return task
@@ -77,6 +85,26 @@ export const tasks = (prevState = initialState, action) => {
                     }
                     return list
                 })
+            }
+        case DELETE_TASK:
+            return {
+                ...prevState,
+                selectedTaskId: '',
+                tasksLists: [...prevState.tasksLists.map(list => {
+                    if(list._id === payload.listId) {
+                        const filteredTasks = list.tasks.filter(task => task._id !== payload.taskId)
+                        list.tasks = [...filteredTasks]
+                        return list
+                    }
+                    return list
+                })]
+
+            }
+        
+        case CLOSE_FULL_INFO: 
+            return {
+                ...prevState,
+                selectedTaskId: ''
             }
 
         case SELECT_TASK: 
@@ -109,17 +137,71 @@ export const tasks = (prevState = initialState, action) => {
                 selectedListId: '',
                 selectedTaskId: ''
             }
-        // case CHANGE_TASKS_LIST_SETTINGS:
-        //     return {
-        //         ...prevState,
-        //         tasksLists: prevState.tasksLists.map(list => {
-        //             if(list._id === payload.listId) {
-        //                 const [changedValueKey] = Object.keys(payload.changedValue)
-        //                 return {...list, settings: {...list.settings, [changedValueKey]: payload.changedValue[changedValueKey] }}
-        //             }
-        //             return list
-        //         }) 
-        //     }
+        
+        case CREATE_SUBTASK:
+            return {
+                ...prevState,
+                tasksLists: prevState.tasksLists.map(list => {
+                    if(list._id === payload.listId) {
+                        list.tasks.map(task => {
+                            if(task._id === payload.taskId) {
+                                task.subtasks.push(payload.createdSubtask)
+                            }
+                            return task
+                        })
+                    }
+                    return list
+                })
+            }
+        
+        case UPDATE_SUBTASK:
+            return {
+                ...prevState,
+                tasksLists: prevState.tasksLists.map(list => {
+                    if(list._id === payload.listId) {
+                        list.tasks.map(task => {
+                            if(task._id === payload.taskId) {
+                                task.subtasks.map(subtask => {
+                                    if(subtask._id === payload.subtaskId) {
+                                        subtask.text = payload.update
+                                        return subtask
+                                    }
+                                    return subtask
+                                })
+                            }
+                            return task
+                        })
+                    }
+                    return list
+                })
+            }
+
+          
+
+        
+        case DELETE_SUBTASK:
+            return {
+                ...prevState,
+                tasksLists: prevState.tasksLists.map(list => {
+                    if(list._id === payload.listId) {
+                        list.tasks.map(task => {
+                            if(task._id === payload.taskId) {
+                                const filteredSubtasks = task.subtasks.filter(subtask => subtask._id !== payload._id )
+                                task.subtasks = filteredSubtasks
+                                return task
+                            }
+                            return task
+                        })
+                    }
+                    return list
+                })
+            }
+
+        case SELECT_SUBTASK:
+            return {
+                ...prevState,
+                selectedSubtaskId: payload.id              
+            }
 
         default:
             return prevState

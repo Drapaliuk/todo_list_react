@@ -34,7 +34,6 @@ export const getUncompletedTasks = sortBy => state => {
 
 export const getCompletedTasks = state => {
     if(!isCreatedTasksLists(state)) return
-
     const {tasks} = getSelectedListProperty(state)
     return tasks?.filter(task => task.hasDone)
 }

@@ -6,11 +6,11 @@ import { saveNewList, selectTasksList, defaultTasks } from '../../../../redux/ac
 import { getSelectedListId, getTasksLists } from '../../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './components'
 
-export function Bar({isCreatedTasksLists}) {
+export function Bar({isCreatedTasksLists, tasksLists}) {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state))
     const [isVisibleNewList, setVisibleNewList] = React.useState(false);
-    const tasksLists = useSelector(state => getTasksLists(state));
+    // const tasksLists = useSelector(state => getTasksLists(state));
 
     const onVisibleNewList = () => setVisibleNewList(!isVisibleNewList)
     const onSaveNewList = newListName => dispatch(saveNewList(newListName))

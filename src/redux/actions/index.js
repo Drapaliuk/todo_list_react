@@ -3,3 +3,4 @@ export * from './initialize';
 export * from './biography/biography';
 export * from './settings/settings';
 export * from './tasks/tasks';
+export * from './tasks/subtasks';

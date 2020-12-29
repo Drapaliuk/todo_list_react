@@ -1,34 +1,45 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { changeTask, saveNewTask } from '../../../../redux/actions/tasks/tasks'
-import { getSelectedListId, getSelectedTask, getSelectedTaskId, getSelectedTaskProperty, getSelectedTaskText } from '../../../../redux/selectors'
+import { changeTask, closeFullInfo, deleteTask } from '../../../../redux/actions/tasks/tasks'
+import { getSelectedListId, getSelectedTaskId } from '../../../../redux/selectors'
 import { ChangeText } from './ChangeText'
-import { Comment, SubTask } from './components'
+import { Comment, SubTask} from './components'
 import { TaskDateOption } from './components/TaskDateOption'
-import { DueTime } from './components/DueTime'
 import { Notes } from './components/Note'
-import { Reminder } from './components/Remind'
 import { Subtasks } from './components/Subtasks'
 import { BiTimeFive } from 'react-icons/bi'
 import { BsAlarm } from 'react-icons/bs'
 import { FiRepeat } from 'react-icons/fi'
 import { TaskRangeDateOption } from './components/TaskRangeDateOption'
+import { BsTrash } from 'react-icons/bs'
+import { createSubtask, deleteSubtask, updateSubtask } from '../../../../redux/actions'
+import { getSelectedSubtaskId } from '../../../../redux/selectors/subtasks'
 
-export function FullInfo() {
+export function FullInfo({selectedTask}) {
     const dispatch = useDispatch();
 
-    const {text, hasDone, isImportant, term, remind, repeat} = useSelector(state => getSelectedTaskProperty(state));
+    const {text, hasDone, isImportant, term, remind, repeat, subtasks} = selectedTask;
+    
     const selectedListId = useSelector(state => getSelectedListId(state))
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
+    const selectedSubtaskId = useSelector(state => getSelectedSubtaskId(state))
     const ids = [selectedListId, selectedTaskId]
 
     const onComplete =  isComplete => dispatch(changeTask(...ids, {hasDone: isComplete}))
     const onMakeImportant =  isImportant => dispatch(changeTask(...ids, {isImportant: isImportant}))
     const onSaveNewText = newText => dispatch(changeTask(...ids, {text: newText}))
+    const deleteTaskHandler = () => dispatch(deleteTask(...ids))
+    
+    const onManipulationDateOption = optionName => date => dispatch(changeTask(...ids, {[optionName]: date}))
+    const closeFullInfoHandler = () => dispatch(closeFullInfo())
 
-    const onSaveDueDate = date => dispatch(changeTask(...ids, {term: date}))
-    const onSaveRemindDate = date => dispatch(changeTask(...ids, {remind: date}))
-    const onSaveRepeatTask = dates => dispatch(changeTask(...ids, {repeat: dates}))
+
+    const onCreateSubtask = text => dispatch(createSubtask(...ids, text))
+    const onUpdateSubtask = newText => dispatch(updateSubtask(...ids, selectedSubtaskId, newText))
+    const onDeleteSubtask = () => dispatch(deleteSubtask(...ids, selectedSubtaskId))
+    // const onCompleteSubtask = () => 
+
+
     
     
 
@@ -45,11 +56,17 @@ export function FullInfo() {
             
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">
-                    <TaskDateOption onSave = {onSaveDueDate} placeholder = 'due date' Icon = {BiTimeFive} initialDate = {term} />
-                    <TaskDateOption onSave = {onSaveRemindDate} placeholder = 'remind' Icon = {BsAlarm} initialDate = {remind} />
-                    <TaskRangeDateOption onSave = {onSaveRepeatTask} placeholder = 'repeat task' Icon = {FiRepeat} initialDate = {repeat} />
+                    <TaskDateOption onManipulation = {onManipulationDateOption('term')} placeholder = 'due date' Icon = {BiTimeFive} initialDate = {term} />
+                    <TaskDateOption onManipulation = {onManipulationDateOption('remind')} placeholder = 'remind' Icon = {BsAlarm} initialDate = {remind} />
+                    <TaskRangeDateOption onManipulation = {onManipulationDateOption('repeat')} placeholder = 'repeat task' Icon = {FiRepeat} initialDate = {repeat} />
                 </ul>
-                <Subtasks />
+                <Subtasks 
+                          subtasks = {subtasks} 
+                          onCreate = {onCreateSubtask} 
+                          onUpdate = {onUpdateSubtask} 
+                          onDelete = {onDeleteSubtask}
+                          
+                          />
                 <Notes />
 
                 <ul class="todo-comments-list">
@@ -64,16 +81,15 @@ export function FullInfo() {
                     <button class="add-comment-form__btn">Add</button>
                 </form>
                 <div class="todo-full-info__manipulations">
-                    <button class="todo-full-info__close-btn">
-                        <svg class="todo-full-info-icon">
+                    <button onClick = {closeFullInfoHandler} class="todo-full-info__close-btn">
+                        {/* <svg class="todo-full-info-icon">
                             <use href="./src/img/sprite.svg#icon-arrow-right"></use>
-                        </svg>
+                        </svg> */}
+                        close
                     </button>
                     <p class="creted-by">created yesterday by me</p>
-                    <button class="todo-full-info__close-btn todo-full-info__delete-todo">
-                        <svg class="todo-full-info-icon">
-                            <use href="./src/img/sprite.svg#icon-delete"></use>
-                        </svg>
+                    <button onClick = {deleteTaskHandler} class="todo-full-info__close-btn todo-full-info__delete-todo">
+                        <BsTrash className="todo-full-info-icon" />
                     </button>
                 </div>
             </div>

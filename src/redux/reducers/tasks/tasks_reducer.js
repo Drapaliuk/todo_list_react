@@ -80,9 +80,15 @@ export const tasks = (prevState = initialState, action) => {
             }
 
         case SELECT_TASK: 
+            const prevSelectedTaskId = prevState.selectedTaskId
+            const currentSelectedTaskID = payload.taskId
+            const isTheSameIds = prevSelectedTaskId === currentSelectedTaskID
+
             return {
                 ...prevState,
-                selectedTaskId: prevState.selectedTaskId ? '' : payload.taskId
+                // selectedTaskId: prevState.selectedTaskId ? '' : payload.taskId
+                selectedTaskId: isTheSameIds ? '' : payload.taskId
+
             }
 
         case CHANGE_TASKS_LIST_SETTINGS:

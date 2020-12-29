@@ -4,7 +4,7 @@ import { changeTask, saveNewTask } from '../../../../redux/actions/tasks/tasks'
 import { getSelectedListId, getSelectedTask, getSelectedTaskId, getSelectedTaskProperty, getSelectedTaskText } from '../../../../redux/selectors'
 import { ChangeText } from './ChangeText'
 import { Comment, SubTask } from './components'
-import { DateOption } from './components/DateOption'
+import { TaskDateOption } from './components/TaskDateOption'
 import { DueTime } from './components/DueTime'
 import { Notes } from './components/Note'
 import { Reminder } from './components/Remind'
@@ -12,11 +12,12 @@ import { Subtasks } from './components/Subtasks'
 import { BiTimeFive } from 'react-icons/bi'
 import { BsAlarm } from 'react-icons/bs'
 import { FiRepeat } from 'react-icons/fi'
+import { TaskRangeDateOption } from './components/TaskRangeDateOption'
 
 export function FullInfo() {
     const dispatch = useDispatch();
 
-    const {text, hasDone, isImportant} = useSelector(state => getSelectedTaskProperty(state))
+    const {text, hasDone, isImportant, term, remind, repeat} = useSelector(state => getSelectedTaskProperty(state));
     const selectedListId = useSelector(state => getSelectedListId(state))
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
     const ids = [selectedListId, selectedTaskId]
@@ -27,7 +28,7 @@ export function FullInfo() {
 
     const onSaveDueDate = date => dispatch(changeTask(...ids, {term: date}))
     const onSaveRemindDate = date => dispatch(changeTask(...ids, {remind: date}))
-    const onSaveRepeatTask = (from, to) => dispatch(changeTask(...ids, {repeat: {from, to}}))
+    const onSaveRepeatTask = dates => dispatch(changeTask(...ids, {repeat: dates}))
     
     
 
@@ -44,9 +45,9 @@ export function FullInfo() {
             
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">
-                    <DateOption onSave = {onSaveDueDate} placeholder = 'due date' Icon = {BiTimeFive} />
-                    <DateOption onSave = {onSaveRemindDate} placeholder = 'remind' Icon = {BsAlarm} />
-                    <DateOption onSave = {onSaveRepeatTask} placeholder = 'repeat task' Icon = {FiRepeat} />
+                    <TaskDateOption onSave = {onSaveDueDate} placeholder = 'due date' Icon = {BiTimeFive} initialDate = {term} />
+                    <TaskDateOption onSave = {onSaveRemindDate} placeholder = 'remind' Icon = {BsAlarm} initialDate = {remind} />
+                    <TaskRangeDateOption onSave = {onSaveRepeatTask} placeholder = 'repeat task' Icon = {FiRepeat} initialDate = {repeat} />
                 </ul>
                 <Subtasks />
                 <Notes />

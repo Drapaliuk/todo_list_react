@@ -1522,7 +1522,7 @@ header {
 }
 
 .todo-remind__input {
-  color: red;
+  color: #d1c3c3;
   border: none;
   outline: none;
   background-color: transparent;

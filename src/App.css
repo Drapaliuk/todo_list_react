@@ -1488,6 +1488,8 @@ header {
   color: gray;
 }
 
+
+
 .delete-btn__icon {
   width: 13px;
   height: 13px;
@@ -1497,6 +1499,11 @@ header {
   position: absolute;
   right: 5px;
 }
+
+.delete-btn.subtask__open-sign {
+  right: 15px
+}
+
 
 .delete-btn_todo_time_option {
   position: absolute;
@@ -1560,15 +1567,49 @@ header {
   margin-right: 10px;
 }
 
+.todo-subtask__correction-input {
+  padding: 5px 8px;
+  transform: translateX(-1px);
+  border: none;
+  outline: none;
+  background-color: rgb(112, 106, 106);
+  width: 100%;
+}
+
+.todo-subtask__cancel-correction {
+  background-color: rgb(112, 106, 106);
+  border: none;
+  padding: 5px;
+  height: 26px;
+  outline: none;
+  margin-left: 5px;
+}
+
 .todo-subtask {
   box-shadow: 0px 0px 2px gray;
   border-radius: 3px;
-  height: 30px;
+  /* height: 30px; */
+  /* height: auto; */
+  /* width: 100%; */
+  cursor: pointer;
   display: flex;
+  /* display: block; */
+  line-height: 30px;
   align-items: center;
-  padding: 1px 10px;
+  padding: 1px 25px 1px 10px;
   background-color: #fff;
   position: relative;
+}
+
+.todo-subtask__text {
+  height: 30px;
+  overflow-wrap: break-word;
+  white-space: normal;
+  overflow: hidden;
+}
+
+.todo-subtask__text.todo-subtask__text_full {
+  height: auto;
 }
 
 .todo-subtasks__add-form-btn {

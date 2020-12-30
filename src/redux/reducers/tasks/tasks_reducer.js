@@ -163,7 +163,8 @@ export const tasks = (prevState = initialState, action) => {
                             if(task._id === payload.taskId) {
                                 task.subtasks.map(subtask => {
                                     if(subtask._id === payload.subtaskId) {
-                                        subtask.text = payload.update
+                                        const [key, value] = Object.entries(payload.changedSubTask)[0]
+                                        subtask[key] = value
                                         return subtask
                                     }
                                     return subtask
@@ -180,13 +181,15 @@ export const tasks = (prevState = initialState, action) => {
 
         
         case DELETE_SUBTASK:
+            console.log('PAYLOAD', payload)
+
             return {
                 ...prevState,
                 tasksLists: prevState.tasksLists.map(list => {
                     if(list._id === payload.listId) {
                         list.tasks.map(task => {
                             if(task._id === payload.taskId) {
-                                const filteredSubtasks = task.subtasks.filter(subtask => subtask._id !== payload._id )
+                                const filteredSubtasks = task.subtasks.filter(subtask => subtask._id !== payload.subtaskId )
                                 task.subtasks = filteredSubtasks
                                 return task
                             }

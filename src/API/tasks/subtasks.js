@@ -5,8 +5,8 @@ export const subtasksAPI = {
         return instance.post('/tasks/subtasks', {listId, taskId, text})
     },
 
-    changeSubTask: (listId, taskId, subtaskId, text) => {
-        return instance.put('/tasks/subtasks', {listId, taskId, subtaskId, text})
+    updateSubtask: (listId, taskId, subtaskId, newValue) => {
+        return instance.put('/tasks/subtasks', {listId, taskId, subtaskId, newValue})
     },
 
     deleteSubTask: (listId, taskId, subtaskId) => {

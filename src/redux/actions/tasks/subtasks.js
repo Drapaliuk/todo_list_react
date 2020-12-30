@@ -7,11 +7,11 @@ export const createSubtask = (listId, taskId, text) => async dispatch => {
 }
 
 export const updateSubtask = (listId, taskId, subTaskId, text) => async dispatch => {
-    const {data} = await subtasksAPI.changeSubTask(listId, taskId, subTaskId, text)
+    const {data} = await subtasksAPI.updateSubtask(listId, taskId, subTaskId, text)
     dispatch({type: UPDATE_SUBTASK, payload: data})
 }
 
-export const deleteSubtask = (listId, taskId, subTaskId, text) => async dispatch => {
-    const {data} = await subtasksAPI.changeSubTask(listId, taskId, subTaskId, text)
+export const deleteSubtask = (listId, taskId, subTaskId) => async dispatch => {
+    const {data} = await subtasksAPI.deleteSubTask(listId, taskId, subTaskId)
     dispatch({type: DELETE_SUBTASK, payload: data})
 }

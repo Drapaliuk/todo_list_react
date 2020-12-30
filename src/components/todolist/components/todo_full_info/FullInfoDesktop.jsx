@@ -35,11 +35,9 @@ export function FullInfo({selectedTask}) {
 
 
     const onCreateSubtask = text => dispatch(createSubtask(...ids, text))
-    const onUpdateSubtask = newText => dispatch(updateSubtask(...ids, selectedSubtaskId, newText))
-    const onDeleteSubtask = () => dispatch(deleteSubtask(...ids, selectedSubtaskId))
-    // const onCompleteSubtask = () => 
-
-
+    const onChangeText = newText => dispatch(updateSubtask(...ids, selectedSubtaskId, {text: newText}))
+    const onDeleteSubtask = subtaskId => dispatch(deleteSubtask(...ids, subtaskId))
+    const onCompleteSubtask = isComplete => dispatch(updateSubtask(...ids, selectedSubtaskId, {hasDone: isComplete}))
     
     
 
@@ -63,8 +61,9 @@ export function FullInfo({selectedTask}) {
                 <Subtasks 
                           subtasks = {subtasks} 
                           onCreate = {onCreateSubtask} 
-                          onUpdate = {onUpdateSubtask} 
+                          onChangeText = {onChangeText} 
                           onDelete = {onDeleteSubtask}
+                          onCompleteSubtask = {onCompleteSubtask}
                           
                           />
                 <Notes />

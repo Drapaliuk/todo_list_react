@@ -1,6 +1,11 @@
 import React from 'react'
 
-export function SubTask({text}) {
+export function SubTask({text, onChangeText, onComplete}) {
+    const [newText, writeText] = React.useState(text);
+    // const completeHandler = event => onComplete(event.target.checked)
+    // const onChangeText = () => onChangeText(newText)
+    // const writeTextHandler = event => writeText(event.target.value)
+    // const deleteHandler = () =>  
     return (
         <li class="todo-subtasks__list-item">
             <div class="todo-subtask">

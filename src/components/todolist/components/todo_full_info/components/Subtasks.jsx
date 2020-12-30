@@ -1,7 +1,7 @@
 import React from 'react'
 import { SubTask } from './subtask/SubTask'
 
-export function Subtasks({subtasks, onCreate, onUpdate, onDelete}) {
+export function Subtasks({subtasks, onCreate, onChangeText, onComplete, onDelete}) {
     React.useEffect(() => {
         console.log('ESE EFFECT RERENDER')
     }, [subtasks])
@@ -16,11 +16,9 @@ export function Subtasks({subtasks, onCreate, onUpdate, onDelete}) {
                 <input onChange = {onWriteText} class="todo-subtasks__add-form-input" type="text" placeholder="add subtask" />
             </div>
             <ul class="todo-subtasks__list">
-                {
-                    subtasks.map(subtask => <SubTask text = {subtask.text} />)
-                }
-                {/* <SubTask /> */}
-                
+                { subtasks.map(subtask => <SubTask onComplete = {onComplete} 
+                                                   text = {subtask.text}
+                                                   onChangeText = {onChangeText} />) }                
             </ul>
         </div>
     )

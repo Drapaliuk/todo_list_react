@@ -6,8 +6,11 @@ import {AiOutlineClose} from 'react-icons/ai'
 
 
 export function TaskDateOption({onManipulation, placeholder, Icon, initialDate}) {
+    console.log(onManipulation)
+    console.log(placeholder)
+    console.log(Icon)
+    console.log(initialDate)
 
-    // const CustomInput = <input class="todo-due-date__input todo-remind__input" placeholder="Встановити термін" />
     const deleteDateHandler = () => onManipulation(null) 
 
     return (

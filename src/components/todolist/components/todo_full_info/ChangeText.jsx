@@ -32,3 +32,38 @@ export function ChangeText({initialText, onSave, onComplete, onMakeImportant, on
         </div>
     )
 }
+
+
+
+// const childProps = {
+//     subtasks: {onCreate: onCreateSubtask, 
+//                onUpdateText, 
+//                onDelete: onDeleteSubtask, 
+//                onComplete: onCompleteSubtask, 
+//                subtasks},
+
+//     changeText: {initialText: text,
+//                  hasDone,
+//                  isImportant,
+//                  onSave: onSaveNewText,
+//                  onComplete,
+//                  onMakeImportant},
+
+//     dueDate: {onManipulation: onManipulationDateOption('term'),
+//               placeholder: 'due date',
+//               Icon: BiTimeFive,
+//               initialDate: term},
+
+//     remind: {onManipulation: onManipulationDateOption('remind'),
+//              placeholder: 'remind',
+//              Icon: BsAlarm,
+//              initialDate: remind},
+
+//     repeatTask: {onManipulation: onManipulationDateOption('repeat'),
+//                 placeholder: 'repeat task',
+//                 Icon: FiRepeat,
+//                 initialDate: repeat},
+//     manipulations: {onClose: onCloseFullInfo,
+//                     onDeleteTask: onDeleteTask}
+
+// }

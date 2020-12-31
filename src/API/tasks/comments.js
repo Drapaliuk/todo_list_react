@@ -1,15 +1,15 @@
 import {instance} from '../configs/instance';
 
-export const subtasksAPI = {
-    saveNewComment: (selectedListId, selectedTaskId, text) => {
-        return instance.post('/tasks/subtasks', {selectedListId, selectedTaskId, text})
+export const commentsAPI = {
+    createComment: (listId, taskId, text) => {
+        return instance.post('/tasks/subtasks', {listId, taskId, text})
     },
 
-    changeComment: (selectedListId, selectedTaskId, selectedSubTaskId, text) => {
-        return instance.put('/tasks/subtasks', {selectedListId, selectedTaskId, selectedSubTaskId, text})
+    updateComment: (listId, taskId, commentId, newValue) => {
+        return instance.put('/tasks/subtasks', {listId, taskId, commentId, newValue})
     },
 
-    deleteComment: (selectedListId, selectedTaskId, selectedSubTaskId) => {
-        return instance.delete('/tasks/subtasks', {data: {selectedListId, selectedTaskId, selectedSubTaskId}})
+    deleteComment: (listId, taskId, commentId) => {
+        return instance.delete('/tasks/subtasks', {data: {listId, taskId, commentId}})
     }
 }

@@ -1,5 +1,5 @@
 export const INITIALIZED_TASKS = 'tasks/INITIALIZED_TASKS';
-export const SAVE_NEW_LIST = 'tasks/SAVE_NEW_LIST';
+export const CREATE_LIST = 'tasks/CREATE_LIST';
 export const SELECT_TASKS_LIST = 'tasks/SELECT_TASKS_LIST';
 export const DELETE_TASKS_LIST = 'tasks/DELETE_TASKS_LIST';
 export const CLEAR_SELECTED_LIST = 'tasks/CLEAR_SELECTED_LIST';
@@ -13,7 +13,10 @@ export const CLOSE_FULL_INFO = 'tasks/CLOSE_FULL_INFO';
 export const CREATE_SUBTASK = 'tasks/CREATE_SUBTASK';
 export const DELETE_SUBTASK = 'tasks/DELETE_SUBTASK';
 export const UPDATE_SUBTASK = 'tasks/UPDATE_SUBTASK';
-export const SELECT_SUBTASK = 'task/SELECT_SUBTASK';
-export const SAVE_NEW_COMMENT = 'tasks/SAVE_NEW_COMMENT';
+export const SELECT_SUBTASK = 'task/SELECT_SUBTASK'; //! не використовується
+
+export const CREATE_COMMENT = 'tasks/CREATE_COMMENT';
 export const DELETE_COMMENT = 'tasks/DELETE_COMMENT';
 export const UPDATE_COMMENT = 'tasks/UPDATE_COMMENT';
+
+

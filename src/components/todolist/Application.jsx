@@ -16,7 +16,6 @@ return (
     <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
         <Bar isCreatedTasksLists = {isCreatedTasksListsValue} tasksLists = {tasksLists} />
         <TodoList isCreatedTasksLists = {isCreatedTasksListsValue} />
-        
         {isSelectedTask && <FullInfo selectedTask = {selectedTask} tasksLists = {tasksLists} />}
     </div>
 )

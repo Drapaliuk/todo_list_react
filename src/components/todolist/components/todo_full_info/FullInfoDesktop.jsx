@@ -39,7 +39,38 @@ export function FullInfo({selectedTask}) {
     const onDeleteSubtask = id => dispatch(deleteSubtask(...ids, id))
     const onCompleteSubtask = (id, isComplete) => dispatch(updateSubtask(...ids, id, {hasDone: isComplete}))
     
-    
+    const childProps = {
+    subtasks: {onCreate: onCreateSubtask, 
+               onUpdateText, 
+               onDelete: onDeleteSubtask, 
+               onComplete: onCompleteSubtask, 
+               subtasks},
+
+    changeText: {initialText: text,
+                 hasDone,
+                 isImportant,
+                 onSave: onSaveNewText,
+                 onComplete,
+                 onMakeImportant},
+
+    dueDate: {onManipulation: onManipulationDateOption('term'),
+              placeholder: 'due date',
+              Icon: BiTimeFive,
+              initialDate: term},
+
+    remind: {onManipulation: onManipulationDateOption('remind'),
+             placeholder: 'remind',
+             Icon: BsAlarm,
+             initialDate: remind},
+
+    repeatTask: {onManipulation: onManipulationDateOption('repeat'),
+                placeholder: 'repeat task',
+                Icon: FiRepeat,
+                initialDate: repeat},
+    // manipulations: {onClose: onCloseFullInfo,
+    //                 onDeleteTask: onDeleteTask}
+
+}
 
     return (
         <div class="todo-full-info todo-full-info_theme_dark desktop">
@@ -54,9 +85,14 @@ export function FullInfo({selectedTask}) {
             
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">
-                    <TaskDateOption onManipulation = {onManipulationDateOption('term')} placeholder = 'due date' Icon = {BiTimeFive} initialDate = {term} />
+                    {/* <TaskDateOption onManipulation = {onManipulationDateOption('term')} placeholder = 'due date' Icon = {BiTimeFive} initialDate = {term} />
                     <TaskDateOption onManipulation = {onManipulationDateOption('remind')} placeholder = 'remind' Icon = {BsAlarm} initialDate = {remind} />
-                    <TaskRangeDateOption onManipulation = {onManipulationDateOption('repeat')} placeholder = 'repeat task' Icon = {FiRepeat} initialDate = {repeat} />
+                    <TaskRangeDateOption onManipulation = {onManipulationDateOption('repeat')} placeholder = 'repeat task' Icon = {FiRepeat} initialDate = {repeat} /> */}
+                
+                    <TaskDateOption {...childProps.dueDate} />
+                    <TaskDateOption {...childProps.remind} />
+                    <TaskRangeDateOption {...childProps.repeatTask} />
+                
                 </ul>
                 <Subtasks 
                           subtasks = {subtasks} 

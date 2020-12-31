@@ -1601,6 +1601,26 @@ header {
   position: relative;
 }
 
+.subtasks__open-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.subtasks__open-btn {
+  width: 100%;
+  background-color: #303030;
+  border: none;
+  outline: none;
+  margin-bottom: 15px;
+  height: 35px;
+  border-radius: 4px;
+  color: #d1c3c3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px 0 15px;
+}
+
 .todo-subtask__text {
   height: 30px;
   overflow-wrap: break-word;

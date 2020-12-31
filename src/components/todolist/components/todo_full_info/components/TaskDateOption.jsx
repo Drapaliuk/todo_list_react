@@ -6,11 +6,6 @@ import {AiOutlineClose} from 'react-icons/ai'
 
 
 export function TaskDateOption({onManipulation, placeholder, Icon, initialDate}) {
-    console.log(onManipulation)
-    console.log(placeholder)
-    console.log(Icon)
-    console.log(initialDate)
-
     const deleteDateHandler = () => onManipulation(null) 
 
     return (

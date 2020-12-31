@@ -14,12 +14,14 @@ import { TaskRangeDateOption } from './components/TaskRangeDateOption'
 import { BsTrash } from 'react-icons/bs'
 import { createSubtask, deleteSubtask, updateSubtask } from '../../../../redux/actions'
 import { getSelectedSubtaskId } from '../../../../redux/selectors/subtasks'
+import { FullInfoManipulations } from './components/FullInfoManipulations'
+import { Comments } from './components/Comments'
+import { createComment, deleteComment, updateComment } from '../../../../redux/actions/tasks/comments'
 
 export function FullInfo({selectedTask}) {
     const dispatch = useDispatch();
 
-    const {text, hasDone, isImportant, term, remind, repeat, subtasks} = selectedTask;
-    
+    const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments} = selectedTask;
     const selectedListId = useSelector(state => getSelectedListId(state))
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
     const selectedSubtaskId = useSelector(state => getSelectedSubtaskId(state))
@@ -28,20 +30,28 @@ export function FullInfo({selectedTask}) {
     const onComplete =  isComplete => dispatch(changeTask(...ids, {hasDone: isComplete}))
     const onMakeImportant =  isImportant => dispatch(changeTask(...ids, {isImportant: isImportant}))
     const onSaveNewText = newText => dispatch(changeTask(...ids, {text: newText}))
-    const deleteTaskHandler = () => dispatch(deleteTask(...ids))
+    const onDeleteTask = () => dispatch(deleteTask(...ids))
     
     const onManipulationDateOption = optionName => date => dispatch(changeTask(...ids, {[optionName]: date}))
-    const closeFullInfoHandler = () => dispatch(closeFullInfo())
+    const onCloseFullInfo = () => dispatch(closeFullInfo())
 
 
     const onCreateSubtask = text => dispatch(createSubtask(...ids, text))
-    const onUpdateText = (id, newText) => dispatch(updateSubtask(...ids, id, {text: newText}))
+    const onUpdateSubtaskText = (id, newText) => dispatch(updateSubtask(...ids, id, {text: newText}))
     const onDeleteSubtask = id => dispatch(deleteSubtask(...ids, id))
     const onCompleteSubtask = (id, isComplete) => dispatch(updateSubtask(...ids, id, {hasDone: isComplete}))
     
+    const onCreateComment = text => dispatch(createComment(...ids, text))
+    const onUpdateCommentText = (id, newText) => dispatch(updateComment(...ids, id, {text: newText}))
+    const onDeleteComment = id => dispatch(deleteComment(...ids, id))
+
+
+    
+
+
     const childProps = {
     subtasks: {onCreate: onCreateSubtask, 
-               onUpdateText, 
+               onUpdateText: onUpdateSubtaskText, 
                onDelete: onDeleteSubtask, 
                onComplete: onCompleteSubtask, 
                subtasks},
@@ -67,66 +77,30 @@ export function FullInfo({selectedTask}) {
                 placeholder: 'repeat task',
                 Icon: FiRepeat,
                 initialDate: repeat},
-    // manipulations: {onClose: onCloseFullInfo,
-    //                 onDeleteTask: onDeleteTask}
+    manipulations: {onClose: onCloseFullInfo,
+                    onDeleteTask,
+                    onCreateComment
+                },
+    comments: {comments, onDeleteComment}
 
 }
 
     return (
         <div class="todo-full-info todo-full-info_theme_dark desktop">
-            <ChangeText initialText = {text} 
-                        hasDone = {hasDone}
-                        isImportant = {isImportant}
-                        onSave = {onSaveNewText} 
-                        onComplete = {onComplete} 
-                        onMakeImportant = {onMakeImportant}
-                    />
+            <ChangeText {...childProps.changeText}/>
 
             
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">
-                    {/* <TaskDateOption onManipulation = {onManipulationDateOption('term')} placeholder = 'due date' Icon = {BiTimeFive} initialDate = {term} />
-                    <TaskDateOption onManipulation = {onManipulationDateOption('remind')} placeholder = 'remind' Icon = {BsAlarm} initialDate = {remind} />
-                    <TaskRangeDateOption onManipulation = {onManipulationDateOption('repeat')} placeholder = 'repeat task' Icon = {FiRepeat} initialDate = {repeat} /> */}
-                
                     <TaskDateOption {...childProps.dueDate} />
                     <TaskDateOption {...childProps.remind} />
                     <TaskRangeDateOption {...childProps.repeatTask} />
-                
                 </ul>
-                <Subtasks 
-                          subtasks = {subtasks} 
-                          onCreate = {onCreateSubtask} 
-                          onUpdateText = {onUpdateText} 
-                          onDelete = {onDeleteSubtask}
-                          onComplete = {onCompleteSubtask}
-                          />
+                <Subtasks {...childProps.subtasks}/>
                 <Notes />
-
-                <ul class="todo-comments-list">
-                    <Comment />
-                </ul>
+                <Comments {...childProps.comments} />
             </div>
-
-
-            <div class="todo-full-info__manipulation-wrapper">
-                <form class="add-comment-form">
-                    <input class="add-comment-form__input" type="text" placeholder="Add comment..." />
-                    <button class="add-comment-form__btn">Add</button>
-                </form>
-                <div class="todo-full-info__manipulations">
-                    <button onClick = {closeFullInfoHandler} class="todo-full-info__close-btn">
-                        {/* <svg class="todo-full-info-icon">
-                            <use href="./src/img/sprite.svg#icon-arrow-right"></use>
-                        </svg> */}
-                        close
-                    </button>
-                    <p class="creted-by">created yesterday by me</p>
-                    <button onClick = {deleteTaskHandler} class="todo-full-info__close-btn todo-full-info__delete-todo">
-                        <BsTrash className="todo-full-info-icon" />
-                    </button>
-                </div>
-            </div>
+            <FullInfoManipulations {...childProps.manipulations} />
         </div>
 )
 }

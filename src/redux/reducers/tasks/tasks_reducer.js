@@ -11,6 +11,7 @@ const initialState = {
 
 export const tasks = (prevState = initialState, action) => {
     const {payload, type} = action;
+    console.log('action common', action)
 
     switch(type)  {
         case INITIALIZED_TASKS:
@@ -179,8 +180,6 @@ export const tasks = (prevState = initialState, action) => {
 
 
         case DELETE_SUBTASK: //! Зробити абстракцію
-            console.log('PAYLOAD', payload)
-
             return {
                 ...prevState,
                 tasksLists: prevState.tasksLists.map(list => {
@@ -204,27 +203,23 @@ export const tasks = (prevState = initialState, action) => {
                 selectedSubtaskId: payload.id              
             }
 
-
-
-
-
-
-
         case CREATE_COMMENT://! Зробити абстракцію !!!
-        return {
-            ...prevState,
-            tasksLists: prevState.tasksLists.map(list => {
-                if(list._id === payload.listId) {
-                    list.tasks.map(task => {
-                        if(task._id === payload.taskId) {
-                            task.comments.push(payload.createdElement)
-                        }
-                        return task
-                    })
-                }
-                return list
-            })
-        }
+        console.log(CREATE_COMMENT, '-----------------------------', payload)
+            return {
+                ...prevState,
+                tasksLists: prevState.tasksLists.map(list => {
+                    if(list._id === payload.listId) {
+                        list.tasks.map(task => {
+                            if(task._id === payload.taskId) {
+                                console.log('!!!!!', payload.createdElement)
+                                task.comments.push(payload.createdElement)
+                            }
+                            return task
+                        })
+                    }
+                    return list
+                })
+            }
         
         case UPDATE_COMMENT: //! Зробити абстракцію !!!!
             return {
@@ -235,7 +230,7 @@ export const tasks = (prevState = initialState, action) => {
                             if(task._id === payload.taskId) {
                                 task.comments.map(comment => {
                                     if(comment._id === payload.commentId) {
-                                        const [key, value] = Object.entries(payload.changedSubTask)[0]
+                                        const [key, value] = Object.entries(payload.updates)[0]
                                         comment[key] = value
                                         return comment
                                     }
@@ -259,7 +254,7 @@ export const tasks = (prevState = initialState, action) => {
                     if(list._id === payload.listId) {
                         list.tasks.map(task => {
                             if(task._id === payload.taskId) {
-                                const filteredSubtasks = task.comments.filter(comment => comment._id !== payload.elementId )
+                                const filteredSubtasks = task.comments.filter(comment => comment._id !== payload.deletedCommentId )
                                 task.comments = filteredSubtasks
                                 return task
                             }

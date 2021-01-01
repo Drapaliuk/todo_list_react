@@ -1,4 +1,5 @@
 import { listsAPI } from "../../../API";
+import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils/selectors_by_id";
 import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT } from "../../actions_types"
 
 const initialState = {
@@ -11,7 +12,6 @@ const initialState = {
 
 export const tasks = (prevState = initialState, action) => {
     const {payload, type} = action;
-    console.log('action common', action)
 
     switch(type)  {
         case INITIALIZED_TASKS:
@@ -53,53 +53,41 @@ export const tasks = (prevState = initialState, action) => {
                 selectedListId: ''
             }
         case SAVE_NEW_TASK: 
-            return {
-                ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks = [...list.tasks, payload.savedTask]
-                        return list
-                    }
-                    
-                    return list
-                })
 
+            const createTaskLogic = selectedList => {
+                selectedList.tasks = [...selectedList.tasks, payload.savedTask]
+                return selectedList
             }
 
+            return {
+                ...prevState,
+                tasksLists: changeListById(prevState.tasksLists, payload.listId, createTaskLogic)
+            }
 
 
         case CHANGE_TASK:
+
+            const changeTaskLogic = selectedTask => {
+                const [key, value] = Object.entries(payload.changedValue)[0]
+                selectedTask[key] = value
+                return selectedTask
+            } 
+
             return {
                 ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks.map(task => {
-                            if(task._id === payload.taskId) {
-                                const [key] = Object.keys(payload.changedValue)
-                                task[key] = payload.changedValue[key] //!
-                                // console.log(key, payload.changedValue[key])
-                                // return {...task, [key]: payload.changedValue[key]}
-                                return task
-                            }
-                            return task
-                        })
-                    }
-                    return list
-                })
+                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, changeTaskLogic)
             }
         case DELETE_TASK:
+            const deleteTaskLogic = selectedList => {
+                const filteredTasks = selectedList.tasks.filter(task => task._id !== payload.taskId)
+                selectedList.tasks = [...filteredTasks]
+                return selectedList
+            }
+
             return {
                 ...prevState,
                 selectedTaskId: '',
-                tasksLists: [...prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        const filteredTasks = list.tasks.filter(task => task._id !== payload.taskId)
-                        list.tasks = [...filteredTasks]
-                        return list
-                    }
-                    return list
-                })]
-
+                tasksLists: changeListById(prevState.tasksLists, payload.listId, deleteTaskLogic)
             }
         
         case CLOSE_FULL_INFO: 
@@ -115,23 +103,21 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                // selectedTaskId: prevState.selectedTaskId ? '' : payload.taskId
                 selectedTaskId: isTheSameIds ? '' : payload.taskId
-
             }
 
         case CHANGE_TASKS_LIST_SETTINGS:
+            const changeListSettingsLogic = selectedList => {
+                const [key, value] = Object.entries(payload.changedValue)[0]
+                selectedList.settings[key] = value
+                return selectedList
+            }       
+
             return {
                 ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        const [key] = Object.keys(payload.changedValue)
-                        list.settings[key] = payload.changedValue[key]
-                        return list
-                    }
-                    return list
-                }) 
+                tasksLists: changeListById(prevState.tasksLists, payload.listId, changeListSettingsLogic)
             }
+
         case DEFAULT_TASKS:
             return {
                 tasksLists: [],
@@ -139,62 +125,42 @@ export const tasks = (prevState = initialState, action) => {
                 selectedTaskId: ''
             }
         
-        case CREATE_SUBTASK://! Зробити абстракцію
+        case CREATE_SUBTASK:
+
+            const createSubTaskLogic = selectedTask => {
+                const {subtasks} = selectedTask
+                const {createdSubtask} = payload
+                selectedTask.subtasks = [...subtasks, createdSubtask]
+                return selectedTask
+            }
+
             return {
                 ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks.map(task => {
-                            if(task._id === payload.taskId) {
-                                task.subtasks.push(payload.createdSubtask)
-                            }
-                            return task
-                        })
-                    }
-                    return list
-                })
+                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, createSubTaskLogic)
             }
         
-        case UPDATE_SUBTASK: //! Зробити абстракцію
-            return {
-                ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks.map(task => {
-                            if(task._id === payload.taskId) {
-                                task.subtasks.map(subtask => {
-                                    if(subtask._id === payload.subtaskId) {
-                                        const [key, value] = Object.entries(payload.changedSubTask)[0]
-                                        subtask[key] = value
-                                        return subtask
-                                    }
-                                    return subtask
-                                })
-                            }
-                            return task
-                        })
-                    }
-                    return list
-                })
+        case UPDATE_SUBTASK: 
+            const updateSubtaskLogic = selectedSubtask => {
+                const [key, value] = Object.entries(payload.changedSubTask)[0]
+                return {...selectedSubtask, [key]: value} // це копіювання, обов'язкове?
             }
 
-
-        case DELETE_SUBTASK: //! Зробити абстракцію
             return {
                 ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks.map(task => {
-                            if(task._id === payload.taskId) {
-                                const filteredSubtasks = task.subtasks.filter(subtask => subtask._id !== payload.subtaskId )
-                                task.subtasks = filteredSubtasks
-                                return task
-                            }
-                            return task
-                        })
-                    }
-                    return list
-                })
+                tasksLists: changeSubTaskById(prevState.tasksLists, payload.listId, payload.taskId, payload.subtaskId, updateSubtaskLogic)
+            }
+
+        case DELETE_SUBTASK: 
+
+            const deleteSubtaskLogic = selectedTask => {
+                const filteredSubtasks = selectedTask.subtasks.filter(subtask => subtask._id !== payload.subtaskId)
+                selectedTask.subtasks = filteredSubtasks
+                return selectedTask 
+            }
+
+            return {
+                ...prevState,
+                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, deleteSubtaskLogic)
             }
 
         case SELECT_SUBTASK:
@@ -203,68 +169,45 @@ export const tasks = (prevState = initialState, action) => {
                 selectedSubtaskId: payload.id              
             }
 
-        case CREATE_COMMENT://! Зробити абстракцію !!!
-        console.log(CREATE_COMMENT, '-----------------------------', payload)
+        case CREATE_COMMENT:
+
+            const createCommentLogic = selectedTask => {
+                const {comments} = selectedTask
+                const {createdElement} = payload
+                selectedTask.comments = [...comments, createdElement]
+                return selectedTask
+            }
+
             return {
                 ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks.map(task => {
-                            if(task._id === payload.taskId) {
-                                console.log('!!!!!', payload.createdElement)
-                                task.comments.push(payload.createdElement)
-                            }
-                            return task
-                        })
-                    }
-                    return list
-                })
+                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, createCommentLogic)
             }
         
-        case UPDATE_COMMENT: //! Зробити абстракцію !!!!
-            return {
-                ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks.map(task => {
-                            if(task._id === payload.taskId) {
-                                task.comments.map(comment => {
-                                    if(comment._id === payload.commentId) {
-                                        const [key, value] = Object.entries(payload.updates)[0]
-                                        comment[key] = value
-                                        return comment
-                                    }
-                                    return comment
-                                })
-                            }
-                            return task
-                        })
-                    }
-                    return list
-                })
+        case UPDATE_COMMENT:
+            const updateCommentLogic = selectedComment => {
+                const [key, value] = Object.entries(payload.changedSubTask)[0]
+                return {...selectedComment, [key]: value} // це копіювання, обов'язкове?
             }
-
-
-        case DELETE_COMMENT: //! Зробити абстракцію
-            console.log('PAYLOAD', payload)
 
             return {
                 ...prevState,
-                tasksLists: prevState.tasksLists.map(list => {
-                    if(list._id === payload.listId) {
-                        list.tasks.map(task => {
-                            if(task._id === payload.taskId) {
-                                const filteredSubtasks = task.comments.filter(comment => comment._id !== payload.deletedCommentId )
-                                task.comments = filteredSubtasks
-                                return task
-                            }
-                            return task
-                        })
-                    }
-                    return list
-                })
+                tasksLists: changeCommentById(prevState.tasksLists, payload.listId, payload.taskId, payload.subtaskId, updateCommentLogic)
             }
+
+
+        case DELETE_COMMENT: 
+        const deleteCommentLogic = selectedTask => {
+            const filteredComment = selectedTask.comment.filter(subtask => subtask._id !== payload.subtaskId)
+            selectedTask.subtasks = filteredComment
+            return selectedTask 
+        }
+        return {
+            ...prevState,
+            tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, deleteCommentLogic)
+        }
+
         default:
             return prevState
     }
 }
+

@@ -21,7 +21,7 @@ export function Login() {
             <AuthForm onSubmit = {onSubmit} />
             <div class="login__service-panel">
                 <div class="login__remember-me">
-                    <input onChange = {(e) => console.log(e.target.checked)} id="remember_me" type="checkbox" />
+                    <input id="remember_me" type="checkbox" />
                     <label for="remember_me">Remember me</label>
                 </div>
                 <NavLink to='/auth/verification' className = "login__forgot-password">Forgot Password</NavLink>

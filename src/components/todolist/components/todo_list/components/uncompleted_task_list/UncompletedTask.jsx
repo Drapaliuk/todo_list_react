@@ -6,10 +6,8 @@ import { IconPin } from '../../../../../../assets/svg/IconPin';
 
 
 export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, onMakeImportant, isPinned, isImportant}) {
-    console.log('TASK TEXT', text)
     const taskHandler = event => {
         const role = event.target.dataset.role
-        console.log(role)
         if(role === 'complete') return onComplete()
         if(role === 'task') return onSelectTask()
         // if(role === 'pin') return onPin(!isPinned, taskId) //!-????????????????

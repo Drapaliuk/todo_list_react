@@ -2,7 +2,6 @@ import {instance} from './configs/instance';
 
 export const listsAPI = {
     saveNewList: name => {
-        console.log('SAVE NEW LIST')
         return instance.post('/lists', {name})
     },
 

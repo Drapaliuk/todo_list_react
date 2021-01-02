@@ -13,7 +13,7 @@ export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedLis
                 <FaClipboardList className = 'todo-list-label__icon' />
                 <span class="todo-list-label__name">{name} </span>
                 <span class= {classNames("todo-list-label__task-amount", {'todo-list-label__task-amount_selected': isItSelectedList})}  >{tasksAmount}</span>
-                <NavLink onClick = {onSelectList(id)} 
+                <NavLink onClick = {onSelectList(id, name)} 
                          to = '/tasks/edit-list' 
                          className = {classNames("todo-list-label__correct-btn", {'todo-list-label__correct-btn_selected': isItSelectedList})}>
                     <BiPencil className = 'todo-list-label__icon' />

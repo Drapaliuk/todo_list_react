@@ -695,9 +695,9 @@ header {
 }
 
 .bar-section.bar-section_theme_dark .todo-lists-folder__create-new {
-  margin-right: 5px;
   background-color: #706b6b;
 }
+
 
 .bar-section.bar-section_theme_dark .todo-lists-folder__create-new::-webkit-input-placeholder {
   color: #d1c3c3;
@@ -872,6 +872,7 @@ header {
   outline: none;
   padding: 4px 4px 4px 10px;
   border: none;
+  background-color: red;
 }
 
 .todo-lists-folder__inner-list {

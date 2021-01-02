@@ -1,3 +1,4 @@
+import { defaultAppLists } from "../../service/default_app_tasks_list";
 import { SortHandler } from "../../utils/filters";
 
 export const isCreatedTasksLists = state => state.tasks.tasksLists.length > 0
@@ -17,9 +18,26 @@ export const getSelectedListProperty = (state, property) => {
     return list[property];  
 }
 
-export const getUncompletedTasks = currentSortCriteria => state => {
+
+export const getUncompletedTasks = (currentSortCriteria, isSelectedDefaultList, defaultAppListId) => state => {
     if(!isCreatedTasksLists(state)) return
-    
+
+
+    console.log('currentSortCriteria',currentSortCriteria )
+    console.log('isSelectedDefaultList',isSelectedDefaultList )
+    console.log('defaultAppListId',defaultAppListId )
+
+    if(isSelectedDefaultList) {
+        const {filterHandler} = defaultAppLists.find(list => list.id === defaultAppListId)
+        const filteredTasks = state.tasks.reduce((acc, list) => {
+            acc = [...acc, ...filterHandler(list.tasks)]
+            return acc
+        }, [])
+
+        const sortedTasks = filteredTasks //!?
+        return [...sortedTasks]
+    }
+
     const [sortBy, sortOrder] = currentSortCriteria.split('/');
     const {getSortHandler} = new SortHandler(sortBy)
     const {tasks} = getSelectedListProperty(state)
@@ -47,6 +65,14 @@ export const getSelectedTaskProperty = (state, property) => {
     if(!property) return selectedTask
     return selectedTask[property]
 }
+
+
+export const getImportantTasks = state => {
+    if(!isCreatedTasksLists(state)) return
+    const {tasks} = getSelectedListProperty(state)
+    return tasks?.filter(task => task.isImportant)
+}
+
 
 export const getSelectedListSettings = (state, property) => {
     if(!isCreatedTasksLists(state)) return 

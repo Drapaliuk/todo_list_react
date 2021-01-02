@@ -1,29 +1,25 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { defaultAppLists } from '../../../../../../service/default_app_tasks_list';
 
-export function DefaultAppLabels() {
+export function DefaultAppLabels({onSelectList}) {
+
     return (
-        <li class="bar-section__labels-list-item">
-            <div class="todo-list-label todo-list-label_without_correct_btn">
-                <svg class="todo-list-label__icon">
-                    <use href="./src/img/sprite.svg#icon-calendar_color"></use>
-                </svg>
-                <span class="todo-list-label__name">Today </span>
-                <span class="todo-list-label__task-amount">2</span>
-            </div>
-            <div class="todo-list-label todo-list-label_without_correct_btn">
-                <svg class="todo-list-label__icon">
-                    <use href="./src/img/sprite.svg#icon-calendar_color"></use>
-                </svg>
-                <span class="todo-list-label__name">Week </span>
-                <span class="todo-list-label__task-amount">2</span>
-            </div>
-            <div class="todo-list-label todo-list-label_without_correct_btn">
-                <svg class="todo-list-label__icon">
-                    <use href="./src/img/sprite.svg#icon-calendar_color"></use>
-                </svg>
-                <span class="todo-list-label__name">Important </span>
-                <span class="todo-list-label__task-amount">2</span>
-            </div>
-        </li>
+        <Fragment>
+            {
+                defaultAppLists.map(({title, id, Icon}) => {
+                    return (
+                        <li onClick = {onSelectList(id, true)} class="bar-section__labels-list-item">
+                            <div class="todo-list-label todo-list-label_without_correct_btn">
+                            <Icon className="todo-list-label__icon" />
+                            <span class="todo-list-label__name">{title} </span>
+                            <span class="todo-list-label__task-amount">2</span>
+                            </div>
+                        </li>
+                    )
+                    
+                })
+            }
+        </Fragment>
+
     )
 }

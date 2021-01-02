@@ -7,7 +7,8 @@ const initialState = {
     selectedListId: '',
     selectedTaskId: '',
     selectedSubtaskId: '',
-    selectedCommentId: ''
+    selectedCommentId: '',
+    isSelectedDefaultList: ''
 }
 
 export const tasks = (prevState = initialState, action) => {
@@ -30,14 +31,27 @@ export const tasks = (prevState = initialState, action) => {
                 selectedTaskId: ''
             }
 
+
+
         case SELECT_TASKS_LIST:
+            console.log(payload)
+            if(payload.isDefaultAppList) {
+                return {
+                    ...prevState,
+                    selectedListId: payload.listId, 
+                    selectedTaskId: '',
+                    isSelectedDefaultList: true
+                }
+            }
+
             const selectedListId = prevState.tasksLists.find(list => list._id === payload.listId);
             const [selectedTaskId = ''] = selectedListId.tasks.filter(task => (!task.hasDone && task.isPinned )|| (!task.hasDone && !task.isPinned))
-            
+
             return {
                 ...prevState,
                 selectedListId: payload.listId, 
-                selectedTaskId: selectedTaskId._id
+                selectedTaskId: selectedTaskId._id,
+                isSelectedDefaultList: false
             }
             
         case DELETE_TASKS_LIST:

@@ -19,7 +19,7 @@ export const saveNewList = newListName => async dispatch => {
     const { list } = (await listsAPI.saveNewList(newListName)).data; //!
     dispatch({type: CREATE_LIST, payload: list})
 }
-export const selectTasksList = listId => ({type: SELECT_TASKS_LIST, payload: {listId}});
+export const selectTasksList = (listId, isDefaultAppList, ) => ({type: SELECT_TASKS_LIST, payload: {listId, isDefaultAppList}});
 
 export const deleteTasksList = listId => async dispatch => {
     console.log(listId)

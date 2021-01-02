@@ -12,8 +12,10 @@ export function TodoList({isCreatedTasksLists}) {
     const dispatch = useDispatch();
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
 
+
+    const isSelectedDefaultLists = useSelector(state => state.tasks.isSelectedDefaultList)
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria)(state));
+    const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria, isSelectedDefaultLists, selectedListId)(state));
     const completedTasks = useSelector(state => getCompletedTasks(state));
 
     const onSelectTask = id => () => dispatch(selectTask(id))

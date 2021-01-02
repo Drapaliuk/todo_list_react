@@ -24,7 +24,6 @@ export function CreateNewList({onSave, onVisible}) {
                        placeholder="list name"
                        onKeyDown = {saveHandler}
                 />
-                <button onClick = {saveHandler}>+</button>
             </div>
         </li>
     )

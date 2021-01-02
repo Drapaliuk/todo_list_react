@@ -26,7 +26,7 @@ export function TodoList({isCreatedTasksLists}) {
     return (
         <section className="todo-section todo-section_theme_dark">
             <NewTaskInput onSave = {onSaveTask}  />
-            <Route exact path = '/tasks/edit-list'  component = {EditListLabelDesktop} />
+            <Route exact path = '/tasks/edit-list' component = {EditListLabelDesktop} />
             {
                 isCreatedTasksLists
                 &&

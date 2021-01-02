@@ -37,14 +37,16 @@ export const tasks = (prevState = initialState, action) => {
             return {
                 ...prevState,
                 selectedListId: payload.listId, 
-                // selectedTaskId: selectedListId.tasks[0]?._id || ''
                 selectedTaskId: selectedTaskId._id
             }
+            
         case DELETE_TASKS_LIST:
+            const filteredLists = prevState.tasksLists.filter(({_id}) => _id !== payload.deletedListId )
             return {
                 ...prevState,
-                tasksLists: prevState.tasksLists.filter(({_id}) => _id !== payload ),
-                selectedListId: ''
+                tasksLists: filteredLists,
+                selectedListId: filteredLists[0]._id,
+                selectedTaskId: ''
 
             }
         case CLEAR_SELECTED_LIST:

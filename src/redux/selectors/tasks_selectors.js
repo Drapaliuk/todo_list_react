@@ -21,45 +21,12 @@ export const getUncompletedTasks = currentSortCriteria => state => {
     if(!isCreatedTasksLists(state)) return
     
     const [sortBy, sortOrder] = currentSortCriteria.split('/');
-    console.log('sortOrder', sortOrder)
-
-    // const sortByHandler = new SortHandler(sortBy)
-
-    const sortHandlers = {
-        desc: (valueA, valueB) => {
-            const valueType = typeof valueA[sortBy]
-            console.log(valueType)
-            if(valueType === 'string') {
-                if(valueA[sortBy] < valueB[sortBy]) return -1
-                if(valueA[sortBy] > valueB[sortBy]) return 1
-                return 0
-            }
-
-            if(valueType === 'number' || valueType === 'boolean') {
-                return (valueA[sortBy] - valueB[sortBy])
-            }
-    
-        },
-    
-        asc: (valueA, valueB) => {
-            const valueType = typeof valueA[sortBy]
-            if(valueType === 'string') {
-                if(valueA[sortBy] > valueB[sortBy]) return -1
-                if(valueA[sortBy] < valueB[sortBy]) return 1
-                return 0
-            }
-
-            if(valueType === 'number' || valueType === 'boolean') {
-                return (valueB[sortBy] - valueA[sortBy])
-            }
-        }
-    }
-
+    const {getSortHandler} = new SortHandler(sortBy)
     const {tasks} = getSelectedListProperty(state)
 
     const unCompletedTasks = tasks?.filter(task => !task.hasDone)
-    const pinnedTasks = unCompletedTasks?.filter(task => task.isPinned).sort(sortHandlers[sortOrder])
-    const unPinnedTasks = unCompletedTasks?.filter(task => !task.isPinned).sort(sortHandlers[sortOrder])
+    const pinnedTasks = unCompletedTasks?.filter(task => task.isPinned).sort(getSortHandler(sortOrder))
+    const unPinnedTasks = unCompletedTasks?.filter(task => !task.isPinned).sort(getSortHandler(sortOrder))
 
     return [...pinnedTasks, ...unPinnedTasks]
 }

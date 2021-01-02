@@ -2,19 +2,19 @@ import React from 'react'
 import {BsTrash} from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, Redirect } from 'react-router-dom';
-import { clearSelectedList, deleteTasksList } from '../../../../../../redux/actions/tasks/tasks';
+import { deleteTasksList } from '../../../../../../redux/actions/tasks/tasks';
 import { getSelectedListId } from '../../../../../../redux/selectors'
+import { changeListById } from '../../../../../../utils/selectors_by_id';
 export function EditListLabelDesktop() {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));
-    // const selectedListName = useSelector(state => getSelectedListName(state));
-    const [newName, setNewName] = React.useState('')
-
-    const onDeleteList = () => dispatch(deleteTasksList(selectedListId));
-    const onClearSelectedList = () => dispatch(clearSelectedList());
-    if(!selectedListId) {
+    const [newName, setNewName] = React.useState('');
+    const [previousListId] = React.useState(selectedListId)
+    if(previousListId !== selectedListId) {
         return <Redirect to = '/tasks' />
     }
+    const onDeleteList = () => dispatch(deleteTasksList(selectedListId));
+    const renameListHandler = () => dispatch()
 
     return (
         <div className="edit-list-label edit-list-label_theme-dark">
@@ -38,8 +38,11 @@ export function EditListLabelDesktop() {
             <button onClick = {onDeleteList} className="edit-list-label__delete-todo-list">
                 <BsTrash className="edit-list-label__icon" />
             </button>
-            <button onClick = {onClearSelectedList} className = 'edit-list-label__results-btns edit-list-label__results-btn_cancel'>Cancel</button>
-            <button onClick = {onClearSelectedList} className = "edit-list-label__results-btns edit-list-label__results-btn_done">Done</button>
+            <NavLink to = '/tasks' className = 'edit-list-label__results-btns edit-list-label__results-btn_cancel'>Cancel</NavLink>
+            <NavLink to = '/tasks' 
+                     className = "edit-list-label__results-btns edit-list-label__results-btn_done"
+                    //  onClick = {}
+                     >Done</NavLink>
         </footer>
     </div>
     )

@@ -10,9 +10,10 @@ import { CompletedTasksList } from './components/completed_tasks_list/CompletedT
 
 export function TodoList({isCreatedTasksLists}) {
     const dispatch = useDispatch();
-    const currentSortBy = useSelector(state => getSelectedListSettings(state, 'sortBy')) 
+    const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
+
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortBy)(state));
+    const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria)(state));
     const completedTasks = useSelector(state => getCompletedTasks(state));
 
     const onSelectTask = id => () => dispatch(selectTask(id))
@@ -41,8 +42,7 @@ export function TodoList({isCreatedTasksLists}) {
                                         onComplete = {onComplete}
                                     />
                     <TodoListSettings onSortTasks = {onSortTasks} 
-                                      currentSortBy = {currentSortBy} 
-                
+                                      currentSortCriteria = {currentSortCriteria}
                                       />
                 </Fragment>
             }

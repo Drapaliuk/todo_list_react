@@ -1,24 +1,24 @@
 import React from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux';
-import { Redirect, useHistory, useLocation, useParams } from 'react-router-dom';
-import { defaultBiography, defaultSettings, isInitialized } from '../../../../redux/actions';
+import { defaultBiography, defaultSettings, isInitialized, updateSettings } from '../../../../redux/actions';
 import { logOut } from '../../../../redux/actions/authorization';
-import { saveNewList, selectTasksList, defaultTasks } from '../../../../redux/actions/tasks/tasks';
-import { getSelectedListId, getTasksLists } from '../../../../redux/selectors';
+import { saveNewList, selectTasksList, defaultTasks, selectAppList } from '../../../../redux/actions/tasks/tasks';
+import { getSelectedListId } from '../../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './components'
+import { ThemeSwitcher } from './components/ThemeSwitcher';
+import classNames from 'classnames';
 
-export function Bar({isCreatedTasksLists, tasksLists}) {
+
+export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
     const dispatch = useDispatch();
-    // const history = useHistory()
-    // const location = useLocation()
-    // const params = useParams()
-
     const selectedListId = useSelector(state => getSelectedListId(state))
     const [isVisibleNewList, setVisibleNewList] = React.useState(false);
 
     const onVisibleNewList = () => setVisibleNewList(!isVisibleNewList)
     const onSaveNewList = newListName => dispatch(saveNewList(newListName))
-    const onSelectList = (listId, isDefaultAppList) => () => dispatch(selectTasksList(listId, isDefaultAppList))
+    const onSelectUserList = listId => () => dispatch(selectTasksList(listId))
+    const onSelectAppList = listId => () => dispatch(selectAppList(listId))
+    const onThemeChange = newValue => dispatch(updateSettings({theme: newValue}))
     
     const onLogOut = () => {
         batch(() => {
@@ -31,12 +31,13 @@ export function Bar({isCreatedTasksLists, tasksLists}) {
         
     };
 
-    return (
-        <section class="bar-section bar-section_theme_dark">
-            <Header onLogOut = {onLogOut} />
+    
 
+    return (
+        <section className = {classNames('bar-section', {'bar-section_theme_dark': currentTheme === 'dark'})} class="bar-section">
+            <Header onThemeChange = {onThemeChange} currentTheme = {currentTheme} onLogOut = {onLogOut} />
             <ul class="bar-section__labels-list">
-                <DefaultAppLabels onSelectList = {onSelectList} selectedListId = {selectedListId} />
+                <DefaultAppLabels onSelectList = {onSelectAppList} selectedListId = {selectedListId} />
                 
                 {
                     isCreatedTasksLists
@@ -47,7 +48,7 @@ export function Bar({isCreatedTasksLists, tasksLists}) {
                                                id = {_id} 
                                                name = {name} 
                                                tasksAmount = {tasksAmount} 
-                                               onSelectList = {onSelectList}
+                                               onSelectList = {onSelectUserList}
                                                selectedListId = {selectedListId}
                                 />
                     })
@@ -57,8 +58,6 @@ export function Bar({isCreatedTasksLists, tasksLists}) {
                                    onVisible = {onVisibleNewList}
                                    />
                 }
-            {/* <button onClick = {() => {push('/tasks/2')}}>on redirect</button> */}
-
             </ul>
             <button onClick = {onVisibleNewList} class="bar-section__add-new-folder-btn">+</button>
         </section>

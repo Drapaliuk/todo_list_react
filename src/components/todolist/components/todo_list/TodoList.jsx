@@ -2,20 +2,25 @@ import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
 import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../../redux/actions/tasks/tasks';
-import { getSelectedListId, getCompletedTasks, getUncompletedTasks, getSelectedTaskId, getSortByValue, getSelectedListSettings } from '../../../../redux/selectors';
-import { CompletedTask, MobileHeader, EditListLabelDesktop, TodoListSettings, UncompletedTask } from './components'
+import { getSelectedListId, getCompletedTasks, getUncompletedTasks, getSelectedListSettings } from '../../../../redux/selectors';
+import { EditListLabelDesktop, TodoListSettings, UncompletedTask } from './components'
 import { NewTaskInput } from './components/new_task_input/NewTaskInput';
 import { UncompletedTasksList } from './components/uncompleted_task_list/UncompletedTasksList';
 import { CompletedTasksList } from './components/completed_tasks_list/CompletedTasksList';
+import classNames from 'classnames';
 
-export function TodoList({isCreatedTasksLists}) {
+
+export function TodoList({isCreatedTasksLists, currentTheme}) {
     const dispatch = useDispatch();
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
 
 
-    const isSelectedDefaultLists = useSelector(state => state.tasks.isSelectedDefaultList)
+    const isSelectedDefaultList = useSelector(state => {
+        return state.tasks.isSelectedDefaultList
+    })
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria, isSelectedDefaultLists, selectedListId)(state));
+    const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria, isSelectedDefaultList, selectedListId)(state));
+
     const completedTasks = useSelector(state => getCompletedTasks(state));
 
     const onSelectTask = id => () => dispatch(selectTask(id))
@@ -26,7 +31,7 @@ export function TodoList({isCreatedTasksLists}) {
     const onSaveTask = text => dispatch(saveNewTask(selectedListId, text))
     
     return (
-        <section className="todo-section todo-section_theme_dark">
+        <section className = {classNames('todo-section', {'todo-section_theme_dark': currentTheme === 'dark'})}>
             <NewTaskInput onSave = {onSaveTask}  />
             <Route exact path = '/tasks/edit-list' component = {EditListLabelDesktop} />
             {

@@ -1,30 +1,29 @@
 import React from 'react'
-import {RiPushpinFill, RiPushpin2Fill} from 'react-icons/ri';
-import {AiFillStar, AiOutlineStar} from 'react-icons/ai'
+import { AiOutlineStar} from 'react-icons/ai'
 import classNames from 'classnames';
 import { IconPin } from '../../../../../../assets/svg/IconPin';
 
 
-export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, onMakeImportant, isPinned, isImportant}) {
+export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, onMakeImportant, isPinned, isImportant, belongToList}) {
+    console.log('BELONG', belongToList)
+    
     const taskHandler = event => {
         const role = event.target.dataset.role
         if(role === 'complete') return onComplete()
         if(role === 'task') return onSelectTask()
-        // if(role === 'pin') return onPin(!isPinned, taskId) //!-????????????????
-        // if(role === 'important') return onMakeImportant(!isImportant, taskId)
     }
 
     const completeHandler = event => {
         const isCompleted = event.target.checked;
-        onComplete(isCompleted, taskId)
+        onComplete(belongToList, taskId, isCompleted)
     }
 
-    const pinHandler = () => onPin(!isPinned, taskId)
-    const makeImportantHandler = () => onMakeImportant(!isImportant, taskId)
+    const pinHandler = () => onPin(belongToList, taskId,!isPinned)
+    const makeImportantHandler = () => onMakeImportant(belongToList, taskId, !isImportant)
 
     return (
-        <li  onClick = {taskHandler} className="todo-list__item">
-            <div {...{'data-role':'task'}} className="todo">
+        <li onClick = {taskHandler} className="todo-list__item">
+            <div {...{'data-role':'task'}} className="todo todo_theme_dark">
                 <input {...{'data-role':'complete'}} onChange = {completeHandler} className="todo__check-input" type="checkbox"/>
                 <div {...{'data-role':'task'}} className="todo__text">{text}</div>
                 <button onClick = {pinHandler} className="pin-btn pin-btn_todo">

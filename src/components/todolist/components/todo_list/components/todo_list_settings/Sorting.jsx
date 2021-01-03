@@ -9,7 +9,6 @@ export function Sorting({sortByHandler, currentSortCriteria}) {
 
     return (
         <ul className="options">
-       
             <SortingOption  sortByHandler = {sortByHandler('text/asc')} 
                             title = 'Sort Alphabetically' 
                             Icon = {AiOutlineSortAscending} 

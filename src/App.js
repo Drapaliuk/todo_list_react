@@ -26,16 +26,12 @@ function App() {
 
   return (
         <BrowserRouter >
-            {/* {isAuthorization && <Redirect to = '/tasks' />} */}
             {isAuthorization && <Redirect to = '/lists' />}
-
             {!isAuthorization && <Redirect to = '/' />}
-
             <Route exact path = '/' component = {Introduction} />
             <Route path = '/auth' component = {Authorization}/>
             
             <Route path = '/lists:listName?' component = {Application} />
-            {/* <Route path = '/tasks/:taskId?' component = {Application}/> */}
         </BrowserRouter>
   );
 }

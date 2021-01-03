@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, INITIALIZED_SETTINGS } from "../../actions_types"
+import { DEFAULT_SETTINGS, INITIALIZED_SETTINGS, UPDATE_SETTINGS } from "../../actions_types"
 
 const initialState = {
     theme: '',
@@ -18,6 +18,13 @@ export const settings = (prevState = initialState, action) => {
             return {
                 theme: '',
                 language: ''
+            }
+        case UPDATE_SETTINGS:
+            console.log(action.payload)
+
+            return {
+                ...prevState,
+                ...action.payload
             }
         
         default:

@@ -1,18 +1,20 @@
 import { listsAPI } from "../../../API";
 import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils/selectors_by_id";
-import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT } from "../../actions_types"
+import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT, SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST } from "../../actions_types"
 
 const initialState = {
     tasksLists: [],
     selectedListId: '',
+    selectedAppListId: '',
     selectedTaskId: '',
     selectedSubtaskId: '',
     selectedCommentId: '',
-    isSelectedDefaultList: ''
+    isSelectedAppList: false
 }
 
 export const tasks = (prevState = initialState, action) => {
     const {payload, type} = action;
+
 
     switch(type)  {
         case INITIALIZED_TASKS:
@@ -34,15 +36,6 @@ export const tasks = (prevState = initialState, action) => {
 
 
         case SELECT_TASKS_LIST:
-            console.log(payload)
-            if(payload.isDefaultAppList) {
-                return {
-                    ...prevState,
-                    selectedListId: payload.listId, 
-                    selectedTaskId: '',
-                    isSelectedDefaultList: true
-                }
-            }
 
             const selectedListId = prevState.tasksLists.find(list => list._id === payload.listId);
             const [selectedTaskId = ''] = selectedListId.tasks.filter(task => (!task.hasDone && task.isPinned )|| (!task.hasDone && !task.isPinned))
@@ -51,8 +44,20 @@ export const tasks = (prevState = initialState, action) => {
                 ...prevState,
                 selectedListId: payload.listId, 
                 selectedTaskId: selectedTaskId._id,
-                isSelectedDefaultList: false
+                isSelectedAppList: false
             }
+
+
+        case SELECT_APP_LIST:
+            return {
+                ...prevState,
+                isSelectedAppList: true,
+                selectedAppListId: payload.listId,
+                selectedListId: '',
+                selectedTaskId: ''
+            }   
+        
+
             
         case DELETE_TASKS_LIST:
             const filteredLists = prevState.tasksLists.filter(({_id}) => _id !== payload.deletedListId )
@@ -113,14 +118,17 @@ export const tasks = (prevState = initialState, action) => {
             }
 
         case SELECT_TASK: 
-            const prevSelectedTaskId = prevState.selectedTaskId
-            const currentSelectedTaskID = payload.taskId
-            const isTheSameIds = prevSelectedTaskId === currentSelectedTaskID
-
             return {
                 ...prevState,
-                selectedTaskId: isTheSameIds ? '' : payload.taskId
+                selectedTaskId: prevState.selectedTaskId === payload.taskId ? '' : payload.taskId
             }
+
+        case SELECT_TASK_FROM_APP_LIST: 
+            return {
+                ...prevState,
+                selectedListId: payload.listId,
+                selectedTaskId: prevState.selectedTaskId === payload.taskId ? '' : payload.taskId
+        }
 
         case CHANGE_TASKS_LIST_SETTINGS:
             const changeListSettingsLogic = selectedList => {

@@ -11,7 +11,9 @@ import { INITIALIZED_TASKS,
          CHANGE_TASKS_LIST_SETTINGS,
          DEFAULT_TASKS,
          DELETE_TASK,
-         CLOSE_FULL_INFO
+         CLOSE_FULL_INFO,
+         SELECT_APP_LIST,
+         SELECT_TASK_FROM_APP_LIST
         } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
@@ -19,8 +21,8 @@ export const saveNewList = newListName => async dispatch => {
     const { list } = (await listsAPI.saveNewList(newListName)).data; //!
     dispatch({type: CREATE_LIST, payload: list})
 }
-export const selectTasksList = (listId, isDefaultAppList, ) => ({type: SELECT_TASKS_LIST, payload: {listId, isDefaultAppList}});
-
+export const selectTasksList = (listId, isDefaultAppList) => ({type: SELECT_TASKS_LIST, payload: {listId, isDefaultAppList}});
+export const selectAppList = listId => ({type: SELECT_APP_LIST, payload: {listId}})
 export const deleteTasksList = listId => async dispatch => {
     console.log(listId)
     const {data: payload} = (await listsAPI.deleteList(listId));
@@ -39,6 +41,10 @@ export const changeTask = (selectedListId, selectedTaskId, newValue) => async di
 }
 
 export const selectTask = taskId => ({type: SELECT_TASK, payload: {taskId}});
+export const selectTaskFromAppList = (listId, taskId) => ({type: SELECT_TASK_FROM_APP_LIST, payload: {listId, taskId}});
+
+
+
 export const changeListSettings = (selectedListId, newValue) => async dispatch => {
     const {data: payload} = await listsAPI.changeSettings(selectedListId, newValue)
     dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload})

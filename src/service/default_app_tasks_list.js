@@ -2,7 +2,7 @@ import { FcCalendar } from 'react-icons/fc';
 import { AiOutlineStar } from 'react-icons/ai';
 
 
-export const defaultAppLists = [
+export const appListsData = [
     {
         title: 'today',
         id: 'DL_today',

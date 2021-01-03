@@ -13,7 +13,7 @@ export function CompletedTask({text, onSelectTask, onComplete, taskId}) {
 
     return (
         <li onClick = {onSelectTask} className="todo-list__item">
-            <div className="todo todo_completed">
+            <div className="todo todo_theme_dark todo_completed">
                 <input onChange = {completeHandler} checked = {isCompleted} className="todo__check-input" type="checkbox"/>
                 <div className="todo__text">{text}</div>
             </div>

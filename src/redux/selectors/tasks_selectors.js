@@ -1,4 +1,4 @@
-import { defaultAppLists } from "../../service/default_app_tasks_list";
+import { appListsData } from "../../service/default_app_tasks_list";
 import { SortHandler } from "../../utils/filters";
 
 export const isCreatedTasksLists = state => state.tasks.tasksLists.length > 0
@@ -18,17 +18,24 @@ export const getSelectedListProperty = (state, property) => {
     return list[property];  
 }
 
+export const getTasks = state => {
+    const filteredTasks = state.tasks.tasksLists.reduce((acc, list) => {
+        const uncompletedTasks = list.tasks.filter(task => !task.hasDone)
+        const addedBelongToList = uncompletedTasks.map(task => ({...task, belongToList: list._id}))
+        acc = [...acc, ...addedBelongToList]
+        return acc
+    }, [])
+    
+    return filteredTasks
+}
+
+
 
 export const getUncompletedTasks = (currentSortCriteria, isSelectedDefaultList, defaultAppListId) => state => {
     if(!isCreatedTasksLists(state)) return
 
-
-    console.log('currentSortCriteria',currentSortCriteria )
-    console.log('isSelectedDefaultList',isSelectedDefaultList )
-    console.log('defaultAppListId',defaultAppListId )
-
     if(isSelectedDefaultList) {
-        const {filterHandler} = defaultAppLists.find(list => list.id === defaultAppListId)
+        const {filterHandler} = appListsData.find(list => list.id === defaultAppListId)
         const filteredTasks = state.tasks.reduce((acc, list) => {
             acc = [...acc, ...filterHandler(list.tasks)]
             return acc
@@ -60,8 +67,9 @@ export const getSelectedTaskProperty = (state, property) => {
 
     const selectedListId = state.tasks.selectedListId;
     const selectedTaskId = state.tasks.selectedTaskId;
-    const {tasks} = state.tasks.tasksLists.find(list => list._id === selectedListId)
-    const selectedTask = tasks.find(task => task._id === selectedTaskId)
+    const foundList = state.tasks.tasksLists.find(list => list._id === selectedListId)
+    if(!foundList) return 
+    const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
     if(!property) return selectedTask
     return selectedTask[property]
 }

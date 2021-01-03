@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { changeTask, closeFullInfo, deleteTask } from '../../../../redux/actions/tasks/tasks'
 import { getSelectedListId, getSelectedTaskId } from '../../../../redux/selectors'
 import { ChangeText } from './ChangeText'
-import { Comment, SubTask} from './components'
 import { TaskDateOption } from './components/TaskDateOption'
 import { Notes } from './components/Note'
 import { Subtasks } from './components/Subtasks'
@@ -11,14 +10,14 @@ import { BiTimeFive } from 'react-icons/bi'
 import { BsAlarm } from 'react-icons/bs'
 import { FiRepeat } from 'react-icons/fi'
 import { TaskRangeDateOption } from './components/TaskRangeDateOption'
-import { BsTrash } from 'react-icons/bs'
 import { createSubtask, deleteSubtask, updateSubtask } from '../../../../redux/actions'
 import { getSelectedSubtaskId } from '../../../../redux/selectors/subtasks'
 import { FullInfoManipulations } from './components/FullInfoManipulations'
 import { Comments } from './components/Comments'
 import { createComment, deleteComment, updateComment } from '../../../../redux/actions/tasks/comments'
+import classNames from 'classnames';
 
-export function FullInfo({selectedTask}) {
+export function FullInfo({selectedTask, currentTheme}) {
     const dispatch = useDispatch();
 
     const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments} = selectedTask;
@@ -86,7 +85,7 @@ export function FullInfo({selectedTask}) {
 }
 
     return (
-        <div class="todo-full-info todo-full-info_theme_dark desktop">
+        <div className = {classNames('todo-full-info', {'todo-full-info_theme_dark': currentTheme === 'dark'})}>
             <ChangeText {...childProps.changeText}/>
 
             

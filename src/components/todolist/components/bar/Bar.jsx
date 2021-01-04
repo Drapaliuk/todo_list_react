@@ -8,6 +8,8 @@ import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './compo
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import classNames from 'classnames';
 
+import { clearPersonalData } from '../../../../redux/actions/personal_data/personal_data';
+
 
 export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
     const dispatch = useDispatch();
@@ -25,16 +27,17 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
             dispatch(defaultTasks())
             dispatch(defaultBiography())
             dispatch(defaultSettings())
+            dispatch(clearPersonalData())
             dispatch(isInitialized())
             dispatch(logOut())
         })
         
     };
 
-    
+    console.log('BAR THEME', currentTheme === 'dark')
 
     return (
-        <section className = {classNames('bar-section', {'bar-section_theme_dark': currentTheme === 'dark'})} class="bar-section">
+        <section className = {classNames('bar-section', {'bar-section_theme_dark': currentTheme === 'dark'})}>
             <Header onThemeChange = {onThemeChange} currentTheme = {currentTheme} onLogOut = {onLogOut} />
             <ul class="bar-section__labels-list">
                 <DefaultAppLabels onSelectList = {onSelectAppList} selectedListId = {selectedListId} />

@@ -2,21 +2,15 @@ import React from 'react'
 import { ThemeSwitcher } from '../ThemeSwitcher'
 import { BiLogOut } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
+import { IoSettingsOutline } from 'react-icons/io5';
 
 export function Header({onLogOut, onThemeChange, currentTheme}) {
     return (
         <header>
-        {/* <button class="user-photo">
-            <img src="./src/img/logo.jpg" alt="user photo" />
-        </button> */}
-        <NavLink to = '/lists/settings'>Settings</NavLink>
-
+        <NavLink to = '/lists/settings'>
+            <IoSettingsOutline className = 'icon icon-settings' />
+        </NavLink>
         <div>
-            <button class="settings-btn">
-                <svg class="icon icon-settings">
-                    <use href="./src/img/sprite.svg#icon-settings"></use>
-                </svg>
-            </button>
             <button class="bell">
                 <svg class="icon icon--notification">
                     <use href="./src/img/sprite.svg#icon-notification"></use>

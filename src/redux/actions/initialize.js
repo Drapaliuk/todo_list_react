@@ -4,6 +4,7 @@ import { localStorageManipulator } from "../../utils";
 import { IS_FETCHING_INIT_DATA, IS_INITIALIZED } from '../actions_types';
 import { isAuthorization } from "./authorization";
 import { initializeBiography } from "./biography/biography";
+import { initializePersonalData } from "./personal_data/personal_data";
 import { initializeSettings } from "./settings/settings";
 import { initializeTasks } from "./tasks/tasks";
 
@@ -19,6 +20,7 @@ export const initialize = () => async dispatch => {
 
     const response = await initializeAPI.initialize(token, refreshToken);
     const {responseCode, shouldUpdateTokens, payload} = response.data;
+    console.log('payload', payload)
     if(responseCode === 0) {
         dispatch(isAuthorization(false));
         dispatch(isInitialized(false));
@@ -28,11 +30,12 @@ export const initialize = () => async dispatch => {
 
     if(shouldUpdateTokens) localStorageManipulator.saveTokens(shouldUpdateTokens)
 
-    const {tasks, biography, settings} = payload;
+    const {tasks, biography, settings, personalData} = payload;
 
     dispatch( initializeTasks(tasks) );
     dispatch( initializeSettings(settings) );
     dispatch( initializeBiography(biography) );
+    dispatch( initializePersonalData(personalData) )
 
     dispatch( isAuthorization(true) );
     dispatch( isInitialized(true) );

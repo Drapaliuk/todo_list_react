@@ -1,0 +1,1 @@
+export const getUserPersonalData = state => state.personalData 

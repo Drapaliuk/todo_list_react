@@ -1,0 +1,1 @@
+export const getProfileSettings = state => state.settings

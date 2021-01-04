@@ -11,8 +11,7 @@ export function Application() {
     const selectedTask = useSelector(state => getSelectedTaskProperty(state))
     const tasksLists = useSelector(state => getTasksLists(state));
     const isSelectedAppList = useSelector(state => state.tasks.isSelectedAppList);
-    const currentTheme = useSelector(state => state.settings.theme)
-
+    const currentTheme = useSelector(state => state.settings.theme);
     return (
         <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
             <Bar currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} tasksLists = {tasksLists} />

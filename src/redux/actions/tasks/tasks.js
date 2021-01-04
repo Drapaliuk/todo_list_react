@@ -24,7 +24,6 @@ export const saveNewList = newListName => async dispatch => {
 export const selectTasksList = (listId, isDefaultAppList) => ({type: SELECT_TASKS_LIST, payload: {listId, isDefaultAppList}});
 export const selectAppList = listId => ({type: SELECT_APP_LIST, payload: {listId}})
 export const deleteTasksList = listId => async dispatch => {
-    console.log(listId)
     const {data: payload} = (await listsAPI.deleteList(listId));
     return dispatch({type: DELETE_TASKS_LIST, payload})
 }

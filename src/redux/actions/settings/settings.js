@@ -5,5 +5,5 @@ export const initializeSettings = payload => ({type: INITIALIZED_SETTINGS, paylo
 export const defaultSettings = () => ({type: DEFAULT_SETTINGS})
 export const updateSettings = newValue => async dispatch => {
     dispatch({type: UPDATE_SETTINGS, payload: newValue})
-    // settingsAPI.updateSettings(newValue)
+    settingsAPI.updateSettings(newValue)
 }

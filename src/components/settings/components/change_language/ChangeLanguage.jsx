@@ -1,10 +1,17 @@
 import React from 'react';
 import { OpenPartButton } from '../OpenPartButton';
 import { GrLanguage } from 'react-icons/gr';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { LanguageItem } from './LanguageItem';
+import { availableLanguages } from './available_languages';
+import { updateSettings } from '../../../../redux/actions';
+import { getProfileSettings } from '../../../../redux/selectors/settings';
+import { SelectedLanguage } from './SelectedLanguage';
 
 export function ChangeLanguage({onOpen, isOpen}) {
+    const dispatch = useDispatch();
+    const {language: selectedLanguage} = useSelector(state => getProfileSettings(state))
+    const onChangeLanguage = langCode => dispatch(updateSettings({language: langCode}))
 
     return (
             <li class="settings__part">
@@ -13,18 +20,12 @@ export function ChangeLanguage({onOpen, isOpen}) {
                     isOpen &&
                     <div class="settings__value-list">
                         <div class="settings__value-list-item">
-                            <div class="settings__selected-language">
-                                Current select: English
-                                <svg class="settings__icon_part_name settings__icon_selected_language">
-                                    <use href="./src/img/sprite.svg#icon-united-kingdom"></use>
-                                </svg>
-                            </div>
-                            <button class="settings__language-btn">
-                                Ukraine
-                                <svg class="settings__icon_language_btn">
-                                    <use href="./src/img/sprite.svg#icon-ukraine"></use>
-                                </svg>
-                            </button>
+                          <SelectedLanguage selectedLanguage = {selectedLanguage} />
+                          {availableLanguages.map(language => {
+                              if(language.code !== selectedLanguage) {
+                                return <LanguageItem {...language} onChange = {onChangeLanguage} />
+                              }
+                          })}
                         </div>
                     </div>
                 }

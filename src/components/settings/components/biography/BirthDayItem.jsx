@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import DatePicker from "react-datepicker";
+
 import { BiPencil } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { FaRegSave } from 'react-icons/fa';
+import { Calendar } from '../../../todolist/components/todo_full_info/components/Calendar';
 
                 
 
@@ -46,13 +47,7 @@ export function BirthDayItem({initialDate, placeholder}) {
             isCorrection 
                 &&
             <div className = 'settings__change-value-wrapper'>
-                <DatePicker 
-                customInput = {<CustomInput onChange = {() => console.log('change!!')} />}
-                shouldCloseOnSelect={false} 
-                selected={selectedDate} 
-                onChange={dateChangeHandler} 
-                timeFormat = "HH"
-            />
+                <Calendar />
                 {
                     <button className="settings__save-btn">
                         <FaRegSave className="settings__save-icon" />

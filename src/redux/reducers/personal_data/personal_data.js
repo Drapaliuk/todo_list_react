@@ -5,7 +5,7 @@ const initialState = {
     phone: ''
 }
 
-export const biography = (prevState = initialState, action) => {
+export const personalData = (prevState = initialState, action) => {
     switch(action.type) {
         case INITIALIZE_PERSONAL_DATA:
             const {email, phone} = action.payload

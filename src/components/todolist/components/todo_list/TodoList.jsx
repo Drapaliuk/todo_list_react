@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
 import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../../redux/actions/tasks/tasks';
 import { getSelectedListId, getCompletedTasks, getUncompletedTasks, getSelectedListSettings } from '../../../../redux/selectors';
-import { EditListLabelDesktop, TodoListSettings, UncompletedTask } from './components'
+import { EditListLabelDesktop, TodoListSettings } from './components'
 import { NewTaskInput } from './components/new_task_input/NewTaskInput';
 import { UncompletedTasksList } from './components/uncompleted_task_list/UncompletedTasksList';
 import { CompletedTasksList } from './components/completed_tasks_list/CompletedTasksList';

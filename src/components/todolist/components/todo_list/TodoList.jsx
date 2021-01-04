@@ -7,6 +7,9 @@ import { EditListLabelDesktop, TodoListSettings, UncompletedTask } from './compo
 import { NewTaskInput } from './components/new_task_input/NewTaskInput';
 import { UncompletedTasksList } from './components/uncompleted_task_list/UncompletedTasksList';
 import { CompletedTasksList } from './components/completed_tasks_list/CompletedTasksList';
+import { ProfileSettings } from '../../../settings/ProfileSettings';
+
+
 import classNames from 'classnames';
 
 
@@ -33,7 +36,8 @@ export function TodoList({isCreatedTasksLists, currentTheme}) {
     return (
         <section className = {classNames('todo-section', {'todo-section_theme_dark': currentTheme === 'dark'})}>
             <NewTaskInput onSave = {onSaveTask}  />
-            <Route exact path = '/tasks/edit-list' component = {EditListLabelDesktop} />
+            <Route exact path = '/lists/edit-list' component = {EditListLabelDesktop} />
+            <Route path = '/lists/settings' component = {ProfileSettings} />
             {
                 isCreatedTasksLists
                 &&

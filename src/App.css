@@ -1944,16 +1944,14 @@ header {
   background-color: rgba(208, 215, 215, 0.9);
   max-width: 500px;
   width: 100%;
-  height: 95vh;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 18px 10px;
   z-index: 999999;
-  display: none;
-  overflow: auto;
   color: #000;
+  border-radius: 5px;
 }
 
 @media (max-width: 767px) {
@@ -1974,15 +1972,36 @@ header {
   border-radius: 3px;
 }
 
+.settings__change-value-wrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: 60%;
+  align-items: center;
+}
+
 .settings__change-value-input {
   box-shadow: 0 0 10px #a8a4a4;
   outline: none;
   padding: 4px 10px;
-  width: 80%;
+  width: 90%;
   border: none;
   display: block;
   border-radius: 3px;
+  padding: 1px 15px;
+  height: 25px;
 }
+
+.settings__change-password-input-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings__save-icon {
+  width: 23px;
+  height: 23px;
+}
+
 
 .settings__close-btn {
   display: block;
@@ -2002,6 +2021,18 @@ header {
 .settings__icon {
   width: 18px;
   height: 18px;
+}
+
+.settings__save-btn {
+  padding: 0;
+  margin: 0;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.settings__part {
+  margin-bottom: 3px;
 }
 
 .settings__part-name-wrapper {

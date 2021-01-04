@@ -1,13 +1,16 @@
 import React from 'react'
 import { ThemeSwitcher } from '../ThemeSwitcher'
 import { BiLogOut } from 'react-icons/bi';
+import { NavLink } from 'react-router-dom';
 
 export function Header({onLogOut, onThemeChange, currentTheme}) {
     return (
         <header>
-        <button class="user-photo">
+        {/* <button class="user-photo">
             <img src="./src/img/logo.jpg" alt="user photo" />
-        </button>
+        </button> */}
+        <NavLink to = '/lists/settings'>Settings</NavLink>
+
         <div>
             <button class="settings-btn">
                 <svg class="icon icon-settings">

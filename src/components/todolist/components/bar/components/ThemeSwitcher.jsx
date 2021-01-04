@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { BiSun, BiMoon } from 'react-icons/bi';
+import { BiSun } from 'react-icons/bi';
 import { BsMoon } from 'react-icons/bs';
 
 

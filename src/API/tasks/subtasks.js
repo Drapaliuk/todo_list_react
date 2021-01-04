@@ -1,11 +1,11 @@
 import {instance} from '../configs/instance';
 
 export const subtasksAPI = {
-    createSubtask: (listId, taskId, text) => {
+    createSubtask: (listId, taskId, text) => { 
         return instance.post('/tasks/subtasks', {listId, taskId, text})
     },
 
-    updateSubtask: (listId, taskId, subtaskId, newValue) => {
+    updateSubtask: (listId, taskId, subtaskId, newValue) => { //! just update
         return instance.put('/tasks/subtasks', {listId, taskId, subtaskId, newValue})
     },
 

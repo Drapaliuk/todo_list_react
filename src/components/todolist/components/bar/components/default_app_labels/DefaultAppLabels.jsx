@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { appListsData } from '../../../../../../service/default_app_tasks_list';
 
-export function DefaultAppLabels({onSelectList}) {
+export function DefaultAppLabels({appListTaskAmounts, onSelectList}) {
 
     return (
         <Fragment>
@@ -12,7 +12,7 @@ export function DefaultAppLabels({onSelectList}) {
                             <div class="todo-list-label todo-list-label_without_correct_btn">
                             <Icon className="todo-list-label__icon" />
                             <span class="todo-list-label__name">{title} </span>
-                            <span class="todo-list-label__task-amount">2</span>
+                            <span class="todo-list-label__task-amount">{appListTaskAmounts[id]}</span>
                             </div>
                         </li>
                     )

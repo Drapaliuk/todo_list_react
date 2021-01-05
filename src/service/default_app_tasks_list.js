@@ -1,39 +1,30 @@
 import { FcCalendar } from 'react-icons/fc';
 import { AiOutlineStar } from 'react-icons/ai';
-
+import { SortByDatesCreation } from '../utils/date_manipulator';
+const filterHandlers = new SortByDatesCreation('monday')
 
 export const appListsData = [
     {
-        title: 'today',
-        id: 'DL_today',
+        title: 'Today',
+        id: 'APP_LIST_today',
         Icon: FcCalendar,
-        filterHandler: tasks => tasks.filter(task => !task.hasDone)
+        filterHandler: task => {
+            return filterHandlers.compareTwoDates.call(filterHandlers, task.dateCreation, Date.now())
+        }
     },
     {
-        title: 'week',
-        id: 'DL_week',
+        title: 'Week',
+        id: 'APP_LIST_week',
         Icon: FcCalendar,
-        filterHandler: lists => {
-            const allTasks = lists.reduce((acc, list) => {
-                acc = [...acc, list.tasks]
-                return acc
-            }, [])
-
-            return allTasks.filter(task => !task.hasDone)
+        filterHandler: task => {
+            return filterHandlers.isThisWeek.call(filterHandlers, task.dateCreation, Date.now())
         }
 
     },
     {
-        title: 'important',
-        id: 'DL_week',
+        title: 'Important',
+        id: 'APP_LIST_important',
         Icon: AiOutlineStar,
-        filterHandler: lists => {
-            const allTasks = lists.reduce((acc, list) => {
-                acc = [...acc, list.tasks]
-                return acc
-            }, [])
-
-            return allTasks.filter(task => task.isImportant)
-        }
+        filterHandler: task => task.isImportant
     }
 ]

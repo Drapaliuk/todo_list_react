@@ -3,7 +3,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import { defaultBiography, defaultSettings, isInitialized, updateSettings } from '../../../../redux/actions';
 import { logOut } from '../../../../redux/actions/authorization';
 import { saveNewList, selectTasksList, defaultTasks, selectAppList } from '../../../../redux/actions/tasks/tasks';
-import { getSelectedListId } from '../../../../redux/selectors';
+import { getAmountTasksForAppLists, getSelectedListId } from '../../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './components'
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import classNames from 'classnames';
@@ -13,8 +13,11 @@ import { clearPersonalData } from '../../../../redux/actions/personal_data/perso
 
 export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
     const dispatch = useDispatch();
-    const selectedListId = useSelector(state => getSelectedListId(state))
+    const selectedListId = useSelector(state => getSelectedListId(state));
     const [isVisibleNewList, setVisibleNewList] = React.useState(false);
+
+    const appListTaskAmounts = useSelector(state => getAmountTasksForAppLists(state))
+    console.log('amounts', appListTaskAmounts)
 
     const onVisibleNewList = () => setVisibleNewList(!isVisibleNewList)
     const onSaveNewList = newListName => dispatch(saveNewList(newListName))
@@ -34,13 +37,11 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
         
     };
 
-    console.log('BAR THEME', currentTheme === 'dark')
-
     return (
         <section className = {classNames('bar-section', {'bar-section_theme_dark': currentTheme === 'dark'})}>
             <Header onThemeChange = {onThemeChange} currentTheme = {currentTheme} onLogOut = {onLogOut} />
             <ul class="bar-section__labels-list">
-                <DefaultAppLabels onSelectList = {onSelectAppList} selectedListId = {selectedListId} />
+                <DefaultAppLabels appListTaskAmounts = {appListTaskAmounts} onSelectList = {onSelectAppList} selectedListId = {selectedListId} />
                 
                 {
                     isCreatedTasksLists

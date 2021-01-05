@@ -1,5 +1,9 @@
 import { appListsData } from "../../service/default_app_tasks_list";
+import { SortByDatesCreation } from "../../utils/date_manipulator";
 import { SortHandler } from "../../utils/filters";
+
+const sortByDateCreation = new SortByDatesCreation('monday')
+
 
 export const isCreatedTasksLists = state => state.tasks.tasksLists.length > 0
 export const getTasksLists = state => state.tasks.tasksLists;
@@ -27,6 +31,46 @@ export const getTasks = state => {
     }, [])
     
     return filteredTasks
+}
+
+export const getSelectedAppListId = state => state.tasks.selectedAppListId
+
+export const getSelectedAppListData = state => {
+    const currentAppListId = state.tasks.selectedAppListId
+    return appListsData.find(list => list.id === currentAppListId)
+} 
+
+export const getAmountTasksForAppLists = state => {
+    const taskAmounts = appListsData.reduce((acc, el, idx) => {
+            const amount = state.tasks.tasksLists.reduce((acc, list) => {
+                const filteredElements = list.tasks.filter(task => el.filterHandler(task) && !task.hasDone)
+                acc = {...acc, [el.id]: filteredElements.length}
+                return acc
+            }, {})
+            acc = {...acc, ...amount}
+            return acc
+
+    }, {})
+    return taskAmounts
+}
+export const getTaskByCreationDate = (state, selectedAppListId) => {
+    const filteredTasks = state.tasks.tasksLists.reduce((acc, list) => {
+        const appList = appListsData.find(list => list.id === selectedAppListId)
+        
+        const tasks = list.tasks.filter(task => {
+            return appList.filterHandler(task)
+        })
+        const addedBelongToList = tasks.map(task => ({...task, belongToList: list._id}))
+
+
+        acc = [...acc, ...addedBelongToList]
+        return acc
+    }, [])
+
+    const uncompletedTasks = filteredTasks.filter(task => !task.hasDone)
+    const completedTasks = filteredTasks.filter(task => task.hasDone)
+
+    return {uncompletedTasks, completedTasks}
 }
 
 

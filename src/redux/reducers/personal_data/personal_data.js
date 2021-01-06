@@ -1,4 +1,4 @@
-import { UPDATE_PERSONAL_DATA, INITIALIZE_PERSONAL_DATA, CLEAR_PERSONAL_DATA } from "../../actions_types/personal_data";
+import { UPDATE_PERSONAL_DATA, INITIALIZE_PERSONAL_DATA, CLEAR_PERSONAL_DATA } from "../../actions_types";
 
 const initialState = {
     email: '',

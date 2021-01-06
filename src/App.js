@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react'
-import {Route, BrowserRouter, Redirect} from 'react-router-dom';
+import { Route, BrowserRouter, Redirect } from 'react-router-dom';
 import { Application, Authorization, Introduction } from './components';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuthStatus, getFetchingInitDataStatus, getInitializeStatus } from './redux/selectors';
@@ -30,7 +30,6 @@ function App() {
             {!isAuthorization && <Redirect to = '/' />}
             <Route exact path = '/' component = {Introduction} />
             <Route path = '/auth' component = {Authorization}/>
-            
             <Route path = '/lists:listName?' component = {Application} />
         </BrowserRouter>
   );

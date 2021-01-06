@@ -1,4 +1,4 @@
-import { settingsAPI } from "../../../API/settings/settings";
+import { settingsAPI } from "../../../API";
 import { DEFAULT_SETTINGS, INITIALIZED_SETTINGS, UPDATE_SETTINGS } from "../../actions_types";
 
 export const initializeSettings = payload => ({type: INITIALIZED_SETTINGS, payload});

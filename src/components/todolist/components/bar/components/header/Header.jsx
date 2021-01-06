@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThemeSwitcher } from '../ThemeSwitcher'
+import { ThemeSwitcher } from '../theme_switcher/ThemeSwitcher';
 import { BiLogOut } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
 import { IoSettingsOutline } from 'react-icons/io5';

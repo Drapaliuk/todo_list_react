@@ -2,9 +2,10 @@ import React from 'react'
 import {BsTrash} from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink, Redirect } from 'react-router-dom';
-import { deleteTasksList } from '../../../../../../redux/actions/tasks/tasks';
-import { getSelectedListId } from '../../../../../../redux/selectors'
-import { changeListById } from '../../../../../../utils/selectors_by_id';
+import { deleteTasksList } from '../../../../../../redux/actions';
+import { getSelectedListId } from '../../../../../../redux/selectors';
+
+
 export function EditListLabelDesktop() {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));

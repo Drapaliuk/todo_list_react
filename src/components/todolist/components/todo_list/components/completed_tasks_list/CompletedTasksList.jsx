@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { CompletedTask } from './CompletedTask';
+import { CompletedTask } from '../completed_task/CompletedTask';
 
 export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
     const [isVisibleCompletedTasks, setVisibleCompletedTasks] = React.useState(false);

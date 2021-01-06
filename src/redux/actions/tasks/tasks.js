@@ -1,5 +1,4 @@
-import { listsAPI } from "../../../API";
-import { tasksAPI } from "../../../API/tasks";
+import { listsAPI, tasksAPI } from "../../../API";
 import { INITIALIZED_TASKS,
          CREATE_LIST,
          SELECT_TASKS_LIST,

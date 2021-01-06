@@ -1,5 +1,5 @@
 import { IS_AUTHORIZATION } from '../../actions_types';
-import { IS_FETCHING_CHECK_AUTH } from '../../actions_types/authorization';
+import { IS_FETCHING_CHECK_AUTH } from '../../actions_types';
 
 const initialState = {
     isAuthorization: false,

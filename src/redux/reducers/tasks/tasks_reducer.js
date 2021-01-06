@@ -1,5 +1,4 @@
-import { listsAPI } from "../../../API";
-import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils/selectors_by_id";
+import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
 import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT, SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST } from "../../actions_types"
 
 const initialState = {

@@ -1,26 +1,23 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { changeTask, closeFullInfo, deleteTask } from '../../../../redux/actions/tasks/tasks'
-import { getSelectedListId, getSelectedTaskId } from '../../../../redux/selectors'
-import { ChangeText } from './ChangeText'
-import { TaskDateOption } from './components/TaskDateOption'
-import { Notes } from './components/Note'
-import { Subtasks } from './components/Subtasks'
-import { BiTimeFive } from 'react-icons/bi'
-import { BsAlarm } from 'react-icons/bs'
-import { FiRepeat } from 'react-icons/fi'
-import { TaskRangeDateOption } from './components/TaskRangeDateOption'
-import { createSubtask, deleteSubtask, updateSubtask } from '../../../../redux/actions'
-import { getSelectedSubtaskId } from '../../../../redux/selectors/subtasks'
-import { FullInfoManipulations } from './components/FullInfoManipulations'
-import { Comments } from './components/Comments'
-import { createComment, deleteComment, updateComment } from '../../../../redux/actions/tasks/comments'
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeTask, closeFullInfo, deleteTask, createSubtask, 
+         deleteSubtask, updateSubtask,
+         createComment, deleteComment, updateComment } from '../../../../redux/actions';
+
+import { getSelectedListId, getSelectedTaskId, getSelectedSubtaskId } from '../../../../redux/selectors';
+import { Subtasks, Notes, TaskDateOption, ChangeText, TaskRangeDateOption,
+         FullInfoManipulations, Comments } from './components';
+
+import { BiTimeFive } from 'react-icons/bi';
+import { BsAlarm } from 'react-icons/bs';
+import { FiRepeat } from 'react-icons/fi';
+
 import classNames from 'classnames';
 
 export function FullInfo({selectedTask, currentTheme}) {
     const dispatch = useDispatch();
 
-    const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments} = selectedTask;
+    const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments, notes} = selectedTask;
     const selectedListId = useSelector(state => getSelectedListId(state))
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
     const selectedSubtaskId = useSelector(state => getSelectedSubtaskId(state))
@@ -43,6 +40,8 @@ export function FullInfo({selectedTask, currentTheme}) {
     const onCreateComment = text => dispatch(createComment(...ids, text))
     const onUpdateCommentText = (id, newText) => dispatch(updateComment(...ids, id, {text: newText}))
     const onDeleteComment = id => dispatch(deleteComment(...ids, id))
+    const onUpdateNote = newNote => dispatch(changeTask(...ids, {notes: newNote}))
+
 
 
     
@@ -87,8 +86,6 @@ export function FullInfo({selectedTask, currentTheme}) {
     return (
         <div className = {classNames('todo-full-info', {'todo-full-info_theme_dark': currentTheme === 'dark'})}>
             <ChangeText {...childProps.changeText}/>
-
-            
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">
                     <TaskDateOption {...childProps.dueDate} />
@@ -96,7 +93,7 @@ export function FullInfo({selectedTask, currentTheme}) {
                     <TaskRangeDateOption {...childProps.repeatTask} />
                 </ul>
                 <Subtasks {...childProps.subtasks}/>
-                <Notes />
+                <Notes onUpdate = {onUpdateNote} text = {notes} />
                 <Comments {...childProps.comments} />
             </div>
             <FullInfoManipulations {...childProps.manipulations} />

@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
-import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../../redux/actions/tasks/tasks';
+import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../../redux/actions';
 import { getSelectedListId, getCompletedTasks, getUncompletedTasks, getSelectedListSettings } from '../../../../redux/selectors';
-import { EditListLabelDesktop, TodoListSettings } from './components'
 import { NewTaskInput } from './components/new_task_input/NewTaskInput';
-import { UncompletedTasksList } from './components/uncompleted_task_list/UncompletedTasksList';
-import { CompletedTasksList } from './components/completed_tasks_list/CompletedTasksList';
 import { ProfileSettings } from '../../../settings/ProfileSettings';
+import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoListSettings } from './components'
 
 
 import classNames from 'classnames';
@@ -18,9 +16,7 @@ export function TodoList({isCreatedTasksLists, currentTheme}) {
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
 
 
-    const isSelectedDefaultList = useSelector(state => {
-        return state.tasks.isSelectedDefaultList
-    })
+    const isSelectedDefaultList = useSelector(state => state.tasks.isSelectedDefaultList)
     const selectedListId = useSelector(state => getSelectedListId(state));
     const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria, isSelectedDefaultList, selectedListId)(state));
 

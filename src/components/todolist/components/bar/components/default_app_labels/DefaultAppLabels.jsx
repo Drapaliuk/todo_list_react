@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { appListsData } from '../../../../../../service/default_app_tasks_list';
+import { appListsData } from '../../../../../../service/app_lists_data/app_lists_data';
 
 export function DefaultAppLabels({appListTaskAmounts, onSelectList}) {
 

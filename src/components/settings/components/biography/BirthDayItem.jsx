@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { BiPencil } from 'react-icons/bi';
 import { AiOutlineClose } from 'react-icons/ai';
 import { FaRegSave } from 'react-icons/fa';
-import { Calendar } from '../../../todolist/components/todo_full_info/components/Calendar';
+import { Calendar } from '../../../todolist/components/todo_full_info/components/calendar/Calendar';
 
                 
 

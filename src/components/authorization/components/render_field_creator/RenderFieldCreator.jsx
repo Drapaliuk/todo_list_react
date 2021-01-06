@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { minLength, required } from '../../../../validators';
+import { minLength, required } from '../../../../utils';
 
 
 export const renderFieldCreator = () => ({input, meta, ...attributes}) => {

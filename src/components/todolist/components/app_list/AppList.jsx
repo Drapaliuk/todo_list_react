@@ -1,21 +1,18 @@
 import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { changeTask, selectTaskFromAppList } from '../../../../redux/actions/tasks/tasks';
-import { getSelectedAppListData, getSelectedAppListId, getTaskByCreationDate, getTasks } from '../../../../redux/selectors';
-import {  AppListSorting } from './components'
-import { UncompletedTasksList } from './components/uncompleted_task_list/UncompletedTasksList';
+import { changeTask, selectTaskFromAppList } from '../../../../redux/actions';
+import { getSelectedAppListData, getTaskByCreationDate } from '../../../../redux/selectors';
+import { UncompletedTasksList, AppListSorting } from './components';
+import { CompletedTasksList } from '../todo_list/components';
+
 import classNames from 'classnames';
-import { CompletedTasksList } from '../todo_list/components/completed_tasks_list/CompletedTasksList';
 
 export function AppList({currentTheme}) {
     React.useEffect(() => {}, [])
     const dispatch = useDispatch();
     const [sortCriteria, setSortCriteria] = React.useState('isPinned')
     const [sortOrder, setSortOrder] = React.useState('asc')
-
-    // const selectedAppListId = useSelector(state => getSelectedAppListId(state))
     const selectedAppListData = useSelector(state => getSelectedAppListData(state));
-    
     const sortHandler = (valueA, valueB) => {
         if(sortOrder === 'asc') {
             if(valueA[sortCriteria] < valueB[sortCriteria]) return 1
@@ -26,14 +23,11 @@ export function AppList({currentTheme}) {
         if(valueA[sortCriteria] > valueB[sortCriteria]) return 1
         if(valueA[sortCriteria] < valueB[sortCriteria]) return -1
         return 0
-       
-
     }
     
     const tasks = useSelector(state => getTaskByCreationDate(state, selectedAppListData.id))
     const uncompletedTasks = tasks.uncompletedTasks.sort(sortHandler)
     const completedTasks = tasks.completedTasks.sort(sortHandler)
-
 
     const onSelectTaskFromAppList = (listId, taskId) => () => dispatch(selectTaskFromAppList(listId, taskId))
     const onSortTasks = newSortCriteria => setSortCriteria(newSortCriteria);

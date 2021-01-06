@@ -1,6 +1,6 @@
 import React from 'react'
 import {AiOutlineSave} from 'react-icons/ai'
-import { KEY_ENTER } from '../../../../../../service/keyboard_codes';
+import { KEY_ENTER } from '../../../../../../service';
 
 export function NewTaskInput({onSave}) {
     const [taskText, setTaskText] = React.useState('');

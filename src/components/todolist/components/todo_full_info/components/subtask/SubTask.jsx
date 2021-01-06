@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
-import { KEY_ENTER } from '../../../../../../service/keyboard_codes';
+import { KEY_ENTER } from '../../../../../../service';
 import classNames from 'classnames';
 
 

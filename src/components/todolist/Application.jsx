@@ -2,8 +2,8 @@ import React from 'react'
 import { useSelector } from 'react-redux';
 import { getSelectedTaskId, getSelectedTaskProperty, getTasksLists, isCreatedTasksLists } from '../../redux/selectors';
 import {Bar, TodoList, FullInfo} from './components';
-import classNames from 'classnames';
 import { AppList } from './components/app_list/AppList';
+import classNames from 'classnames';
 
 export function Application() {
     const isSelectedTask = useSelector(state => getSelectedTaskId(state));

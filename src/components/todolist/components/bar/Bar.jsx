@@ -1,15 +1,10 @@
 import React from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux';
-import { defaultBiography, defaultSettings, isInitialized, updateSettings } from '../../../../redux/actions';
-import { logOut } from '../../../../redux/actions/authorization';
-import { saveNewList, selectTasksList, defaultTasks, selectAppList } from '../../../../redux/actions/tasks/tasks';
+import { defaultBiography, defaultSettings, isInitialized, updateSettings, logOut,
+         saveNewList, selectTasksList, defaultTasks, selectAppList, clearPersonalData } from '../../../../redux/actions';
 import { getAmountTasksForAppLists, getSelectedListId } from '../../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './components'
-import { ThemeSwitcher } from './components/ThemeSwitcher';
 import classNames from 'classnames';
-
-import { clearPersonalData } from '../../../../redux/actions/personal_data/personal_data';
-
 
 export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
     const dispatch = useDispatch();

@@ -1,13 +1,11 @@
 import React from 'react'
-import { OpenPartButton } from '../OpenPartButton';
+import { OpenPartButton } from '../open_setting_part_btn/OpenPartButton';
 import { GrUserSettings } from 'react-icons/gr';
-// import { BiographyItem } from './BiographyItem';
-
 import { BirthDayItem } from './BirthDayItem';
 import { SettingsItem } from '../SettingsItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateBiography } from '../../../../redux/actions/biography/biography';
-import { getUserBiography } from '../../../../redux/selectors/biography';
+import { updateBiography } from '../../../../redux/actions';
+import { getUserBiography } from '../../../../redux/selectors';
 
 
 
@@ -15,7 +13,8 @@ import { getUserBiography } from '../../../../redux/selectors/biography';
 
 export function Biography({onOpen, isOpen}) {
     const dispatch = useDispatch()
-    const {name, surname, country, birthday } = useSelector(state => getUserBiography(state))
+    const {name, surname, country, birthday } = useSelector(state => getUserBiography(state));
+    
     const onChangeName = newValue => dispatch(updateBiography({name: newValue}))
     const onChangeSurname = newValue => dispatch(updateBiography({surname: newValue}))
     const onChangeCountry = newValue => dispatch(updateBiography({country: newValue}))

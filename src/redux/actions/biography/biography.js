@@ -1,4 +1,4 @@
-import { biographyAPI } from "../../../API/biography/biography";
+import { biographyAPI } from "../../../API";
 const { INITIALIZE_BIOGRAPHY, DEFAULT_BIOGRAPHY, UPDATE_BIOGRAPHY } = require("../../actions_types");
 
 export const initializeBiography = payload => ({type: INITIALIZE_BIOGRAPHY, payload});

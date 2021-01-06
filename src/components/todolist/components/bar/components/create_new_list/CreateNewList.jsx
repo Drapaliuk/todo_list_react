@@ -1,6 +1,6 @@
 import React from 'react'
 import { FaClipboardList } from 'react-icons/fa';
-import { KEY_ENTER } from '../../../../../../service/keyboard_codes';
+import { KEY_ENTER } from '../../../../../../service';
 
 export function CreateNewList({onSave, onVisible}) {
     const [name, setName] = React.useState('')

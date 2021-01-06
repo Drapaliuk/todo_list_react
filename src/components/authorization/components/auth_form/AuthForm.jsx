@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { minLength, required } from '../../../../validators';
+import { minLength, required } from '../../../../utils';
 import {RenderField} from './RenderField';
 
 const validators = [required, minLength];

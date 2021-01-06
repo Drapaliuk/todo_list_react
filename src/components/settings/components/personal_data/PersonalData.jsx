@@ -1,11 +1,11 @@
 import React from 'react'
-import { OpenPartButton } from '../OpenPartButton';
+import { OpenPartButton } from '../open_setting_part_btn/OpenPartButton';
 import { GrUserAdmin } from 'react-icons/gr';
 import { ChangePassword } from './ChangePassword';
 import { SettingsItem } from '../SettingsItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePersonalData } from '../../../../redux/actions/personal_data/personal_data';
-import { getUserPersonalData } from '../../../../redux/selectors/personal_data';
+import { updatePersonalData } from '../../../../redux/actions';
+import { getUserPersonalData } from '../../../../redux/selectors';
 export function PersonalData({onOpen, isOpen}) {
     const dispatch = useDispatch()
     const {email, phone} = useSelector(state => getUserPersonalData(state))

@@ -12,7 +12,6 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
     const [isVisibleNewList, setVisibleNewList] = React.useState(false);
 
     const appListTaskAmounts = useSelector(state => getAmountTasksForAppLists(state))
-    console.log('amounts', appListTaskAmounts)
 
     const onVisibleNewList = () => setVisibleNewList(!isVisibleNewList)
     const onSaveNewList = newListName => dispatch(saveNewList(newListName))

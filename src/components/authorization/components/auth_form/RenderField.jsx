@@ -1,23 +1,26 @@
-import React from 'react'
-
+import React from 'react';
+import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import { BiUser } from 'react-icons/bi';
+import { FaExclamation } from 'react-icons/fa';
 
 export const RenderField = ({input, meta, ...attributes}) => {
     const {touched, invalid, error} = meta;
+    
     const isInvalid = touched && invalid;
-    const [isVisibleMessage, setVisibleMessage] = React.useState(false);
-    const onShowInvalidMessage = () => setVisibleMessage(!isVisibleMessage)
+    const [isVisibleErrorMessage, setVisibleErrorMessage] = React.useState(false);
+    const onShowInvalidMessage = () => setVisibleErrorMessage(!isVisibleErrorMessage)
+ 
 
 
     return  (<div class="login__input-wrapper">
         <label for="login-password">
-            <svg class="icon">
-                <use href="./src/img/sprite.svg#icon-lock"></use>
-            </svg>
+            <BiUser class="icon" />
         </label>
         <input className="login__passsword" {...input} {...attributes} />
+        {attributes.serverError}
 
         {
-            isVisibleMessage || isInvalid &&
+            isVisibleErrorMessage || isInvalid &&
             <div class="login__valid-message">
                 <div class="triangle-right"></div>
                 <div class="triangle-down"></div>
@@ -27,10 +30,7 @@ export const RenderField = ({input, meta, ...attributes}) => {
         {
             isInvalid &&
             <button onClick = {onShowInvalidMessage} class="authorization__show-invalid-message">
-                error
-                {/* <svg class="authorization__invalid-icon">
-                    <use href="#icon-warning-sign"></use>
-                </svg> */}
+                <FaExclamation className="authorization__invalid-icon" />
             </button>
         }
     </div>)

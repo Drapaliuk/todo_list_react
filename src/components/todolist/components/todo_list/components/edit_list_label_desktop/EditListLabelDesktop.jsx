@@ -39,8 +39,8 @@ export function EditListLabelDesktop() {
             <button onClick = {onDeleteList} className="edit-list-label__delete-todo-list">
                 <BsTrash className="edit-list-label__icon" />
             </button>
-            <NavLink to = '/tasks' className = 'edit-list-label__results-btns edit-list-label__results-btn_cancel'>Cancel</NavLink>
-            <NavLink to = '/tasks' 
+            <NavLink to = '/lists' className = 'edit-list-label__results-btns edit-list-label__results-btn_cancel'>Cancel</NavLink>
+            <NavLink to = '/lists' 
                      className = "edit-list-label__results-btns edit-list-label__results-btn_done"
                     //  onClick = {}
                      >Done</NavLink>

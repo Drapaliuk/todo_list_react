@@ -1,68 +1,52 @@
 import { authAPI } from "../../../API"
+import { updateDefaultRequestHeaders } from "../../../API/configs/instance";
 import { localStorageManipulator } from "../../../utils";
-import { IS_AUTHORIZATION } from '../../actions_types';
-import { IS_FETCHING_CHECK_AUTH } from "../../actions_types";
+import { IS_AUTHORIZATION, SET_AUTH_ERROR, IS_FETCHING_CHECK_AUTH, RESET_AUTH } from '../../actions_types';
+import { initializeApp, isInitialized } from "../initialize/initialize";
 
 export const isAuthorization = payload => ({type: IS_AUTHORIZATION, payload})
+const authReset = () => ({type: RESET_AUTH})
 const fetchingCheckAuth = payload => ({type: IS_FETCHING_CHECK_AUTH, payload})
+const setAuthError = payload => ({type: SET_AUTH_ERROR, payload})
 
-export const login = (login, password) => async dispatch => {
+export const login = (authData) => async dispatch => {
     dispatch(fetchingCheckAuth(true))
-    const {responseCode, token, refreshToken} = await authAPI.registration(login, password);
+    try {
+        const {token, refreshToken} = (await authAPI.login(authData)).data;
+        localStorageManipulator.saveTokens(token, refreshToken);
 
-    if(responseCode === 0) return dispatch(isAuthorization(false))
+        updateDefaultRequestHeaders(token, refreshToken);
+        dispatch(initializeApp())
+        dispatch(setAuthError(''))
 
-    localStorageManipulator.saveTokens(token, refreshToken);
-    
-    dispatch(isAuthorization(true));
-    dispatch(fetchingCheckAuth(false));
 
-}
-
-export const refreshToken = () => async dispatch => {
-    const token = localStorageManipulator.getTokens()
-    const refreshToken = localStorageManipulator.getRefreshToken()
-    const {responseCode, newToken, newRefreshToken} = await authAPI.refreshToken(token, refreshToken);
-
-    if(responseCode === 0) {
-        return dispatch(isAuthorization(false))
+    } catch ({response}) {
+        dispatch(setAuthError(response.data.error))
+    } finally {
+        dispatch(fetchingCheckAuth(false));
     }
-
-    localStorageManipulator.saveAuthToken(newToken);
-    localStorageManipulator.saveRefreshToken(newRefreshToken);
-    return dispatch(isAuthorization(true));
-}
-
-
-export const checkAuth = () => async dispatch => {
-    dispatch(fetchingCheckAuth(true))
-    const token = localStorageManipulator.getToken()
-    const {responseCode} = await authAPI.checkAuth(token);
-    if(responseCode === 0) {
-        return dispatch(isAuthorization(false))
-    }
-    
-    dispatch(isAuthorization(true))
-    return dispatch(fetchingCheckAuth(false))
 }
 
 export const logOut = () => {
     localStorageManipulator.deleteTokens()
-    return isAuthorization(false)
+    return authReset()
 }
 
 export const registration = (login, password) => async dispatch => {
     dispatch(fetchingCheckAuth(true))
+    try {
+        const {token, refreshToken} = (await authAPI.registration(login, password)).data;
 
-    const response = await authAPI.registration(login, password);
-    const {responseCode, token, refreshToken} = response.data
+        localStorageManipulator.saveTokens(token, refreshToken)
+        updateDefaultRequestHeaders(token, refreshToken);
+        dispatch(initializeApp())
+        dispatch(setAuthError(''));
 
-    if(responseCode === 0) {
-        return dispatch(isAuthorization(false))
+    } catch ({response}) {
+        dispatch(isAuthorization(false));
+        dispatch(setAuthError(response.data.error));
+    } finally {
+        dispatch(fetchingCheckAuth(false));
     }
-    localStorageManipulator.saveToken(token);
-    localStorageManipulator.saveRefreshToken(refreshToken);
-
-    dispatch(isAuthorization(true));
-    return dispatch(fetchingCheckAuth(false))
 }
+

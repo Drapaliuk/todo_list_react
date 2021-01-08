@@ -1,5 +1,4 @@
 import React from 'react'
-import { MobileEditListLabel } from '../mobile_edit_list_label/MobileEditListLabel'
 import { FaClipboardList } from 'react-icons/fa';
 import { BiPencil } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
@@ -14,7 +13,7 @@ export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedLis
                 <span class="todo-list-label__name">{name} </span>
                 <span class= {classNames("todo-list-label__task-amount", {'todo-list-label__task-amount_selected': isItSelectedList})}  >{tasksAmount}</span>
                 <NavLink onClick = {onSelectList(id, name)} 
-                         to = '/tasks/edit-list' 
+                         to = '/lists/edit-list' 
                          className = {classNames("todo-list-label__correct-btn", {'todo-list-label__correct-btn_selected': isItSelectedList})}>
                     <BiPencil className = 'todo-list-label__icon' />
                 </NavLink>

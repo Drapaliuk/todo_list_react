@@ -20,8 +20,6 @@ export const settings = (prevState = initialState, action) => {
                 language: ''
             }
         case UPDATE_SETTINGS:
-            console.log(action.payload)
-
             return {
                 ...prevState,
                 ...action.payload

@@ -1,12 +1,8 @@
 import {instance} from '../configs/instance';
 
 export const authAPI = {
-    checkAuth: token => {
-        return instance.get('/auth/check', {headers: {Authorization: token}})
-    },
-    
-    login: (login, password) => {
-        return instance.post('/auth/login', {login, password})
+    login: authData => {
+        return instance.post('/auth/login', authData)
     },
     
     registration: (login, password) => {
@@ -16,8 +12,4 @@ export const authAPI = {
     logout: token => {
         return instance.delete('/auth/logout', {headers: {Authorization: token}})
     },
-    
-    refreshToken: (token, refreshToken) => {
-        return instance.post('/auth/refreshToken', refreshToken,{headers: {Authorization: token}})
-    }
 }

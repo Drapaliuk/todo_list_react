@@ -7,3 +7,4 @@ export const getAuthData = (state) => {
 
 export const getAuthStatus = state => state.authorization.isAuthorization
 export const getFetchingCheckAuthStatus = state => state.authorization.isFetchingCheckAuth
+export const getAuthError = state => state.authorization.error

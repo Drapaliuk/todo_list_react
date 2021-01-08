@@ -2,23 +2,36 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { AuthForm } from '../auth_form/AuthForm'
-import {getAuthData} from '../../../../redux/selectors';
-import { login } from '../../../../redux/actions';
+import {getAuthData, getAuthError} from '../../../../redux/selectors';
+import { initialize, login } from '../../../../redux/actions';
+import { serverErrorsMessages } from '../../../../service/server_errors/server_errors';
 
 export function Login() {
     const authData = useSelector(state => getAuthData(state));
+    const serverError = useSelector(state => getAuthError(state));
+
     const dispatch = useDispatch();
-    const onSubmit = () => dispatch(login())
+    const onSubmit = () => {
+        dispatch(login(authData))
+        
+    }
 
     return (
         <div class="login">
             <div class="login__icon-background">
                 <svg class="icon__login">
-                    <use href=""></use>q
+                    <use href=""></use>
                 </svg>
             </div>
             <h2 class="login__header">Log in</h2>
             <AuthForm onSubmit = {onSubmit} />
+            {
+                serverError &&
+                <div class="server-error-message">
+                    {serverErrorsMessages.authorization[serverError].message}
+                </div>
+
+            }
             <div class="login__service-panel">
                 <div class="login__remember-me">
                     <input id="remember_me" type="checkbox" />

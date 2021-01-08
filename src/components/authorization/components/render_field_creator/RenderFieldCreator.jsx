@@ -1,18 +1,14 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
-import { minLength, required } from '../../../../utils';
 
 
 export const renderFieldCreator = () => ({input, meta, ...attributes}) => {
-    const {touched, invalid, error, visited} = meta;
+    const {touched, error} = meta;
     const isInvalid = touched && error;
     const [isVisibleMessage, setVisibleMessage] = React.useState(false);
     const [isVisibleMessageSwitch, setVisibleMessageSwitch] = React.useState(false);
     const onSwitchMessage = () => setVisibleMessage(!isVisibleMessage)
     
-    if(isInvalid) {
-        // setVisibleMessageSwitch(true)
-    }
+   
 
 
 

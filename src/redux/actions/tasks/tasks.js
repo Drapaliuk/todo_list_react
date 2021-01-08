@@ -18,6 +18,7 @@ import { INITIALIZED_TASKS,
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
 export const saveNewList = newListName => async dispatch => { 
     const { list } = (await listsAPI.saveNewList(newListName)).data; //!
+    console.log('LIST', list)
     dispatch({type: CREATE_LIST, payload: list})
 }
 export const selectTasksList = (listId, isDefaultAppList) => ({type: SELECT_TASKS_LIST, payload: {listId, isDefaultAppList}});

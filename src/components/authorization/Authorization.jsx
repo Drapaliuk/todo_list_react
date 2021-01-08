@@ -5,7 +5,7 @@ export function Authorization() {
     
     return (
         <div class="authorization">
-            <SelectLanguage />
+            {/* <SelectLanguage /> */}
             <Route exact path = '/auth/introduction' component = { Introduction } />
             <Route exact path = '/auth/login' component = { Login } />
             <Route exact path = '/auth/registration' component = { SignIn } />

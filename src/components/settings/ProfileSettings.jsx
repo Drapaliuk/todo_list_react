@@ -50,8 +50,8 @@ export function ProfileSettings() {
                 <PersonalData onOpen = {localState.openHandler('personalData')} 
                            isOpen = {localState.getStateValue('personalData')} />
 
-                <ChangeLanguage onOpen = {localState.openHandler('changeLanguage')} 
-                           isOpen = {localState.getStateValue('changeLanguage')} />
+                {/* <ChangeLanguage onOpen = {localState.openHandler('changeLanguage')} 
+                           isOpen = {localState.getStateValue('changeLanguage')} /> */}
             </ul>
         </div>
     )

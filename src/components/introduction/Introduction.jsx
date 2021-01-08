@@ -9,7 +9,7 @@ export function Introduction() {
             <div class="introduction__btn-wrapper">
                 <NavLink className = 'introduction__login-link' to = '/auth/login'>Login</NavLink>
                 <NavLink className = 'introduction__login-link' to = '/auth/registration'>Registration</NavLink>
-                <NavLink className = 'introduction__login-link' to = '/tasks'>Guest</NavLink>
+                {/* <NavLink className = 'introduction__login-link' to = '/tasks'>Guest</NavLink> */}
             </div>
         </div>
         </div>

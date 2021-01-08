@@ -12,10 +12,12 @@ export const RangeCalendar = ({onManipulation, placeholder, initialDate}) => {
     }, [initialDate])
 
   const dateChangeHandler = dates => {
+    console.log('dates', dates)
+
     const [start = null, end = null] = dates;
     setStartDate(start)
     setEndDate(end)
-    onManipulation({start: start?.getTime(), end: end?.getTime()})
+    onManipulation({start, end: end?.getTime()})
   }
 
   const CustomInput = ({value, onClick}) => {

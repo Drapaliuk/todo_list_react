@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { registration } from '../../../../redux/actions';
 import { getAuthData, getAuthError } from '../../../../redux/selectors';
 import { AuthForm } from '../auth_form/AuthForm';
-import Sprite from '../../../../assets/sprite/Sprite';
-import {BiUser} from 'react-icons/bi'
-import IconUser from '../../../../assets/svg/User';
 import { serverErrorsMessages } from '../../../../service/server_errors/server_errors';
+import { AiOutlineClose, AiOutlineUser, AiOutlineUserAdd } from 'react-icons/ai';
+import { NavLink } from 'react-router-dom';
 
 export function SignIn() {
     const dispatch = useDispatch();
@@ -18,7 +17,11 @@ export function SignIn() {
     return (
         <div class="registration">
             <div class="registration__icon-background">
+                <AiOutlineUserAdd className = 'icon__login' />
             </div>
+            <NavLink className = 'auth__close-btn' to = '/'>
+                <AiOutlineClose className = 'auth__close-icon' />
+            </NavLink>
             <h2 class="registration__header">Registration</h2>
             <AuthForm onSubmit = {onSubmit}  />
             {

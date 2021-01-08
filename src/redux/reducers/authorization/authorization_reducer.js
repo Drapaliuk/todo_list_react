@@ -9,7 +9,6 @@ const initialState = {
 export const authorization = (prevState = initialState, action) => {
     switch(action.type) {
         case IS_AUTHORIZATION: 
-            console.log('!!!!!!!!!!!!', action.payload)
             return {
                 ...prevState,
                 isAuthorization: action.payload

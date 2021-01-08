@@ -3,26 +3,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { AuthForm } from '../auth_form/AuthForm'
 import {getAuthData, getAuthError} from '../../../../redux/selectors';
-import { initialize, login } from '../../../../redux/actions';
+import { login } from '../../../../redux/actions';
 import { serverErrorsMessages } from '../../../../service/server_errors/server_errors';
+import { AiOutlineClose, AiOutlineUserSwitch } from 'react-icons/ai';
 
 export function Login() {
     const authData = useSelector(state => getAuthData(state));
     const serverError = useSelector(state => getAuthError(state));
 
     const dispatch = useDispatch();
-    const onSubmit = () => {
-        dispatch(login(authData))
-        
-    }
+    const onSubmit = () => dispatch(login(authData))
 
     return (
         <div class="login">
             <div class="login__icon-background">
-                <svg class="icon__login">
-                    <use href=""></use>
-                </svg>
+                <AiOutlineUserSwitch className = 'icon__login' />
             </div>
+            <NavLink className = 'auth__close-btn' to = '/'>
+                <AiOutlineClose className = 'auth__close-icon' />
+            </NavLink>
+
             <h2 class="login__header">Log in</h2>
             <AuthForm onSubmit = {onSubmit} />
             {

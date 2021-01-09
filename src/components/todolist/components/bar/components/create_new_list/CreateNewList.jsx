@@ -1,29 +1,45 @@
 import React from 'react'
 import { FaClipboardList } from 'react-icons/fa';
 import { KEY_ENTER } from '../../../../../../service';
+import classNames from 'classnames';
+
 
 export function CreateNewList({onSave, onVisible}) {
-    const [name, setName] = React.useState('')
-    const onWriteName = event => setName(event.target.value)
+    const [listName, setListName] = React.useState('')
+    const [isInvalidName, setInvalidFlag] = React.useState(false)
+    const onWriteName = event => {
+        setListName(event.target.value)
+        setInvalidFlag(false)
+    }
 
-    const saveHandler = ({keyCode, ctrlKey}) => {
-        if(keyCode === KEY_ENTER && ctrlKey) {
-            onSave(name)
+    const saveHandler = ({keyCode}) => {
+        const isEmptyField = !listName.split(' ').some(el => el)
+        
+        if(keyCode === KEY_ENTER && !isEmptyField) {
+            onSave(listName)
             onVisible()
+            return
+        }
+
+        if(keyCode === KEY_ENTER && isEmptyField) {
+            setListName('')
+            setInvalidFlag(!isInvalidName)
+            return
         }
     }
 
     return (
         <li class="bar-section__labels-list-item bar-section__labels-list-item_folder_wrapper">
-            <div class="todo-list-label">
+            <div className = 'todo-lists__create-new-list-wrapper'>
                 <FaClipboardList className = 'todo-list-label__icon' />
-                <input class="todo-lists-folder__create-new" 
+                <input className = {classNames('todo-lists-folder__create-new', {'todo-lists-folder__create-new_invalid': isInvalidName})}
                        onChange = {onWriteName}
                        type="text" 
-                       value = {name}  
-                       placeholder="list name"
+                       value = {listName}  
+                       placeholder={isInvalidName ? 'This field can`t be empty!' : 'list name'}
                        onKeyDown = {saveHandler}
                 />
+               
             </div>
         </li>
     )

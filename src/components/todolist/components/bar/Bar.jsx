@@ -3,17 +3,18 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import { defaultBiography, defaultSettings, isInitialized, updateSettings, logOut,
          saveNewList, selectTasksList, defaultTasks, selectAppList, clearPersonalData } from '../../../../redux/actions';
 import { getAmountTasksForAppLists, getSelectedListId } from '../../../../redux/selectors';
-import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './components'
+import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './components';
+import { FiPlus } from 'react-icons/fi';
 import classNames from 'classnames';
 
 export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const [isVisibleNewList, setVisibleNewList] = React.useState(false);
+    const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false);
 
     const appListTaskAmounts = useSelector(state => getAmountTasksForAppLists(state))
 
-    const onVisibleNewList = () => setVisibleNewList(!isVisibleNewList)
+    const onVisibleNewList = () => setVisibleNewListInput(!isVisibleNewListInput)
     const onSaveNewList = newListName => dispatch(saveNewList(newListName))
     const onSelectUserList = listId => () => dispatch(selectTasksList(listId))
     const onSelectAppList = listId => () => dispatch(selectAppList(listId))
@@ -51,13 +52,15 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
                                 />
                     })
                 }
-                {isVisibleNewList && 
+                {isVisibleNewListInput && 
                     <CreateNewList onSave = {onSaveNewList}
                                    onVisible = {onVisibleNewList}
                                    />
                 }
             </ul>
-            <button onClick = {onVisibleNewList} class="bar-section__add-new-folder-btn">+</button>
+            <button onClick = {onVisibleNewList} class="bar-section__add-new-folder-btn">
+                <FiPlus className = {classNames('bar-section__add-new-folder-icon', {'bar-section__add-new-folder-icon_active': isVisibleNewListInput})} />
+            </button>
         </section>
 )
 }

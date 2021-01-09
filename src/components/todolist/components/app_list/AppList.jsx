@@ -47,11 +47,12 @@ export function AppList({currentTheme}) {
                                       onPin = {onPinTask}
                                       onMakeImportant = {onMakeImportant}
                                     />
-
-                <CompletedTasksList completedTasks = {completedTasks} 
+                {
+                    completedTasks.length > 0 &&
+                    <CompletedTasksList completedTasks = {completedTasks} 
                                         onSelectTask = {onSelectTaskFromAppList}
-                                        onComplete = {onComplete}
-                                    />
+                                        onComplete = {onComplete} />
+                }
                 <AppListSorting onSortTasks = {onSortTasks} 
                                 onSortOrder = {onSortOrder} 
                                 currentSortOrder = {sortOrder}  

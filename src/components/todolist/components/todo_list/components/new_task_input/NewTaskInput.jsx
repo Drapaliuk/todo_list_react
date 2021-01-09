@@ -1,22 +1,43 @@
 import React from 'react'
 import {AiOutlineSave} from 'react-icons/ai'
 import { KEY_ENTER } from '../../../../../../service';
+import classNames from 'classnames';
 
-export function NewTaskInput({onSave}) {
+export function NewTaskInput({onSave, selectedListId}) {
+    const [isInvalidTaskText, setInvalidFlag] = React.useState(false)
     const [taskText, setTaskText] = React.useState('');
-    const writeTextHandler = event => setTaskText(event.target.value);
+
+    React.useEffect(() => {
+        setInvalidFlag(false)
+        setTaskText('')
+    }, [selectedListId])
+
+    const writeTextHandler = event => {
+        setTaskText(event.target.value)
+        setInvalidFlag(false)
+
+    };
     const saveTaskHandler = ({keyCode}) => {
-        if(keyCode === KEY_ENTER) {
-            onSave(taskText)
+        const isEmptyField = !taskText.split(' ').some(el => el)
+        if(keyCode === KEY_ENTER && !isEmptyField) {
             setTaskText('')
+            onSave(taskText)
+            return
         }
+
+        if(keyCode === KEY_ENTER && isEmptyField) {
+            setTaskText('')
+            setInvalidFlag(!isInvalidTaskText)
+            return
+        }
+
     }
 
     return (
-        <div className = 'add-todo-wrapper'>
-            <input className="add-todo" 
+        <div className = {classNames ('add-todo-wrapper', {'add-todo_invalid': isInvalidTaskText})} >
+            <input className = 'add-todo' 
                    type="text" 
-                   placeholder="+ Add todo" 
+                   placeholder={isInvalidTaskText ? 'This field can`t be empty!' : '+ Add todo'} 
                    onChange = {writeTextHandler}
                    onKeyDown = {saveTaskHandler}
                    value = {taskText}  

@@ -10,8 +10,6 @@ export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, 
         const role = event.target.dataset.role
         if(role === 'complete') return onComplete()
         if(role === 'task') return onSelectTask()
-        // if(role === 'pin') return onPin(!isPinned, taskId) //!-????????????????
-        // if(role === 'important') return onMakeImportant(!isImportant, taskId)
     }
 
     const completeHandler = event => {

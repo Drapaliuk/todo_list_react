@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
 import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../../redux/actions';
-import { getSelectedListId, getCompletedTasks, getUncompletedTasks, getSelectedListSettings } from '../../../../redux/selectors';
+import { getSelectedListId, getCompletedTasks, getUncompletedTasks, getSelectedListSettings, getSelectedListProperty } from '../../../../redux/selectors';
 import { NewTaskInput } from './components/new_task_input/NewTaskInput';
 import { ProfileSettings } from '../../../settings/ProfileSettings';
 import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoListSettings } from './components'
@@ -14,12 +14,11 @@ import classNames from 'classnames';
 export function TodoList({isCreatedTasksLists, currentTheme}) {
     const dispatch = useDispatch();
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
+    const selectedListName = useSelector(state => getSelectedListProperty(state, 'name'))
 
-
-    const isSelectedDefaultList = useSelector(state => state.tasks.isSelectedDefaultList)
+    const isSelectedDefaultList = useSelector(state => state.tasks.isSelectedDefaultList) //!
     const selectedListId = useSelector(state => getSelectedListId(state));
     const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria, isSelectedDefaultList, selectedListId)(state));
-
     const completedTasks = useSelector(state => getCompletedTasks(state));
 
     const onSelectTask = id => () => dispatch(selectTask(id))
@@ -29,9 +28,11 @@ export function TodoList({isCreatedTasksLists, currentTheme}) {
     const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {'sortBy': sortBy}))
     const onSaveTask = text => dispatch(saveNewTask(selectedListId, text))
     
+
     return (
         <section className = {classNames('todo-section', {'todo-section_theme_dark': currentTheme === 'dark'})}>
-            <NewTaskInput onSave = {onSaveTask}  />
+            <h2>{selectedListName}</h2>
+            <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
             <Route exact path = '/lists/edit-list' component = {EditListLabelDesktop} />
             <Route path = '/lists/settings' component = {ProfileSettings} />
             {
@@ -44,10 +45,14 @@ export function TodoList({isCreatedTasksLists, currentTheme}) {
                                           onPin = {onPinTask}
                                           onMakeImportant = {onMakeImportant}
                                         />
-                    <CompletedTasksList completedTasks = {completedTasks} 
-                                        onSelectTask = {onSelectTask}
-                                        onComplete = {onComplete}
+                    {
+                        completedTasks.length > 0 &&
+                        <CompletedTasksList completedTasks = {completedTasks} 
+                                            onSelectTask = {onSelectTask}
+                                            onComplete = {onComplete}
                                     />
+                    }
+                    
                     <TodoListSettings onSortTasks = {onSortTasks} 
                                       currentSortCriteria = {currentSortCriteria}
                                       />

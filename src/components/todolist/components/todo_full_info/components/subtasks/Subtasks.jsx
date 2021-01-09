@@ -9,6 +9,7 @@ import classNames from 'classnames';
 export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete}) {
     const [text, writeText] = React.useState('')
     const [openedSubtaskId, setOpenFullText] = React.useState('');
+    const [isInvalidSubtaskText, setInvalidSubtaskFlag] = React.useState(false)
     const [isVisibleList, setVisibleSubtasksList] = React.useState(false); 
     const [isVisibleSorting, setVisibleSubtasksSorting] = React.useState(false); 
     const [isVisibleSearchInput, setVisibleSearchInput] = React.useState(false); 
@@ -18,29 +19,52 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
     const visibleSubtasksSortingHandler = () => setVisibleSubtasksSorting(!isVisibleSorting);
     const visibleSearchInputHandler = () => setVisibleSearchInput(!isVisibleSearchInput)
     const inVisibleSearchInputHandler = () => setVisibleSearchInput(false)
+    const isEmptyField = !text.split(' ').some(el => el)
 
-    
-    const createHandler = () => {
-        onCreate(text)
-        writeText('')
-    }
+    const createSubtaskByClick = () => {
+        if(!isEmptyField) {
+            writeText('')
+            onCreate(text)
+            return
+        }
 
-    const keyboardCreateHandler = ({keyCode}) => {
-        if(keyCode === KEY_ENTER) {
-            createHandler()
+        if(isEmptyField) {
+            writeText('')
+            setInvalidSubtaskFlag(!isInvalidSubtaskText)
+            return
         }
     }
-    const onWriteText = event => writeText(event.target.value)
+
+    const createSubtaskByKeyboard = ({keyCode}) => {
+        console.log('isEmptyField', isEmptyField)
+        if(keyCode === KEY_ENTER && !isEmptyField) {
+            writeText('')
+            onCreate(text)
+            return
+        }
+
+        if(keyCode === KEY_ENTER && isEmptyField) {
+            writeText('')
+            setInvalidSubtaskFlag(!isInvalidSubtaskText)
+            return
+        }
+    }
+
+
+    const onWriteText = event => {
+        writeText(event.target.value)
+        if(isInvalidSubtaskText) return setInvalidSubtaskFlag(false)
+    }
 
     return (
         <div class="todo-subtasks">
-            <div class="todo-subtasks__add-form">
-                <button onClick = {createHandler} class="todo-subtasks__add-form-btn">+</button>
-                <input onKeyDown = {keyboardCreateHandler} 
+            <div className = {classNames('todo-subtasks__add-form', {'todo-subtasks_invalid': isInvalidSubtaskText})} class="todo-subtasks__add-form">
+                <button onClick = {createSubtaskByClick} class="todo-subtasks__add-form-btn">+</button>
+                <input onKeyDown = {createSubtaskByKeyboard} 
                        onChange = {onWriteText} 
                        class="todo-subtasks__add-form-input" 
                        type="text" 
-                       placeholder="add subtask"
+                       placeholder={isInvalidSubtaskText ? 'This field can`t be empty!' : 'add subtask'}
                        value = {text}
                 />
             </div>

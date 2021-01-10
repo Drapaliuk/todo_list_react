@@ -2,7 +2,7 @@ import React from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 
 export function Comment({id, text, onDelete}) {
-    const deleteHandler = () => onDelete(id)
+    const deleteHandler = () => {onDelete(id)}
     return (
             <li class="todo-comments-list__item">
                 <div class="todo-comment">

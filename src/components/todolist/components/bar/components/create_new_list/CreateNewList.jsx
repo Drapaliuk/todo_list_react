@@ -34,7 +34,8 @@ export function CreateNewList({onSave, onVisible}) {
                 <FaClipboardList className = 'todo-list-label__icon' />
                 <input className = {classNames('todo-lists-folder__create-new', {'todo-lists-folder__create-new_invalid': isInvalidName})}
                        onChange = {onWriteName}
-                       type="text" 
+                       type="text"
+                       autoFocus = {true}
                        value = {listName}  
                        placeholder={isInvalidName ? 'This field can`t be empty!' : 'list name'}
                        onKeyDown = {saveHandler}

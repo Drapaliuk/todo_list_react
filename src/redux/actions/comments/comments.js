@@ -12,7 +12,7 @@ export const updateComment = (listId, taskId, commentId, newValue) => async disp
 }
 
 export const deleteComment = (listId, taskId, commentId) => async dispatch => {
-    const {data: payload} = await commentsAPI.createComment(listId, taskId, commentId)
+    const {data: payload} = await commentsAPI.deleteComment(listId, taskId, commentId)
     dispatch({type: DELETE_COMMENT, payload})
 }
 

@@ -806,12 +806,14 @@ header {
 .bar-section {
   background-color: #fff;
   font-family: sans-serif;
-  position: relative;
   color: #5e5b5b;
   font-weight: 600;
   min-width: 350px;
   overflow: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @media (max-width: 767px) {
@@ -872,6 +874,7 @@ header {
 .bar-section__labels-list {
   margin: 0;
   padding-bottom: 35px;
+  height: 100%;
   overflow: auto;
 }
 
@@ -1133,6 +1136,8 @@ header {
   padding: 5px 14px;
   border-radius: 4px;
   cursor: pointer;
+  text-decoration: none;
+  color: #000;
 }
 
 .edit-list-label__results-btn_cancel {
@@ -1217,14 +1222,16 @@ header {
 .todo-lists-folder__create-new.todo-lists-folder__create-new_invalid,
 .add-todo-wrapper.add-todo_invalid,
 .todo-subtasks__add-form.todo-subtasks_invalid,
-.add-comment-form__input.add-comment-form__input_invalid  {
+.add-comment-form__input.add-comment-form__input_invalid,
+.edit-list-label__new-name.edit-list-label__new-name_invalid {
   background-color: rgba(190, 77, 75, 0.85);
   border: none;
 }
 
 .todo-lists-folder__create-new.todo-lists-folder__create-new_invalid::placeholder,
 .todo-subtasks__add-form.todo-subtasks_invalid::placeholder,
-.add-comment-form__input.add-comment-form__input_invalid::placeholder {
+.add-comment-form__input.add-comment-form__input_invalid::placeholder,
+.edit-list-label__new-name.edit-list-label__new-name_invalid::placeholder {
   color: #fff;
 }
 

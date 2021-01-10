@@ -32,7 +32,9 @@ export function SettingsItem({title, value, placeholder, onChange}) {
             <div className = 'settings__change-value-wrapper'>
                 <input onChange = {newValueHandler} 
                        value = {newValue} class="settings__change-value-input" 
-                       type="text" placeholder={placeholder} />
+                       type="text" placeholder={placeholder}
+                       autoFocus = {true}
+                       />
                 {
                     value !== newValue
                     &&

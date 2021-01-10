@@ -1,5 +1,5 @@
 import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
-import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT, SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST } from "../../actions_types"
+import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT, SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
 
 const initialState = {
     tasksLists: [],
@@ -67,6 +67,22 @@ export const tasks = (prevState = initialState, action) => {
                 selectedTaskId: ''
 
             }
+            
+
+        case UPDATE_TASKS_LIST:
+            const updateListLogic = selectedList => {
+                const [key, value] = Object.entries(payload.changedValue)[0];
+                console.log('selectedList', selectedList)
+                console.log('payload', payload.changedValue)
+                selectedList[key] = value;
+                return selectedList
+            }
+             return {
+                ...prevState,
+                tasksLists: changeListById(prevState.tasksLists, payload.listId, updateListLogic)
+
+            }
+
         case CLEAR_SELECTED_LIST:
             return {
                 ...prevState,
@@ -218,12 +234,13 @@ export const tasks = (prevState = initialState, action) => {
             }
 
 
-        case DELETE_COMMENT: 
+        case DELETE_COMMENT:
         const deleteCommentLogic = selectedTask => {
-            const filteredComment = selectedTask.comment.filter(subtask => subtask._id !== payload.subtaskId)
-            selectedTask.subtasks = filteredComment
+            const filteredComments = selectedTask.comments.filter(comment => comment._id !== payload.deletedCommentId)
+            selectedTask.comments = filteredComments
             return selectedTask 
         }
+
         return {
             ...prevState,
             tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, deleteCommentLogic)

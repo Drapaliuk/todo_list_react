@@ -90,7 +90,7 @@ export function FullInfo({selectedTask, currentTheme}) {
                 <ul class="todo-additional-option__time-options">
                     <TaskDateOption {...childProps.dueDate} />
                     <TaskDateOption {...childProps.remind} />
-                    <TaskRangeDateOption {...childProps.repeatTask} />
+                    {/* <TaskRangeDateOption {...childProps.repeatTask} /> */}
                 </ul>
                 <Subtasks {...childProps.subtasks}/>
                 <Notes onUpdate = {onUpdateNote} text = {notes} />

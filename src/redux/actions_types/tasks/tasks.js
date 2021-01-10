@@ -3,6 +3,7 @@ export const CREATE_LIST = 'tasks/CREATE_LIST';
 export const SELECT_TASKS_LIST = 'tasks/SELECT_TASKS_LIST';
 export const SELECT_APP_LIST = 'tasks/SELECT_APP_LIST';
 export const DELETE_TASKS_LIST = 'tasks/DELETE_TASKS_LIST';
+export const UPDATE_TASKS_LIST = 'tasks/UPDATE_TASKS_LIST';
 export const CLEAR_SELECTED_LIST = 'tasks/CLEAR_SELECTED_LIST';
 export const SAVE_NEW_TASK = 'tasks/SAVE_NEW_TASK';
 export const DELETE_TASK = 'tasks/DELETE_TASK';

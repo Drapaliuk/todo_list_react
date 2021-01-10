@@ -10,6 +10,7 @@ export const commentsAPI = {
     },
 
     deleteComment: (listId, taskId, commentId) => {
+        console.log('DELETE COMMENT API')
         return instance.delete('/tasks/comments', {data: {listId, taskId, commentId}})
     }
 }

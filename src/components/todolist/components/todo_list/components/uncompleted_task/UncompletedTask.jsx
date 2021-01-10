@@ -8,13 +8,11 @@ import { IconPin } from '../../../../../../assets/svg/IconPin';
 export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, onMakeImportant, isPinned, isImportant}) {
     const taskHandler = event => {
         const role = event.target.dataset.role
-        if(role === 'complete') return onComplete()
+        if(role === 'complete') {
+            const isCompleted = event.target.checked
+            onComplete(isCompleted, taskId)
+        }
         if(role === 'task') return onSelectTask()
-    }
-
-    const completeHandler = event => {
-        const isCompleted = event.target.checked;
-        onComplete(isCompleted, taskId)
     }
 
     const pinHandler = () => onPin(!isPinned, taskId)
@@ -23,9 +21,9 @@ export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, 
     return (
         <li  onClick = {taskHandler} className="todo-list__item">
             <div {...{'data-role':'task'}} className="todo">
-                <input {...{'data-role':'complete'}} onChange = {completeHandler} className="todo__check-input" type="checkbox"/>
+                <input {...{'data-role':'complete'}} className="todo__check-input" type="checkbox"/>
                 <div {...{'data-role':'task'}} className="todo__text">{text}</div>
-                <button onClick = {pinHandler} className="pin-btn pin-btn_todo">
+                <button {...{'data-role':'pin'}} onClick = {pinHandler} className="pin-btn pin-btn_todo">
                     <IconPin className = {classNames('pin-btn__icon', {'pin-btn_active': isPinned})} />
                 </button>
                 <button onClick = {makeImportantHandler} className="importantly-btn importantly-btn_todo importantly-btn_active">

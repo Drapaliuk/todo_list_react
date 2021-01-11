@@ -11,6 +11,7 @@ export const instance = Axios.create({baseURL: herokuServerURL});
 
 instance.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 instance.defaults.headers.common['refresh_token'] = REFRESH_TOKEN;
+instance.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 export const updateDefaultRequestHeaders = (token, refreshToken) => {
     console.log('updated tokens')

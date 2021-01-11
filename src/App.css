@@ -816,6 +816,14 @@ header {
   justify-content: space-between;
 }
 
+.bar-section.bar-section_theme_dark .todo-list-label__name {
+  color: #d1c3c3;
+}
+
+.bar-section .todo-list-label__name {
+  color: #00112c;
+}
+
 @media (max-width: 767px) {
   .bar-section {
     display: none;

@@ -1,19 +1,27 @@
 import React from 'react'
-import {RiPushpinFill, RiPushpin2Fill} from 'react-icons/ri';
-import {AiFillStar, AiOutlineStar} from 'react-icons/ai'
+import {AiOutlineStar} from 'react-icons/ai'
 import classNames from 'classnames';
 import { IconPin } from '../../../../../../assets/svg/IconPin';
+import { FullInfo } from '../../../todo_full_info/FullInfoDesktop';
 
 
-export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, onMakeImportant, isPinned, isImportant}) {
+export function UncompletedTask({onSelectTask, onComplete, onPin, onMakeImportant, currentTask, currentTheme,  isSelectedTask}) {
+    
+    const {text, _id: taskId, isPinned, isImportant} = currentTask;
+
     const taskHandler = event => {
         const role = event.target.dataset.role
         if(role === 'complete') {
             const isCompleted = event.target.checked
             onComplete(isCompleted, taskId)
         }
-        if(role === 'task') return onSelectTask()
+        if(role === 'task') {
+             onSelectTask()
+             return
+        }
     }
+
+    console.log('selectedTask', currentTask)
 
     const pinHandler = () => onPin(!isPinned, taskId)
     const makeImportantHandler = () => onMakeImportant(!isImportant, taskId)
@@ -30,6 +38,11 @@ export function UncompletedTask({text, onSelectTask, onComplete, taskId, onPin, 
                     <AiOutlineStar {...{'data-role':'important'}} className = {classNames('importantly-btn__icon', {'importantly-btn_active': isImportant})}/>
                 </button>
             </div>
+            {
+                isSelectedTask === taskId &&
+                <FullInfo isMobileVer = {true} selectedTask = {currentTask} currentTheme = 'dark' />
+            }
+           
         </li>
     )
 }

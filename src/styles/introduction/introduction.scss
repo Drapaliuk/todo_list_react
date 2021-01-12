@@ -1,0 +1,65 @@
+.introduction {
+    height: 300px;
+  }
+  
+  .introduction h1 {
+    margin-bottom: 80px;
+    font-size: 3rem;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .icon.icon-settings {
+    fill: gray;
+    color: gray;
+  }
+  
+  .introduction__btn-wrapper {
+    margin: auto;
+    display: grid;
+    /* grid-template-columns: 1fr 1fr 1fr; */
+    grid-template-columns: 1fr 1fr;
+  
+    grid-gap: 5px;
+  }
+  
+  @media (max-width: 767px) {
+    .introduction__btn-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  
+  .introduction__login-link,
+  .introduction__signin-link,
+  .introduction__guest-link {
+    text-decoration: none;
+    color: #000;
+    text-align: center;
+    padding: 10px 60px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: all .3s linear;
+    font-weight: 700;
+  }
+  
+  @media (max-width: 767px) {
+    .introduction__login-link,
+    .introduction__signin-link,
+    .introduction__guest-link {
+      width: 70%;
+      margin-bottom: 5px;
+      background-color: rgba(255, 255, 255, 0.6);
+    }
+  }
+  
+  .introduction__login-link:hover,
+  .introduction__signin-link:hover,
+  .introduction__guest-link:hover {
+    background-color: rgba(0, 119, 199, 0.8);
+    color: #fff;
+  }

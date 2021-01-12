@@ -1,0 +1,48 @@
+@import './styles/bar/bar.scss';
+@import './styles/full-info/full-info.scss';
+@import './styles/tasks/tasks.scss';
+@import './styles/settings/settings.scss';
+@import './styles/authorization/authorization.scss';
+@import './styles/header/header.scss';
+@import './styles/common/common.scss';
+@import './styles/introduction/introduction.scss';
+@import './styles/tasks/tasks.scss';
+
+
+
+
+
+
+
+
+
+.inactive {
+  -webkit-filter: blur(1.1px);
+  filter: blur(1.1px);
+}
+
+.slick-list {
+  overflow: hidden;
+}
+
+.slick-track {
+  display: flex;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

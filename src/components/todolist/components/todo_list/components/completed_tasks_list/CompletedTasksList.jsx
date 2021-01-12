@@ -16,14 +16,14 @@ export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
                     completed item
                 </button>
                 
-                    <div onClick = {onVisibleCompletedTasks}>
-                    {
-                        isVisibleCompletedTasks 
-                            ? 
-                        <IoMdEye className = 'visible-completed-todo__icon' />
-                            :
-                        <IoMdEyeOff className = 'visible-completed-todo__icon' />  
-                    } 
+                    <div className = 'visible-completed-todo__icon-wrapper'  onClick = {onVisibleCompletedTasks}>
+                        {
+                            isVisibleCompletedTasks 
+                                ? 
+                            <IoMdEye className = 'visible-completed-todo__icon' />
+                                :
+                            <IoMdEyeOff className = 'visible-completed-todo__icon' />  
+                        } 
                     </div>
             </div>
             {

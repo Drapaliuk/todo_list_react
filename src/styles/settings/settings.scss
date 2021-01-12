@@ -1,0 +1,201 @@
+.settings {
+  background-color: rgba(208, 215, 215, 0.9);
+  max-width: 500px;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 18px 10px;
+  z-index: 999999;
+  color: #000;
+  border-radius: 5px;
+
+  @media (max-width: 767px) {
+    position: static;
+    height: 100%;
+    transform: none;
+    margin-top: 60px;
+  }
+}
+
+.settings__change-password-btn {
+  padding: 3px 15px;
+  margin-bottom: 10px;
+  border: 1px solid #b6b2b2;
+  box-shadow: 0 0 10px gray;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.settings__change-value-wrapper {
+  display: flex;
+  justify-content: space-between;
+  max-width: 60%;
+  align-items: center;
+}
+
+.settings__change-value-input {
+  box-shadow: 0 0 10px #a8a4a4;
+  outline: none;
+  padding: 4px 10px;
+  width: 90%;
+  border: none;
+  display: block;
+  border-radius: 3px;
+  padding: 1px 15px;
+  height: 25px;
+}
+
+.settings__change-password-input-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.settings__save-icon {
+  width: 23px;
+  height: 23px;
+}
+
+
+.settings__close-btn {
+  display: block;
+  margin-left: auto;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.settings__header {
+  margin-top: 0;
+  text-align: center;
+  color: #000;
+}
+
+.settings__icon {
+  width: 18px;
+  height: 18px;
+}
+
+.settings__save-btn {
+  padding: 0;
+  margin: 0;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.settings__part {
+  margin-bottom: 3px;
+}
+
+.settings__part-name-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.settings__part-name {
+  letter-spacing: 1px;
+}
+
+.settings__value {
+  margin-bottom: 10px;
+  margin-left: 10px;
+  position: relative;
+  color: #000;
+}
+
+.settings__icon_correct {
+  width: 18px;
+  height: 18px;
+}
+
+.settings__icon_open-status {
+  width: 24px;
+  height: 24px;
+}
+
+.settings__icon_part_name {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.settings.settings_theme_dark {
+  background-color: rgba(123, 142, 142, 0.9);
+}
+
+.settings.settings_theme_dark * {
+  box-shadow: none;
+}
+
+.settings__part-btn {
+  width: 100%;
+  padding: 6px 15px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid #c2bbbb;
+  box-shadow: 0 0 10px #c9c5c5;
+  border-radius: 4px;
+}
+
+.settings__value-list {
+  padding: 10px 0;
+}
+
+.settings__value-list-item {
+  margin-bottom: 5px;
+}
+
+.settings__change-value-btn {
+  border: none;
+  background-color: transparent;
+  position: absolute;
+  right: 0;
+}
+
+.settings__change-value-input_security_parts {
+  margin-bottom: 5px;
+}
+
+.settings__language-btn {
+  box-shadow: 0 0 10px #a8a4a4;
+  outline: none;
+  padding: 4px 10px;
+  width: 80%;
+  border: none;
+  display: block;
+  border-radius: 3px;
+  background-color: #fff;
+  margin-bottom: 5px;
+  position: relative;
+}
+
+.settings__icon_language_btn {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.settings__selected-language {
+  margin-bottom: 10px;
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.settings__icon_selected_language {
+  margin-left: 10px;
+}
+
+.settings__value-header {
+  font-weight: 700;
+  margin-right: 7px;
+}

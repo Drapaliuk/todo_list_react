@@ -14,13 +14,12 @@ import { FiRepeat } from 'react-icons/fi';
 
 import classNames from 'classnames';
 
-export function FullInfo({selectedTask, currentTheme}) {
+export function FullInfo({selectedTask, isMobileVer}) {
     const dispatch = useDispatch();
 
-    const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments, notes} = selectedTask;
+    const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments, notes, _id:selectedTaskId} = selectedTask;
     const selectedListId = useSelector(state => getSelectedListId(state))
-    const selectedTaskId = useSelector(state => getSelectedTaskId(state))
-    const selectedSubtaskId = useSelector(state => getSelectedSubtaskId(state))
+    const currentTheme = useSelector(state => state.settings.theme )
     const ids = [selectedListId, selectedTaskId]
 
     const onComplete =  isComplete => dispatch(changeTask(...ids, {hasDone: isComplete}))
@@ -84,7 +83,10 @@ export function FullInfo({selectedTask, currentTheme}) {
 }
 
     return (
-        <div className = {classNames('todo-full-info', {'todo-full-info_theme_dark': currentTheme === 'dark'})}>
+        <div className = {classNames('todo-full-info', {
+                'todo-full-info_theme_dark': currentTheme === 'dark',
+                'todo-full-info_mobile': isMobileVer
+                })}>
             <ChangeText {...childProps.changeText}/>
             <div class="todo-additional-option">
                 <ul class="todo-additional-option__time-options">

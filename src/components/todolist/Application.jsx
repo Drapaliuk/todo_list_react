@@ -18,11 +18,16 @@ export function Application() {
             {
                 isSelectedAppList 
                     ? 
+                
                 <AppList currentTheme = {currentTheme} /> 
                     : 
-                <TodoList currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} />
+                <TodoList isSelectedTask = {isSelectedTask} currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} />
             }
-            {isSelectedTask && <FullInfo currentTheme = {currentTheme} selectedTask = {selectedTask} tasksLists = {tasksLists} />}
+            {
+                isSelectedTask 
+                    && 
+                <FullInfo isMobileVer = {false} currentTheme = {currentTheme} selectedTask = {selectedTask} tasksLists = {tasksLists} />
+            }
         </div>
     )
 }

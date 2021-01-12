@@ -9,9 +9,10 @@ import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoLis
 
 
 import classNames from 'classnames';
+import { ThemeSwitcher } from '../bar/components';
 
 
-export function TodoList({isCreatedTasksLists, currentTheme}) {
+export function TodoList({isCreatedTasksLists, currentTheme, isSelectedTask}) {
     const dispatch = useDispatch();
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
     const selectedListName = useSelector(state => getSelectedListProperty(state, 'name'))
@@ -31,7 +32,12 @@ export function TodoList({isCreatedTasksLists, currentTheme}) {
 
     return (
         <section className = {classNames('todo-section', {'todo-section_theme_dark': currentTheme === 'dark'})}>
-            <h2>{selectedListName}</h2>
+            <nav className = 'mobile-nav'>
+                <button>Back</button>
+                <h2 className = 'mobile-nav__title'>{selectedListName}</h2>
+                <ThemeSwitcher />
+            </nav>
+            {/* <h2>{selectedListName}</h2> */}
             <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
             <Route exact path = '/lists/edit-list' component = {EditListLabelDesktop} />
             <Route path = '/lists/settings' component = {ProfileSettings} />
@@ -44,6 +50,7 @@ export function TodoList({isCreatedTasksLists, currentTheme}) {
                                           onSelectTask = {onSelectTask} 
                                           onPin = {onPinTask}
                                           onMakeImportant = {onMakeImportant}
+                                          isSelectedTask = {isSelectedTask}
                                         />
                     {
                         completedTasks.length > 0 &&

@@ -1,0 +1,139 @@
+body * {
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body ul {
+  -webkit-padding-start: 0;
+  padding-inline-start: 0;
+  list-style: none;
+  margin: 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body button {
+  cursor: pointer;
+  outline: none;
+}
+
+body img {
+  display: block;
+}
+
+.container {
+  width: 100%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 3.5fr 1.5fr;
+  height: 100vh;
+  @media (max-width: 767px) {
+    // grid-template-columns: 1fr;
+    display: block;
+  }
+}
+
+.container.container_full_info_closed {
+  grid-template-columns: 1fr 5fr;
+}
+
+
+
+
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.icon--medium-size {
+  width: 18px;
+  height: 18px;
+}
+
+.icon--small-size {
+  width: 13px;
+  height: 13px;
+}
+
+.icon--pen {
+  width: 18px;
+  height: 18px;
+}
+
+.icon--mute-active {
+  fill: #2b96f1;
+}
+
+.icon--full-info-options {
+  margin-right: 10px;
+}
+
+.icon--bar {
+  margin-right: 5px;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-full-text__text::-webkit-input-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-subtasks__add-form-input::-webkit-input-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-remind__input::-webkit-input-placeholder {
+  color: #d1c3c3;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-full-text__text::-moz-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-subtasks__add-form-input::-moz-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-remind__input::-moz-placeholder {
+  color: #d1c3c3;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-full-text__text:-ms-input-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-subtasks__add-form-input:-ms-input-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-remind__input:-ms-input-placeholder {
+  color: #d1c3c3;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-full-text__text::-ms-input-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-subtasks__add-form-input::-ms-input-placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-remind__input::-ms-input-placeholder {
+  color: #d1c3c3;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-full-text__text,
+.todo-full-info.todo-full-info_theme_dark .todo-full-text__text::placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-subtasks__add-form-input::placeholder,
+.todo-full-info.todo-full-info_theme_dark .todo-remind__input::placeholder {
+  color: #d1c3c3;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-additional-option__time-options {
+  background-color: #303030;
+  fill: #d1c3c3;
+  box-shadow: none;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-note {
+  box-shadow: none;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-full-info__manipulation-wrapper {
+  fill: #d1c3c3;
+  background-color: #121212;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-subtask,
+.todo-full-info.todo-full-info_theme_dark .todo-comment,
+.todo-full-info.todo-full-info_theme_dark .todo-subtasks__add-form,
+.todo-full-info.todo-full-info_theme_dark .add-comment-form__input,
+.todo-full-info.todo-full-info_theme_dark .add-comment-form__btn {
+  background-color: #303030;
+  box-shadow: none;
+  fill: #d1c3c3;
+  color: #d1c3c3;
+}
+
+
+
+
+

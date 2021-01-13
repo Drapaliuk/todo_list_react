@@ -7,7 +7,7 @@ import { IoSettingsOutline } from 'react-icons/io5';
 export function Header({onLogOut, onThemeChange, currentTheme}) {
     return (
         <header>
-        <NavLink to = '/lists/settings'>
+        <NavLink to = '/app/settings'>
             <IoSettingsOutline className = 'icon icon-settings' />
         </NavLink>
         <div>

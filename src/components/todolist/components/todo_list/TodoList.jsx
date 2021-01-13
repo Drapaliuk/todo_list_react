@@ -34,13 +34,11 @@ export function TodoList({isCreatedTasksLists, currentTheme, isSelectedTask, isV
             'todo-section_theme_dark': currentTheme === 'dark',
             'todo-section_invisible': !isVisibleInMobVer
             })}>
-
-
             <MobileNav partName = {selectedListName} />
-            {/* <h2>{selectedListName}</h2> */}
+            <h2>{selectedListName}</h2>
             <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
-            <Route exact path = '/lists/edit-list' component = {EditListLabelDesktop} />
-            <Route path = '/lists/settings' component = {ProfileSettings} />
+            <Route exact path = '/app/edit-list' component = {EditListLabelDesktop} />
+            <Route path = '/app/settings' component = {ProfileSettings} />
             {
                 isCreatedTasksLists
                 &&

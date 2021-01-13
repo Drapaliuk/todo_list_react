@@ -3,14 +3,11 @@ import { Biography } from './components/biography/Biography';
 import { ChangeLanguage } from './components/change_language/ChangeLanguage';
 import { PersonalData } from './components/personal_data/PersonalData';
 import { AiOutlineClose } from 'react-icons/ai';
-import { useHistory } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 
 
 export function ProfileSettings() {
-    const {goBack} = useHistory()
-    const closeSettingsHandler = () => goBack()
-
     const localState = {
                     state: {
                         biography: React.useState(false),
@@ -39,9 +36,9 @@ export function ProfileSettings() {
     return (
 
         <div class="settings settings_theme_dark">
-            <button onClick = {closeSettingsHandler} class="settings__close-btn">
+            <NavLink to = '/app' class="settings__close-btn">
                 <AiOutlineClose className = 'settings__icon' />
-            </button>
+            </NavLink>
             <h2 class="settings__header">Settings</h2>
             <ul class="settings__parts-list">
                 <Biography onOpen = {localState.openHandler('biography')} 

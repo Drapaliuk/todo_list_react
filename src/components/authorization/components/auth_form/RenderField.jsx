@@ -16,7 +16,7 @@ export const RenderField = ({input, meta, ...attributes}) => {
         <label for="login-password">
             <BiUser class="icon" />
         </label>
-        <input className="login__passsword" {...input} {...attributes} />
+        <input  className="login__passsword" {...input} {...attributes} />
         {attributes.serverError}
 
         {

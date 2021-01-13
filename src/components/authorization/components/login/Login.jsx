@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { AuthForm } from '../auth_form/AuthForm'
@@ -15,7 +15,8 @@ export function Login() {
     const onSubmit = () => dispatch(login(authData))
 
     return (
-        <div class="login">
+        <Fragment>
+<div class="login">
             <div class="login__icon-background">
                 <AiOutlineUserSwitch className = 'icon__login' />
             </div>
@@ -43,5 +44,7 @@ export function Login() {
                 <NavLink to='/auth/registration'>REGISTER HERE</NavLink>
             </p>
         </div>
+        </Fragment>
+        
     )
 }

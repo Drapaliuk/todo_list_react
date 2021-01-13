@@ -7,13 +7,13 @@ import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from './compo
 import { FiPlus } from 'react-icons/fi';
 import classNames from 'classnames';
 
-export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
+export function Bar({isCreatedTasksLists, tasksLists, currentTheme, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));
     const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false);
 
     const appListTaskAmounts = useSelector(state => getAmountTasksForAppLists(state))
-
+    
     const onVisibleNewList = () => setVisibleNewListInput(!isVisibleNewListInput)
     const onSaveNewList = newListName => dispatch(saveNewList(newListName))
     const onSelectUserList = listId => () => dispatch(selectTasksList(listId))
@@ -33,7 +33,10 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme}) {
     };
 
     return (
-        <section className = {classNames('bar-section', {'bar-section_theme_dark': currentTheme === 'dark'})}>
+        <section className = {classNames('bar-section', {
+            'bar-section_theme_dark': currentTheme === 'dark',
+            'bar-section_invisible': !isVisibleInMobVer
+            })}>
             <Header onThemeChange = {onThemeChange} currentTheme = {currentTheme} onLogOut = {onLogOut} />
             <ul class="bar-section__labels-list">
                 <DefaultAppLabels appListTaskAmounts = {appListTaskAmounts} onSelectList = {onSelectAppList} selectedListId = {selectedListId} />

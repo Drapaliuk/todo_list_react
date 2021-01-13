@@ -11,7 +11,7 @@
   justify-content: space-between;
 
   @media (max-width: 767px) {
-    display: none;
+    // display: none;
     padding-top: 60px;
     width: 100%;
     height: 100vh;
@@ -22,10 +22,16 @@
   color: #d1c3c3;
 }
 
+.bar-section.bar-section_invisible {
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+
 .bar-section .todo-list-label__name {
   color: #00112c;
 }
-
 
 
 .bar-section.bar-section_theme_dark {
@@ -86,7 +92,16 @@
   padding: 6px 0 6px 10px;
   position: relative;
   cursor: pointer;
+}
 
+
+
+.bar-section__labels-link {
+  text-decoration: none;
+  color:#00112c
+}
+.bar-section.bar-section_theme_dark .bar-section__labels-link {
+  color: #d1c3c3;
 }
 
 .bar-section__labels-list-item:hover {

@@ -41,34 +41,31 @@ export const getSelectedAppListData = state => {
 
 export const getAmountTasksForAppLists = state => {
     const taskAmounts = appListsData.reduce((acc, el, idx) => {
-            const amount = state.tasks.tasksLists.reduce((acc, list) => {
-                const filteredElements = list.tasks.filter(task => el.filterHandler(task) && !task.hasDone)
-                acc = {...acc, [el.id]: filteredElements.length}
-                return acc
-            }, {})
-            acc = {...acc, ...amount}
+        const amount = state.tasks.tasksLists.reduce((acc, list) => {
+            const filteredElements = list.tasks.filter(task => {
+                return el.filterHandler(task) && !task.hasDone
+            })
+            acc += filteredElements.length
             return acc
-
+        }, 0)
+        acc = {...acc,  [el.id]: amount}
+        return acc
     }, {})
     return taskAmounts
 }
-export const getTaskByCreationDate = (state, selectedAppListId) => {
+
+
+export const getTasksForDefaultAppList = (state, selectedAppListData) => {
     const filteredTasks = state.tasks.tasksLists.reduce((acc, list) => {
-        const appList = appListsData.find(list => list.id === selectedAppListId)
-        
         const tasks = list.tasks.filter(task => {
-            return appList.filterHandler(task)
+            return selectedAppListData.filterHandler(task)
         })
-        const addedBelongToList = tasks.map(task => ({...task, belongToList: list._id}))
-
-
-        acc = [...acc, ...addedBelongToList]
+        acc = [...acc, ...tasks]
         return acc
     }, [])
 
     const uncompletedTasks = filteredTasks.filter(task => !task.hasDone)
     const completedTasks = filteredTasks.filter(task => task.hasDone)
-
     return {uncompletedTasks, completedTasks}
 }
 

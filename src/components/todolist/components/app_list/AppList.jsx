@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTask, selectTaskFromAppList } from '../../../../redux/actions';
-import { getSelectedAppListData, getTaskByCreationDate } from '../../../../redux/selectors';
+import { getSelectedAppListData, getTasksForDefaultAppList } from '../../../../redux/selectors';
 import { UncompletedTasksList, AppListSorting } from './components';
 import { CompletedTasksList } from '../todo_list/components';
 
 import classNames from 'classnames';
 
-export function AppList({currentTheme}) {
-    React.useEffect(() => {}, [])
+export function AppList({currentTheme, isVisibleInMobVer}) {
+    // React.useEffect(() => {}, [])
     const dispatch = useDispatch();
     const [sortCriteria, setSortCriteria] = React.useState('isPinned')
     const [sortOrder, setSortOrder] = React.useState('asc')
@@ -25,7 +25,7 @@ export function AppList({currentTheme}) {
         return 0
     }
     
-    const tasks = useSelector(state => getTaskByCreationDate(state, selectedAppListData.id))
+    const tasks = useSelector(state => getTasksForDefaultAppList(state, selectedAppListData))
     const uncompletedTasks = tasks.uncompletedTasks.sort(sortHandler)
     const completedTasks = tasks.completedTasks.sort(sortHandler)
 
@@ -38,7 +38,10 @@ export function AppList({currentTheme}) {
 
 
     return (
-        <section className = {classNames('todo-section', {'todo-section_theme_dark': currentTheme === 'dark'})}>
+        <section className = {classNames('todo-section', {
+                'todo-section_theme_dark': currentTheme === 'dark',
+                'todo-section_invisible': isVisibleInMobVer
+                })}>
             <h1>{selectedAppListData.title}</h1>
             <Fragment>
                 <UncompletedTasksList uncompletedTasks = {uncompletedTasks} 

@@ -4,8 +4,17 @@ import { getSelectedTaskId, getSelectedTaskProperty, getTasksLists, isCreatedTas
 import {Bar, TodoList, FullInfo} from './components';
 import { AppList } from './components/app_list/AppList';
 import classNames from 'classnames';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export function Application() {
+    const location = useLocation()
+    console.log('history', location)
+
+    const mobileVersionVisiblePage = {
+        bar: location.pathname === '/app',
+        list: location.pathname === '/app/list' 
+    }
+
     const isSelectedTask = useSelector(state => getSelectedTaskId(state));
     const isCreatedTasksListsValue = useSelector(state => isCreatedTasksLists(state));
     const selectedTask = useSelector(state => getSelectedTaskProperty(state))
@@ -14,15 +23,15 @@ export function Application() {
     const currentTheme = useSelector(state => state.settings.theme);
     return (
         <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
-            <Bar currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} tasksLists = {tasksLists} />
+            <Bar isVisibleInMobVer = {mobileVersionVisiblePage.bar} currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} tasksLists = {tasksLists} />
             {
                 isSelectedAppList 
                     ? 
-                
-                <AppList currentTheme = {currentTheme} /> 
+                <AppList isVisibleInMobVer = {mobileVersionVisiblePage.list} currentTheme = {currentTheme} /> 
                     : 
-                <TodoList isSelectedTask = {isSelectedTask} currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} />
+                <TodoList isVisibleInMobVer = {mobileVersionVisiblePage.list} isSelectedTask = {isSelectedTask} currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} />
             }
+                
             {
                 isSelectedTask 
                     && 

@@ -8,16 +8,18 @@ export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedLis
     const isItSelectedList = id === selectedListId
     return (
         <li onClick = {onSelectList(id)} class={classNames("bar-section__labels-list-item", {'bar-section__labels-list-item_selected': isItSelectedList})}>
-            <div class="todo-list-label todo-list-label_with_correct_btn">
-                <FaClipboardList className = 'todo-list-label__icon' />
-                <span class="todo-list-label__name">{name} </span>
-                <span class= {classNames("todo-list-label__task-amount", {'todo-list-label__task-amount_selected': isItSelectedList})}  >{tasksAmount}</span>
-                <NavLink onClick = {onSelectList(id, name)} 
-                         to = '/lists/edit-list' 
-                         className = {classNames("todo-list-label__correct-btn", {'todo-list-label__correct-btn_selected': isItSelectedList})}>
-                    <BiPencil className = 'todo-list-label__icon' />
-                </NavLink>
-            </div>
+            <NavLink className = 'bar-section__labels-link' to = '/app/list'>
+                <div class="todo-list-label todo-list-label_with_correct_btn">
+                    <FaClipboardList className = 'todo-list-label__icon' />
+                    <span class="todo-list-label__name">{name} </span>
+                    <span class= {classNames("todo-list-label__task-amount", {'todo-list-label__task-amount_selected': isItSelectedList})}  >{tasksAmount}</span>
+                    <NavLink onClick = {onSelectList(id, name)} 
+                            to = '/app/edit-list' 
+                            className = {classNames("todo-list-label__correct-btn", {'todo-list-label__correct-btn_selected': isItSelectedList})}>
+                        <BiPencil className = 'todo-list-label__icon' />
+                    </NavLink>
+                </div>
+            </NavLink>
             {/* <MobileEditListLabel /> */}
         </li>
     )

@@ -1,18 +1,18 @@
 import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Route } from 'react-router-dom'
+import { Route, useHistory } from 'react-router-dom'
 import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../../redux/actions';
 import { getSelectedListId, getCompletedTasks, getUncompletedTasks, getSelectedListSettings, getSelectedListProperty } from '../../../../redux/selectors';
 import { NewTaskInput } from './components/new_task_input/NewTaskInput';
 import { ProfileSettings } from '../../../settings/ProfileSettings';
 import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoListSettings } from './components'
-
-
+ 
 import classNames from 'classnames';
 import { ThemeSwitcher } from '../bar/components';
+import { MobileNav } from '../common/mobile_nav/mobile_nav';
 
 
-export function TodoList({isCreatedTasksLists, currentTheme, isSelectedTask}) {
+export function TodoList({isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
     const selectedListName = useSelector(state => getSelectedListProperty(state, 'name'))
@@ -28,15 +28,15 @@ export function TodoList({isCreatedTasksLists, currentTheme, isSelectedTask}) {
     const onMakeImportant =  (isImportant, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: isImportant}))
     const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {'sortBy': sortBy}))
     const onSaveTask = text => dispatch(saveNewTask(selectedListId, text))
-    
 
     return (
-        <section className = {classNames('todo-section', {'todo-section_theme_dark': currentTheme === 'dark'})}>
-            <nav className = 'mobile-nav'>
-                <button>Back</button>
-                <h2 className = 'mobile-nav__title'>{selectedListName}</h2>
-                <ThemeSwitcher />
-            </nav>
+        <section className = {classNames('todo-section', {
+            'todo-section_theme_dark': currentTheme === 'dark',
+            'todo-section_invisible': !isVisibleInMobVer
+            })}>
+
+
+            <MobileNav partName = {selectedListName} />
             {/* <h2>{selectedListName}</h2> */}
             <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
             <Route exact path = '/lists/edit-list' component = {EditListLabelDesktop} />

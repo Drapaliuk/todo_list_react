@@ -26,11 +26,11 @@ console.log('isInitialized', isInitialized)
   // }
   return (
         <BrowserRouter >
-            {isAuthorization && <Redirect to = '/lists' />}
+            {isAuthorization && <Redirect to = '/app' />}
             {!isAuthorization && <Redirect to = '/' />}
             <Route exact path = '/' component = {Introduction} />
             <Route path = '/auth' component = {Authorization}/>
-            <Route path = '/lists:listName?' component = {Application} />
+            <Route path = '/app' component = {Application} />
         </BrowserRouter>
   );
 }

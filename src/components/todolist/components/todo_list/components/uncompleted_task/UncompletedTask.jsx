@@ -21,8 +21,6 @@ export function UncompletedTask({onSelectTask, onComplete, onPin, onMakeImportan
         }
     }
 
-    console.log('selectedTask', currentTask)
-
     const pinHandler = () => onPin(!isPinned, taskId)
     const makeImportantHandler = () => onMakeImportant(!isImportant, taskId)
 
@@ -42,7 +40,6 @@ export function UncompletedTask({onSelectTask, onComplete, onPin, onMakeImportan
                 isSelectedTask === taskId &&
                 <FullInfo isMobileVer = {true} selectedTask = {currentTask} currentTheme = 'dark' />
             }
-           
         </li>
     )
 }

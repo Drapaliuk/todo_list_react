@@ -42,7 +42,8 @@ export const tasks = (prevState = initialState, action) => {
             return {
                 ...prevState,
                 selectedListId: payload.listId, 
-                selectedTaskId: selectedTaskId._id,
+                // selectedTaskId: selectedTaskId._id,
+                selectedTaskId: '',
                 isSelectedAppList: false
             }
 

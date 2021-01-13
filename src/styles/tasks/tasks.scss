@@ -7,6 +7,7 @@
     position: relative;
     min-width: 350px;
     overflow-y: auto;
+    height: 100vh;
 
     @media (max-width: 767px) {
         padding-top: 1px;
@@ -23,6 +24,12 @@
     background-color: #121212;
     color: #d1c3c3;
     background-image: none;
+}
+
+.todo-section.todo-section_invisible {
+    @media (max-width: 767px) {
+        display: none;
+    }
 }
 
 .add-todo-wrapper {
@@ -67,6 +74,19 @@
 .mobile-nav__title {
     line-height: 5px;
 }
+
+.mobile-nav__btn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 5px;
+}
+
+.mobile-nav__icon {
+    width: 22px;
+    height: 22px;
+}
+
 
 .todo-section.todo-section_theme_dark .add-todo-wrapper {
     background-color: #706b6b;
@@ -344,6 +364,7 @@
     justify-content: space-between;
     padding-right: 15px;
     margin-bottom: 10px;
+
     @media (max-width: 767px) {
         padding: 0;
     }
@@ -400,18 +421,17 @@
     align-items: center;
     border: none;
     transition: all .3s linear;
+
+    @media (max-width: 767px) {
+        background-color: rgba(255, 255, 255, 0.95);
+    }
 }
 
 .todo-list-settings-option:hover {
     background-color: white;
 }
 
-@media (max-width: 767px) {
-    .todo-list-settings-option {
-        background-color: rgba(255, 255, 255, 0.95);
-        display: none;
-    }
-}
+
 
 .todo-list-settings-option__icon {
     width: 24px;

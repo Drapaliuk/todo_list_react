@@ -12,7 +12,7 @@ import { ThemeSwitcher } from '../bar/components';
 import { MobileNav } from '../common/mobile_nav/mobile_nav';
 
 
-export function TodoList({isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
+export function TodoList({isVisibleSettingsInMobVer, isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
     const selectedListName = useSelector(state => getSelectedListProperty(state, 'name'))
@@ -35,7 +35,7 @@ export function TodoList({isCreatedTasksLists, currentTheme, isSelectedTask, isV
             'todo-section_invisible': !isVisibleInMobVer
             })}>
             <MobileNav partName = {selectedListName} />
-            <h2>{selectedListName}</h2>
+            <h2 className ='todo-list__title'>{selectedListName}</h2>
             <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
             <Route exact path = '/app/edit-list' component = {EditListLabelDesktop} />
             <Route path = '/app/settings' component = {ProfileSettings} />

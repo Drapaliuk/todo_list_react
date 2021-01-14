@@ -11,6 +11,7 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme, isVisibleInM
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));
     const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false);
+    const [openedEditListId, setOpenEditListId] = React.useState('')
 
     const appListTaskAmounts = useSelector(state => getAmountTasksForAppLists(state))
     
@@ -52,6 +53,9 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme, isVisibleInM
                                                tasksAmount = {tasksAmount} 
                                                onSelectList = {onSelectUserList}
                                                selectedListId = {selectedListId}
+                                               isOpenedEditMenu = {_id === openedEditListId}
+                                               onOpenEditMenu = {setOpenEditListId}
+
                                 />
                     })
                 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { registration } from '../../../../redux/actions';
+import { registration, setAuthError } from '../../../../redux/actions';
 import { getAuthData, getAuthError } from '../../../../redux/selectors';
 import { AuthForm } from '../auth_form/AuthForm';
 import { serverErrorsMessages } from '../../../../service/server_errors/server_errors';
@@ -13,13 +13,14 @@ export function SignIn() {
     const serverError = useSelector(state => getAuthError(state));
 
     const onSubmit = () => dispatch(registration(login, password))
+    const onClearAuthError = () => dispatch(setAuthError(''))
 
     return (
         <div class="registration">
             <div class="registration__icon-background">
                 <AiOutlineUserAdd className = 'icon__login' />
             </div>
-            <NavLink className = 'auth__close-btn' to = '/'>
+            <NavLink onClick = {onClearAuthError} className = 'auth__close-btn' to = '/'>
                 <AiOutlineClose className = 'auth__close-icon' />
             </NavLink>
             <h2 class="registration__header">Registration</h2>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import { AuthForm } from '../auth_form/AuthForm'
 import {getAuthData, getAuthError} from '../../../../redux/selectors';
-import { login } from '../../../../redux/actions';
+import { login, setAuthError } from '../../../../redux/actions';
 import { serverErrorsMessages } from '../../../../service/server_errors/server_errors';
 import { AiOutlineClose, AiOutlineUserSwitch } from 'react-icons/ai';
 
@@ -13,14 +13,14 @@ export function Login() {
 
     const dispatch = useDispatch();
     const onSubmit = () => dispatch(login(authData))
-
+    const onClearAuthError = () => dispatch(setAuthError(''))
     return (
         <Fragment>
-<div class="login">
+        <div class="login">
             <div class="login__icon-background">
                 <AiOutlineUserSwitch className = 'icon__login' />
             </div>
-            <NavLink className = 'auth__close-btn' to = '/'>
+            <NavLink onClick = {onClearAuthError} className = 'auth__close-btn' to = '/'>
                 <AiOutlineClose className = 'auth__close-icon' />
             </NavLink>
 
@@ -34,11 +34,11 @@ export function Login() {
 
             }
             <div class="login__service-panel">
-                <div class="login__remember-me">
+                {/* <div class="login__remember-me">
                     <input id="remember_me" type="checkbox" />
                     <label for="remember_me">Remember me</label>
-                </div>
-                <NavLink to='/auth/verification' className = "login__forgot-password">Forgot Password</NavLink>
+                </div> */}
+                {/* <NavLink to='/auth/verification' className = "login__forgot-password">Forgot Password</NavLink> */}
             </div>
             <p class="login__register-link">Don`t have account?
                 <NavLink to='/auth/registration'>REGISTER HERE</NavLink>

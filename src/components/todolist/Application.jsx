@@ -4,15 +4,14 @@ import { getSelectedTaskId, getSelectedTaskProperty, getTasksLists, isCreatedTas
 import {Bar, TodoList, FullInfo} from './components';
 import { AppList } from './components/app_list/AppList';
 import classNames from 'classnames';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 export function Application() {
     const location = useLocation()
-    console.log('history', location)
-
     const mobileVersionVisiblePage = {
         bar: location.pathname === '/app',
-        list: location.pathname === '/app/list' 
+        list: location.pathname === '/app/list',
+        settings: location.pathname === '/app/settings'
     }
 
     const isSelectedTask = useSelector(state => getSelectedTaskId(state));
@@ -27,15 +26,23 @@ export function Application() {
             {
                 isSelectedAppList 
                     ? 
-                <AppList isVisibleInMobVer = {mobileVersionVisiblePage.list} currentTheme = {currentTheme} /> 
+                <AppList isVisibleInMobVer = {mobileVersionVisiblePage.list} 
+                         currentTheme = {currentTheme} /> 
                     : 
-                <TodoList isVisibleInMobVer = {mobileVersionVisiblePage.list} isSelectedTask = {isSelectedTask} currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} />
+                <TodoList isVisibleSettingsInMobVer = {mobileVersionVisiblePage.settings}  
+                          isVisibleInMobVer = {mobileVersionVisiblePage.list} 
+                          isSelectedTask = {isSelectedTask} 
+                          currentTheme = {currentTheme} 
+                          isCreatedTasksLists = {isCreatedTasksListsValue} />
             }
                 
             {
                 isSelectedTask 
                     && 
-                <FullInfo isMobileVer = {false} currentTheme = {currentTheme} selectedTask = {selectedTask} tasksLists = {tasksLists} />
+                <FullInfo isMobileVer = {false} 
+                          currentTheme = {currentTheme} 
+                          selectedTask = {selectedTask} 
+                          tasksLists = {tasksLists} />
             }
         </div>
     )

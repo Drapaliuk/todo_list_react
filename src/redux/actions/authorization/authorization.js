@@ -10,7 +10,7 @@ export const isAuthorization = payload => {
 }
 const authReset = () => ({type: RESET_AUTH})
 const fetchingCheckAuth = payload => ({type: IS_FETCHING_CHECK_AUTH, payload})
-const setAuthError = payload => ({type: SET_AUTH_ERROR, payload})
+export const setAuthError = payload => ({type: SET_AUTH_ERROR, payload})
 
 export const login = (authData) => async dispatch => {
     dispatch(fetchingCheckAuth(true))

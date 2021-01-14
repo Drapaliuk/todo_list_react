@@ -3,11 +3,35 @@ import { FaClipboardList } from 'react-icons/fa';
 import { BiPencil } from 'react-icons/bi';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
+import { MobileEditListLabel } from '../mobile_edit_list_label/MobileEditListLabel';
 
-export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedListId}) {
+export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedListId, isOpenedEditMenu, onOpenEditMenu}) {
     const isItSelectedList = id === selectedListId
+    let touchStartTimestamp;
+    
+    const pointerDownHandler = () => {
+        touchStartTimestamp = Date.now();
+    }
+
+    const pointerUpHandler = () => {
+        let currentTime = Date.now();
+        if(currentTime - touchStartTimestamp >= 700) {
+            console.log('open menu')
+            onOpenEditMenu(id)
+        }
+    }
+
+    const contextMenuHandler = e => e.preventDefault()
+
+
     return (
-        <li onClick = {onSelectList(id)} class={classNames("bar-section__labels-list-item", {'bar-section__labels-list-item_selected': isItSelectedList})}>
+        <li onPointerDown = {pointerDownHandler}
+            onPointerUp = {pointerUpHandler}
+            onClick = {onSelectList(id)} 
+            onContextMenu = {contextMenuHandler}
+            class={classNames("bar-section__labels-list-item", {'bar-section__labels-list-item_selected': isItSelectedList})}>
+            
+            
             <NavLink className = 'bar-section__labels-link' to = '/app/list'>
                 <div class="todo-list-label todo-list-label_with_correct_btn">
                     <FaClipboardList className = 'todo-list-label__icon' />
@@ -20,7 +44,10 @@ export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedLis
                     </NavLink>
                 </div>
             </NavLink>
-            {/* <MobileEditListLabel /> */}
+            {/* {
+                isOpenedEditMenu && <MobileEditListLabel />
+            } */}
+            
         </li>
     )
 };

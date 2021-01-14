@@ -7,19 +7,12 @@ import { IoSettingsOutline } from 'react-icons/io5';
 export function Header({onLogOut, onThemeChange, currentTheme}) {
     return (
         <header>
-        <NavLink to = '/app/settings'>
-            <IoSettingsOutline className = 'icon icon-settings' />
-        </NavLink>
-        <div>
-            <button class="bell">
-                <svg class="icon icon--notification">
-                    <use href="./src/img/sprite.svg#icon-notification"></use>
-                </svg>
-            </button>
-        </div>
-        <ThemeSwitcher onThemeChange = {onThemeChange} currentTheme = {currentTheme}/>
-        <button className = 'logout-btn' onClick = {() => onLogOut()}><BiLogOut className = 'logout-btn__icon' /></button>
-    </header>
+            <NavLink to = '/app/settings'>
+                <IoSettingsOutline className = 'icon icon-settings' />
+            </NavLink>
+            <ThemeSwitcher onThemeChange = {onThemeChange} currentTheme = {currentTheme}/>
+            <button className = 'logout-btn' onClick = {() => onLogOut()}><BiLogOut className = 'logout-btn__icon' /></button>
+        </header>
     )
 }
 

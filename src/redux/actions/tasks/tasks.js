@@ -46,7 +46,7 @@ export const changeTask = (selectedListId, selectedTaskId, newValue) => async di
     dispatch({type: CHANGE_TASK, payload})
 }
 
-export const selectTask = taskId => ({type: SELECT_TASK, payload: {taskId}});
+export const selectTask = (taskId, selectedListId) => ({type: SELECT_TASK, payload: {taskId, selectedListId}});
 export const selectTaskFromAppList = (listId, taskId) => ({type: SELECT_TASK_FROM_APP_LIST, payload: {listId, taskId}});
 
 

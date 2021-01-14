@@ -8,22 +8,18 @@ import { ProfileSettings } from '../../../settings/ProfileSettings';
 import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoListSettings } from './components'
  
 import classNames from 'classnames';
-import { ThemeSwitcher } from '../bar/components';
 import { MobileNav } from '../common/mobile_nav/mobile_nav';
 
 
-export function TodoList({isVisibleSettingsInMobVer, isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
+export function TodoList({tasksListData, isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
     const dispatch = useDispatch();
+    const {uncompletedTasks, completedTasks, isSelectDefaultAppList, title} = tasksListData;
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
-    const selectedListName = useSelector(state => getSelectedListProperty(state, 'name'))
-
-    const isSelectedDefaultList = useSelector(state => state.tasks.isSelectedDefaultList) //!
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const uncompletedTasks = useSelector(state => getUncompletedTasks(currentSortCriteria, isSelectedDefaultList, selectedListId)(state));
-    const completedTasks = useSelector(state => getCompletedTasks(state));
 
-    const onSelectTask = id => () => dispatch(selectTask(id))
-    const onComplete =  (isComplete, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
+    const onSelectTask = (taskId, selectedListId) => () => dispatch(selectTask(taskId, selectedListId))
+    const onComplete =  (selectedListId, selectedTaskId) => isComplete => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
+    
     const onPinTask =  (isPinned, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isPinned: isPinned}))
     const onMakeImportant =  (isImportant, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: isImportant}))
     const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {'sortBy': sortBy}))
@@ -34,9 +30,14 @@ export function TodoList({isVisibleSettingsInMobVer, isCreatedTasksLists, curren
             'todo-section_theme_dark': currentTheme === 'dark',
             'todo-section_invisible': !isVisibleInMobVer
             })}>
-            <MobileNav partName = {selectedListName} />
-            <h2 className ='todo-list__title'>{selectedListName}</h2>
-            <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
+            <MobileNav partName = {'selectedListName'} />
+            <h2 className ='todo-list__title'>{title}</h2>
+            {
+                !isSelectDefaultAppList 
+                    &&
+                <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
+            }
+            
             <Route exact path = '/app/edit-list' component = {EditListLabelDesktop} />
             <Route path = '/app/settings' component = {ProfileSettings} />
             {
@@ -57,10 +58,13 @@ export function TodoList({isVisibleSettingsInMobVer, isCreatedTasksLists, curren
                                             onComplete = {onComplete}
                                     />
                     }
+                    {
+                        !isSelectDefaultAppList &&
+                        <TodoListSettings onSortTasks = {onSortTasks} 
+                                          currentSortCriteria = {currentSortCriteria}
+                                            />
+                    }
                     
-                    <TodoListSettings onSortTasks = {onSortTasks} 
-                                      currentSortCriteria = {currentSortCriteria}
-                                      />
                 </Fragment>
             }
            

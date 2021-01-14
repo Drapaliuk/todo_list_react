@@ -1,11 +1,11 @@
 import React from 'react'
 
-export function CompletedTask({text, onSelectTask, onComplete, taskId}) {
+export function CompletedTask({text, onSelectTask, onComplete}) {
     const [isCompleted, setCompleted] = React.useState(true);
     const completeHandler = event => {
         const isCompleted = event.target.checked;
         if(!isCompleted) {
-            onComplete(false, taskId)
+            onComplete(false)
             setCompleted(false)
             return 
         }

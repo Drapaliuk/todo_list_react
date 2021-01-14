@@ -7,6 +7,7 @@ import { Settings } from './Settings';
 
 
 export function TodoListSettings({onSortTasks, currentSortCriteria}) {
+    
     const [isVisibleSorting, setVisibleSorting] = React.useState(false);
     const [isVisibleSettings, setVisibleSettings] = React.useState(false);
     

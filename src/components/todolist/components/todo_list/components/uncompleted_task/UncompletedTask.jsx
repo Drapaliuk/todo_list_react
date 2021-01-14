@@ -13,7 +13,7 @@ export function UncompletedTask({onSelectTask, onComplete, onPin, onMakeImportan
         const role = event.target.dataset.role
         if(role === 'complete') {
             const isCompleted = event.target.checked
-            onComplete(isCompleted, taskId)
+            onComplete(isCompleted)
         }
         if(role === 'task') {
              onSelectTask()

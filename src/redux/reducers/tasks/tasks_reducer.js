@@ -134,9 +134,11 @@ export const tasks = (prevState = initialState, action) => {
             }
 
         case SELECT_TASK: 
+            console.log('payload', payload)
             return {
                 ...prevState,
-                selectedTaskId: prevState.selectedTaskId === payload.taskId ? '' : payload.taskId
+                selectedListId: payload.selectedListId,
+                selectedTaskId: prevState.selectedTaskId === payload.taskId ? '' : payload.taskId,
             }
 
         case SELECT_TASK_FROM_APP_LIST: 

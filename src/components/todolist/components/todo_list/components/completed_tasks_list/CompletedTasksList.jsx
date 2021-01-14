@@ -29,12 +29,11 @@ export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
             {
                 isVisibleCompletedTasks &&
                 <ul className="todo-list">
-                    {completedTasks.map(({text, _id}) => {
+                    {completedTasks.map(({text, _id, belongToList}) => {
                         return <CompletedTask key = {_id}
-                                              taskId = {_id}
                                               text = {text}
                                               onSelectTask = {onSelectTask}
-                                              onComplete = {onComplete}
+                                              onComplete = {onComplete(belongToList, _id)}
                         />
                     })}
                 </ul>

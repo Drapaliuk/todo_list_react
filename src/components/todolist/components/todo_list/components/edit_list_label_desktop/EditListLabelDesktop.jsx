@@ -18,7 +18,7 @@ export function EditListLabelDesktop() {
     const [previousListId] = React.useState(selectedListId)
 
     if(previousListId !== selectedListId) {
-        return <Redirect to = '/lists' />
+        return <Redirect to = '/app' />
     }
     const onDeleteList = () => dispatch(deleteTasksList(selectedListId));
     const isEmptyField = !newName.split(' ').some(el => el)

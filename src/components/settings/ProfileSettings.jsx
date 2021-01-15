@@ -1,9 +1,9 @@
 import React from 'react';
-import { Biography } from './components/biography/Biography';
-import { ChangeLanguage } from './components/change_language/ChangeLanguage';
-import { PersonalData } from './components/personal_data/PersonalData';
+import { Biography } from './biography/Biography';
+import { ChangeLanguage } from './change_language/ChangeLanguage';
+import { PersonalData } from './personal_data/PersonalData';
 import { AiOutlineClose } from 'react-icons/ai';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 
 

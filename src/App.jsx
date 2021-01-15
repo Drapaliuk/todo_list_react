@@ -5,8 +5,7 @@ import { Organizer, Authorization, Introduction } from './pages';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuthStatus, getFetchingInitDataStatus, getInitializeStatus } from './redux/selectors';
 import { initializeApp } from './redux/actions';
-
-export function Routing() {
+export function App() {
   const dispatch = useDispatch()
   const isAuthorization = useSelector(state => getAuthStatus(state));
   const isInitialized = useSelector(state => getInitializeStatus(state));

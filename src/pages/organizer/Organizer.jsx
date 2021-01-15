@@ -47,9 +47,9 @@ export function Organizer() {
                 isSelectedTask 
                     && 
                 <TaskFullInfo isMobileVer = {false} 
-                          currentTheme = {currentTheme} 
-                          selectedTask = {selectedTask} 
-                          tasksLists = {tasksLists} />
+                              currentTheme = {currentTheme} 
+                              selectedTask = {selectedTask} 
+                              tasksLists = {tasksLists} />
             }
         </div>
     )

@@ -17,7 +17,6 @@ import classNames from 'classnames';
 
 export function TaskFullInfo({selectedTask, isMobileVer}) {
     const dispatch = useDispatch();
-
     const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments, notes, _id:selectedTaskId} = selectedTask;
     const selectedListId = useSelector(state => getSelectedListId(state))
     const currentTheme = useSelector(state => state.settings.theme )
@@ -38,7 +37,6 @@ export function TaskFullInfo({selectedTask, isMobileVer}) {
     const onCompleteSubtask = (id, isComplete) => dispatch(updateSubtask(...ids, id, {hasDone: isComplete}))
     
     const onCreateComment = text => dispatch(createComment(...ids, text))
-    const onUpdateCommentText = (id, newText) => dispatch(updateComment(...ids, id, {text: newText}))
     const onDeleteComment = id => dispatch(deleteComment(...ids, id))
     const onUpdateNote = newNote => dispatch(changeTask(...ids, {notes: newNote}))
 

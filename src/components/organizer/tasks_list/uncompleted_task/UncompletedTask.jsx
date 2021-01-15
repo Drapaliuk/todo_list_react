@@ -2,12 +2,9 @@ import React from 'react'
 import {AiOutlineStar} from 'react-icons/ai'
 import classNames from 'classnames';
 import { IconPin } from '../../../../assets/svg/IconPin';
-import { FullInfo } from '../../task_full_info/TaskFullInfo';
 import { TaskFullInfo } from '../../'
 
-
-
-export function UncompletedTask({onSelectTask, onComplete, onPin, onMakeImportant, currentTask, currentTheme,  isSelectedTask}) {
+export function UncompletedTask({onSelectTask, onComplete, onPin, onMakeImportant, currentTask,  isSelectedTask}) {
     
     const {text, _id: taskId, isPinned, isImportant} = currentTask;
 

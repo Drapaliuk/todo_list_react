@@ -6,6 +6,7 @@ import { tasks } from "./tasks/tasks_reducer";
 import { reducer as formReducer } from 'redux-form';
 import { initialize } from './initialized/initialized_reducer';
 import { personalData } from './personal_data/personal_data';
+import { defaultTasksLists } from './default_tasks_lists/default_tasks_lists';
 
 export const combinedReducers = combineReducers({
     initialize,
@@ -14,5 +15,6 @@ export const combinedReducers = combineReducers({
     authorization,
     biography,
     personalData,
+    defaultTasksLists,
     form: formReducer
 }) 

@@ -10,21 +10,29 @@ import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoLis
  
 import classNames from 'classnames';
 import { MobileNav } from '../../common/mobile_nav/mobile_nav';
+import { updateDefaultListSettings } from '../../../redux/actions/default_tasks_lists/default_tasks_lists';
 
 
 
 export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const {uncompletedTasks, completedTasks, isSelectDefaultAppList, title} = tasksListData;
+
+    console.log('title', title)
+
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
     const selectedListId = useSelector(state => getSelectedListId(state));
-
     const onSelectTask = (taskId, selectedListId) => () => dispatch(selectTask(taskId, selectedListId))
     const onComplete =  (selectedListId, selectedTaskId) => isComplete => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
     
     const onPinTask =  (isPinned, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isPinned: isPinned}))
     const onMakeImportant =  (isImportant, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: isImportant}))
-    const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {'sortBy': sortBy}))
+    const onSortTasks = sortBy => {
+        if(isSelectDefaultAppList) {
+            return dispatch(updateDefaultListSettings(selectedListId, {sortBy}))
+        }
+        dispatch(changeListSettings(selectedListId, {sortBy}))
+    }
     const onSaveTask = text => dispatch(saveNewTask(selectedListId, text))
 
     return (
@@ -60,12 +68,9 @@ export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isS
                                             onComplete = {onComplete}
                                     />
                     }
-                    {
-                        !isSelectDefaultAppList &&
-                        <TodoListSettings onSortTasks = {onSortTasks} 
-                                          currentSortCriteria = {currentSortCriteria}
-                                            />
-                    }
+                    <TodoListSettings onSortTasks = {onSortTasks} 
+                                      currentSortCriteria = {currentSortCriteria}
+                                        />
                     
                 </Fragment>
             }

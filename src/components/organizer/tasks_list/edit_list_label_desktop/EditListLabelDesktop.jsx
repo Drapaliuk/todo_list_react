@@ -19,7 +19,10 @@ export function EditListLabelDesktop() {
     if(previousListId !== selectedListId) {
         return <Redirect to = '/app' />
     }
-    const onDeleteList = () => dispatch(deleteTasksList(selectedListId));
+    const onDeleteList = () => {
+        dispatch(deleteTasksList(selectedListId))
+        goBack()
+    };
     const isEmptyField = !newName.split(' ').some(el => el)
 
 

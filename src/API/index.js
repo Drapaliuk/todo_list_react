@@ -7,5 +7,6 @@ export { initializeAPI } from './initialize/initialize';
 export { biographyAPI } from './biography/biography';
 export { commentsAPI } from './tasks/comments';
 export { subtasksAPI } from './tasks/subtasks';
+export { defaultTasksListsAPI } from './default_tasks_lists/default_tasks_lists';
 
  

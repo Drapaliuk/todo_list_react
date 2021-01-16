@@ -1,12 +1,16 @@
 import { appListsData } from "../../../service/app_lists_data/app_lists_data";
 import { SortByDatesCreation, SortHandler } from "../../../utils";
 
-const sortByDateCreation = new SortByDatesCreation('monday')
-
 
 export const isCreatedTasksLists = state => state.tasks.tasksLists.length > 0
 export const getTasksLists = state => state.tasks.tasksLists;
-export const getSelectedListId = state => state.tasks.selectedListId
+export const getSelectedListId = state => {
+    const isSelectedDefaultAppList = state.tasks.isSelectedAppList
+    if(isSelectedDefaultAppList) {
+        return state.tasks.selectedAppListId
+    }
+    return state.tasks.selectedListId
+}
 export const getSelectedTaskId = state => {
     if(!isCreatedTasksLists(state)) return
     return state.tasks.selectedTaskId;
@@ -17,6 +21,7 @@ export const getSelectedListProperty = (state, property) => {
     const isSelectedDefaultAppList = state.tasks.isSelectedAppList
     if(isSelectedDefaultAppList) {
         const currentDefaultAppList = appListsData.find(list => list.id === state.tasks.selectedAppListId)
+        console.log('currentDefaultAppList', currentDefaultAppList)
         if(!property) return currentDefaultAppList
         return currentDefaultAppList[property]
     }
@@ -26,19 +31,6 @@ export const getSelectedListProperty = (state, property) => {
     if(!property) return currentUserlist
     return currentUserlist[property];  
 }
-
-export const getTasks = state => {
-    const filteredTasks = state.tasks.tasksLists.reduce((acc, list) => {
-        const uncompletedTasks = list.tasks.filter(task => !task.hasDone)
-        const addedBelongToList = uncompletedTasks.map(task => ({...task, belongToList: list._id}))
-        acc = [...acc, ...addedBelongToList]
-        return acc
-    }, [])
-    
-    return filteredTasks
-}
-
-export const getSelectedAppListId = state => state.tasks.selectedAppListId
 
 export const getSelectedAppListData = state => { //!
     const currentAppListId = state.tasks.selectedAppListId
@@ -66,63 +58,70 @@ export const getDefaultAppListTitle = state => {
     return appListsData.find(list => list.id === currentAppListId).title
 }
 
-export const getTasksForDefaultAppList = state => {
-    const currentAppListId = state.tasks.selectedAppListId
-    const selectedAppListData = appListsData.find(list => list.id === currentAppListId)
-
-    const filteredTasks = state.tasks.tasksLists.reduce((acc, list) => {
-        const tasks = list.tasks.filter(task => {
-            return selectedAppListData.filterHandler(task)
-        })
-        acc = [...acc, ...tasks]
-        return acc
-    }, [])
-
-    const uncompletedTasks = filteredTasks.filter(task => !task.hasDone)
-    const completedTasks = filteredTasks.filter(task => task.hasDone)
-    return {uncompletedTasks, completedTasks}
-}
 
 
-
-export const getUncompletedTasks = currentSortCriteria => state => {
+export const getTasks = state => {
     if(!isCreatedTasksLists(state)) return
-    const [sortBy, sortOrder] = currentSortCriteria.split('/');
-    const {getSortHandler} = new SortHandler(sortBy)
-    const {tasks} = getSelectedListProperty(state)
-
-    const unCompletedTasks = tasks?.filter(task => !task.hasDone)
-    const pinnedTasks = unCompletedTasks?.filter(task => task.isPinned).sort(getSortHandler(sortOrder))
-    const unPinnedTasks = unCompletedTasks?.filter(task => !task.isPinned).sort(getSortHandler(sortOrder))
-
-    return [...pinnedTasks, ...unPinnedTasks]
-}
-
-export const getCompletedTasks = state => {
-    if(!isCreatedTasksLists(state)) return
-    const {tasks} = getSelectedListProperty(state)
-    return tasks?.filter(task => task.hasDone)
-}
-
-export const getTasksForUserLists = state => {
-    if(!isCreatedTasksLists(state)) return
+    const isSelectedDefaultAppList = state.tasks.isSelectedAppList
     const currentSortCriteria = getSelectedListSettings(state, 'sortBy')
-
     const [sortBy, sortOrder] = currentSortCriteria.split('/');
     const {getSortHandler} = new SortHandler(sortBy)
-    const {tasks} = getSelectedListProperty(state)
+    let separatedTasks;
+    
+    if(isSelectedDefaultAppList) {
+        const currentDefaultListId = state.tasks.selectedAppListId
+        const selectedAppListData = appListsData.find(list => list.id === currentDefaultListId)
 
-    const unCompletedTasks = tasks?.filter(task => !task.hasDone)
-    const pinnedTasks = unCompletedTasks?.filter(task => task.isPinned).sort(getSortHandler(sortOrder))
-    const unPinnedTasks = unCompletedTasks?.filter(task => !task.isPinned).sort(getSortHandler(sortOrder))
-
-    return {
-        uncompletedTasks: [...pinnedTasks, ...unPinnedTasks],
-        completedTasks: [...tasks?.filter(task => task.hasDone)]
+        const filteredTasks = state.tasks.tasksLists.reduce((acc, list) => {
+            const tasks = list.tasks.filter(task => {
+                return selectedAppListData.filterHandler(task)
+            })
+            acc = [...acc, ...tasks]
+            return acc
+        }, [])
+        separatedTasks = taskSeparator(filteredTasks)
     }
 
-}
+    if(!isSelectedDefaultAppList) {
+        const {tasks} = getSelectedListProperty(state)
+        separatedTasks = taskSeparator(tasks)
+    }
 
+    function taskSeparator (tasks) {
+        return {
+            uncompletedTasks: {
+                pinnedTasks: tasks.filter(task => !task.hasDone && task.isPinned),
+                unpinnedTasks: tasks.filter(task => !task.hasDone && !task.isPinned)
+            },
+            completedTasks: {
+                pinnedTasks: tasks.filter(task => task.hasDone && task.isPinned),
+                unpinnedTasks: tasks.filter(task => task.hasDone && !task.isPinned)
+            }
+        }
+    }
+
+    function taskSorter (separatedTasks, sortHandler) {
+        separatedTasks.uncompletedTasks.pinnedTasks.sort(sortHandler);
+        separatedTasks.uncompletedTasks.unpinnedTasks.sort(sortHandler);
+        separatedTasks.completedTasks.pinnedTasks.sort(sortHandler);
+        separatedTasks.completedTasks.unpinnedTasks.sort(sortHandler);
+        return separatedTasks
+    }
+
+    function resultCreator (sortedTasks) {
+        const {completedTasks} = sortedTasks
+        const {uncompletedTasks} = sortedTasks
+        return {
+            completedTasks: [ ...completedTasks.pinnedTasks, ...completedTasks.unpinnedTasks ],
+            uncompletedTasks: [ ...uncompletedTasks.pinnedTasks, ...uncompletedTasks.unpinnedTasks ]
+        }
+    }
+
+    const sortedTasks = taskSorter(separatedTasks, getSortHandler(sortOrder))
+    return resultCreator(sortedTasks)
+   
+
+}
 
 export const getSelectedTaskProperty = (state, property) => {
     if(!isCreatedTasksLists(state)) return
@@ -136,20 +135,19 @@ export const getSelectedTaskProperty = (state, property) => {
     return selectedTask[property]
 }
 
-
-export const getImportantTasks = state => {
-    if(!isCreatedTasksLists(state)) return
-    const {tasks} = getSelectedListProperty(state)
-    return tasks?.filter(task => task.isImportant)
-}
-
-
 export const getSelectedListSettings = (state, property) => {
-    if(!isCreatedTasksLists(state)) return 
+    if(!isCreatedTasksLists(state)) return
+    const isSelectedDefaultAppList = state.tasks.isSelectedAppList
+    if(isSelectedDefaultAppList) {
+        const selectedDefaultList = state.tasks.selectedAppListId
+        const settings = state.defaultTasksLists.data[selectedDefaultList].settings
+        if(!property) return settings
+        console.log('settings', settings[property] === '')
+        return settings[property]
+    }
     const selectedListId = state.tasks.selectedListId;
     const list = state.tasks.tasksLists.find(list => list._id === selectedListId)
     if(!list) return false
     if(!property) return list.settings
     return list.settings[property]
 }
-

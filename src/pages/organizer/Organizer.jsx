@@ -1,9 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
-import { getSelectedTaskId, getSelectedTaskProperty, getTasksForDefaultAppList,
+import { getSelectedTaskId, getSelectedTaskProperty,
          getTasksLists, isCreatedTasksLists,
-         getTasksForUserLists, 
-         getSelectedListProperty} from '../../redux/selectors';
+         getSelectedListProperty,
+         getTasks} from '../../redux/selectors';
 
 import classNames from 'classnames';
 import { useLocation } from 'react-router-dom';
@@ -24,10 +24,12 @@ export function Organizer() {
     const currentTheme = useSelector(state => state.settings.theme);
     const tasksListData = useSelector(state => {
         if(state.tasks.isSelectedAppList) {
-            return {...getTasksForDefaultAppList(state), isSelectDefaultAppList: true, title: getSelectedListProperty(state, 'title')}
+            return {...getTasks(state), isSelectDefaultAppList: true, title: getSelectedListProperty(state, 'title')}
         }
-        return {...getTasksForUserLists(state), isSelectDefaultAppList: false, title: getSelectedListProperty(state, 'name')}
+        return {...getTasks(state), isSelectDefaultAppList: false, title: getSelectedListProperty(state, 'name')}
     })
+
+
 
 
 

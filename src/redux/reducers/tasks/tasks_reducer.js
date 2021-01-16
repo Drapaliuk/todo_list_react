@@ -61,6 +61,18 @@ export const tasks = (prevState = initialState, action) => {
             
         case DELETE_TASKS_LIST:
             const filteredLists = prevState.tasksLists.filter(({_id}) => _id !== payload.deletedListId )
+            const isUserListsEmpty = filteredLists.length === 0;
+            if(isUserListsEmpty) {
+                return {
+                    ...prevState,
+                    tasksLists: filteredLists,
+                    selectedListId: '',
+                    selectedTaskId: '',
+                    selectedAppListId: 'APP_LIST_today',
+                    isSelectedAppList: true
+                }
+            }
+
             return {
                 ...prevState,
                 tasksLists: filteredLists,

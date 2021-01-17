@@ -23,9 +23,6 @@ export const tasks = (prevState = initialState, action) => {
 
 
     switch(type)  {
-
-        
-
         case INITIALIZED_TASKS:
             const tasksCopy = [...payload]
             if(tasksCopy.length === 0) {

@@ -1,3 +1,4 @@
+import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { appListsData } from "../../../service/app_lists_data/app_lists_data";
 import { SortByDatesCreation, SortHandler } from "../../../utils";
 
@@ -73,15 +74,17 @@ export const getTasks = state => {
     if(isSelectedDefaultAppList) {
         const currentDefaultListId = state.tasks.selectedAppListId
         const selectedAppListData = appListsData.find(list => list.id === currentDefaultListId)
-
-        const filteredTasks = state.tasks.tasksLists.reduce((acc, list) => {
-            const tasks = list.tasks.filter(task => {
-                return selectedAppListData.filterHandler(task)
-            })
-            acc = [...acc, ...tasks]
+        const todayTasks = state.defaultTasksLists.data[DEFAULT_TASKS_LIST_TODAY].tasks
+        const userListTasks = state.tasks.tasksLists.reduce((acc, taskList) => {
+            acc.push(...taskList.tasks)
             return acc
         }, [])
-        separatedTasks = taskSeparator(filteredTasks)
+
+
+        const addedTodayTasks = [...userListTasks, ...todayTasks]
+        const filteredTasks = addedTodayTasks.filter(task => selectedAppListData.filterHandler(task))
+
+        separatedTasks = taskSeparator([...filteredTasks])
     }
 
     if(!isSelectedDefaultAppList) {
@@ -126,10 +129,21 @@ export const getTasks = state => {
 }
 
 export const getSelectedTaskProperty = (state, property) => {
-    if(!isCreatedTasksLists(state)) return
-
     const selectedListId = state.tasks.selectedListId;
     const selectedTaskId = state.tasks.selectedTaskId;
+    const selectedDefaultListId = state.tasks.selectedAppListId;
+    
+    if(selectedDefaultListId === selectedListId) {
+        const foundList = state.defaultTasksLists.data[state.tasks.selectedAppListId];
+        if(!foundList) return 
+        const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
+        if(!property) return selectedTask
+        return selectedTask[property]
+    }
+
+    if(!isCreatedTasksLists(state)) return
+
+
     const foundList = state.tasks.tasksLists.find(list => list._id === selectedListId)
     if(!foundList) return 
     const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
@@ -152,3 +166,6 @@ export const getSelectedListSettings = (state, property) => {
     if(!property) return list.settings
     return list.settings[property]
 }
+
+
+

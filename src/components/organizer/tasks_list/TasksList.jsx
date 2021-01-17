@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
-import { changeListSettings, changeTask, saveNewTask, selectTask, createTodayTask, updateDefaultListSettings } from '../../../redux/actions';
+import { changeListSettings, changeTask, saveNewTask, selectTask, createTodayTask, updateDefaultListSettings, updateTodayTask } from '../../../redux/actions';
 
 import { getSelectedListId, getSelectedListSettings } from '../../../redux/selectors';
 import { ProfileSettings } from '../../settings/ProfileSettings';
@@ -11,7 +11,6 @@ import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoLis
 import classNames from 'classnames';
 import { MobileNav } from '../../common/mobile_nav/mobile_nav';
 import { DEFAULT_TASKS_LIST_IMPORTANT, DEFAULT_TASKS_LIST_TODAY, DEFAULT_TASKS_LIST_WEEK } from '../../../service';
-// import { createTodayTask, updateDefaultListSettings } from '../../../redux/actions/default_tasks_lists/default_tasks_lists';
 
 
 
@@ -21,19 +20,32 @@ export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isS
 
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
     const selectedListId = useSelector(state => getSelectedListId(state));
+    const isSelectedTodayTasksList = selectedListId === DEFAULT_TASKS_LIST_TODAY;
+
     const onSelectTask = (taskId, selectedListId) => () => dispatch(selectTask(taskId, selectedListId))
-    const onComplete =  (selectedListId, selectedTaskId) => isComplete => dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
+    const onComplete =  (selectedListId, selectedTaskId) => isComplete => {
+        if(isSelectedTodayTasksList) return dispatch(updateTodayTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
+        dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
+    }
     
-    const onPinTask =  (isPinned, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isPinned: isPinned}))
-    const onMakeImportant =  (isImportant, selectedTaskId) => dispatch(changeTask(selectedListId, selectedTaskId, {isImportant: isImportant}))
+    const onPinTask =  (isPinned, selectedTaskId) => {
+        if(isSelectedTodayTasksList) return dispatch(updateTodayTask(selectedListId, selectedTaskId, {isPinned}))
+        dispatch(changeTask(selectedListId, selectedTaskId, {isPinned}))
+    }
+
+    const onMakeImportant =  (isImportant, selectedTaskId) => {
+        if(isSelectedTodayTasksList) return dispatch(updateTodayTask(selectedListId, selectedTaskId, {isImportant}))
+        dispatch(changeTask(selectedListId, selectedTaskId, {isImportant}))
+    }
+
     const onSortTasks = sortBy => {
-        if(isSelectDefaultAppList) {
-            return dispatch(updateDefaultListSettings(selectedListId, {sortBy}))
-        }
+        if(isSelectDefaultAppList) return dispatch(updateDefaultListSettings(selectedListId, {sortBy}))
         dispatch(changeListSettings(selectedListId, {sortBy}))
     }
-    const onSaveTask = text => dispatch(saveNewTask(selectedListId, text))
-    const onSaveTodayTask = text => dispatch(createTodayTask(selectedListId, text))
+    const onSaveTask = text => {
+        if(isSelectedTodayTasksList) return dispatch(createTodayTask(selectedListId, text))
+        dispatch(saveNewTask(selectedListId, text))
+    }
 
 
     return (
@@ -46,7 +58,7 @@ export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isS
             {
                 selectedListId === DEFAULT_TASKS_LIST_TODAY
                     ?
-                <NewTaskInput onSave = {onSaveTodayTask} selectedListId = {selectedListId}  />
+                <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
                     :
                 selectedListId !== DEFAULT_TASKS_LIST_TODAY &&
                 selectedListId !== DEFAULT_TASKS_LIST_WEEK && 

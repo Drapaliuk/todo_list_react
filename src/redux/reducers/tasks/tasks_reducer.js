@@ -1,7 +1,14 @@
+import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
-import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST, CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK, DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST, SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST, UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT, SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
+import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST,
+         CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK,
+         DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
+         SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
+         UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT,
+         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
 
 const initialState = {
+    todayTasks: [],
     tasksLists: [],
     selectedListId: '',
     selectedAppListId: '',
@@ -16,12 +23,24 @@ export const tasks = (prevState = initialState, action) => {
 
 
     switch(type)  {
+
+        
+
         case INITIALIZED_TASKS:
             const tasksCopy = [...payload]
+            if(tasksCopy.length === 0) {
+                return {
+                    ...prevState,
+                    tasksLists: [],
+                    selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
+                    isSelectedAppList: true
+                }
+            }
             return {
                 ...prevState,
                 tasksLists: tasksCopy,
                 selectedListId: tasksCopy[0]?._id || ''
+
             }
 
         case CREATE_LIST: 
@@ -68,7 +87,7 @@ export const tasks = (prevState = initialState, action) => {
                     tasksLists: filteredLists,
                     selectedListId: '',
                     selectedTaskId: '',
-                    selectedAppListId: 'APP_LIST_today',
+                    selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
                     isSelectedAppList: true
                 }
             }

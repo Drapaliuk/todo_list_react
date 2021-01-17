@@ -17,19 +17,21 @@ export const getSelectedTaskId = state => {
 }
 
 export const getSelectedListProperty = (state, property) => {
-    if(!isCreatedTasksLists(state)) return
     const isSelectedDefaultAppList = state.tasks.isSelectedAppList
     if(isSelectedDefaultAppList) {
         const currentDefaultAppList = appListsData.find(list => list.id === state.tasks.selectedAppListId)
-        console.log('currentDefaultAppList', currentDefaultAppList)
+        console.log('currentDefaultAppList', appListsData)
         if(!property) return currentDefaultAppList
         return currentDefaultAppList[property]
     }
 
+    if(!isCreatedTasksLists(state)) return
+
+
     const selectedListId = state.tasks.selectedListId;
-    const currentUserlist = state.tasks.tasksLists.find(list => list._id === selectedListId)
-    if(!property) return currentUserlist
-    return currentUserlist[property];  
+    const currentUserList = state.tasks.tasksLists.find(list => list._id === selectedListId)
+    if(!property) return currentUserList
+    return currentUserList[property];  
 }
 
 export const getSelectedAppListData = state => { //!
@@ -142,7 +144,6 @@ export const getSelectedListSettings = (state, property) => {
         const selectedDefaultList = state.tasks.selectedAppListId
         const settings = state.defaultTasksLists.data[selectedDefaultList].settings
         if(!property) return settings
-        console.log('settings', settings[property] === '')
         return settings[property]
     }
     const selectedListId = state.tasks.selectedListId;

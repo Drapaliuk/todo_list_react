@@ -38,11 +38,11 @@ export function Organizer() {
         <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
             <Bar isVisibleInMobVer = {mobileVersionVisiblePage.bar} currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} tasksLists = {tasksLists} />
             <TasksList isVisibleSettingsInMobVer = {mobileVersionVisiblePage.settings}  
-                      isVisibleInMobVer = {mobileVersionVisiblePage.list} 
-                      isSelectedTask = {isSelectedTask} 
-                      currentTheme = {currentTheme} 
-                      isCreatedTasksLists = {isCreatedTasksListsValue} 
-                      tasksListData = {tasksListData}
+                       isVisibleInMobVer = {mobileVersionVisiblePage.list} 
+                       isSelectedTask = {isSelectedTask} 
+                       currentTheme = {currentTheme} 
+                       isCreatedTasksLists = {isCreatedTasksListsValue} 
+                       tasksListData = {tasksListData}
                     />
                 
             {

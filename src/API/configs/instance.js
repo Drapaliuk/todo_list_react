@@ -6,7 +6,7 @@ const REFRESH_TOKEN = localStorageManipulator.getRefreshToken()
 const herokuServerURL = 'https://drapaliuk-to-do-list-server.herokuapp.com/'
 const localHost = 'http://localhost:4000'
 
-export const instance = Axios.create({baseURL: localHost});
+export const instance = Axios.create({baseURL: herokuServerURL});
   
 
 

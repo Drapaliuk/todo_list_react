@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
-import { CompletedTask } from '../completed_task/CompletedTask';
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
+import { Task } from '../task/Task';
 
 export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
     const [isVisibleCompletedTasks, setVisibleCompletedTasks] = React.useState(false);
@@ -29,11 +29,11 @@ export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
             {
                 isVisibleCompletedTasks &&
                 <ul className="todo-list">
-                    {completedTasks.map(({text, _id, belongToList}) => {
-                        return <CompletedTask key = {_id}
-                                              text = {text}
+                    {completedTasks.map(task => {
+                        return <Task key = {task._id}
                                               onSelectTask = {onSelectTask}
-                                              onComplete = {onComplete(belongToList, _id)}
+                                              onComplete = {onComplete}
+                                              currentTask = {task}
                         />
                     })}
                 </ul>

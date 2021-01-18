@@ -23,10 +23,10 @@ export function Organizer() {
     const tasksLists = useSelector(state => getTasksLists(state));
     const currentTheme = useSelector(state => state.settings.theme);
     const tasksListData = useSelector(state => {
-        if(state.tasks.isSelectedAppList) {
-            return {...getTasks(state), isSelectDefaultAppList: true, title: getSelectedListProperty(state, 'title')}
+        if(state.organizer.isSelectedAppList) {
+            return {...getTasks(state), title: getSelectedListProperty(state, 'title')}
         }
-        return {...getTasks(state), isSelectDefaultAppList: false, title: getSelectedListProperty(state, 'name')}
+        return {...getTasks(state), title: getSelectedListProperty(state, 'name')}
     })
 
 

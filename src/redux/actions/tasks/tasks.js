@@ -1,4 +1,5 @@
 import { listsAPI, tasksAPI } from "../../../API";
+import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { INITIALIZED_TASKS,
          CREATE_LIST,
          SELECT_TASKS_LIST,
@@ -13,7 +14,10 @@ import { INITIALIZED_TASKS,
          CLOSE_FULL_INFO,
          SELECT_APP_LIST,
          SELECT_TASK_FROM_APP_LIST,
-         UPDATE_TASKS_LIST
+         UPDATE_TASKS_LIST,
+         CREATE_TODAY_TASK,
+         UPDATE_TODAY_TASK,
+         DELETE_TODAY_TASK
         } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
@@ -36,14 +40,26 @@ export const updateTasksList = (listId, newValue) => async dispatch => {
 }
 
 export const clearSelectedList = () => ({type: CLEAR_SELECTED_LIST})
+
+
+
 export const saveNewTask = (selectedListId, text) => async dispatch => {
     const {data: payload} = (await tasksAPI.saveNewTask(selectedListId, text));
+    console.log('payload', payload)
+    if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+        return dispatch({type: CREATE_TODAY_TASK, payload})
+    }
     return dispatch({type: SAVE_NEW_TASK, payload})
 };
 
 export const changeTask = (selectedListId, selectedTaskId, newValue) => async dispatch => {
     const {data: payload} = (await tasksAPI.changeTask(selectedListId, selectedTaskId, newValue))
-    dispatch({type: CHANGE_TASK, payload})
+
+    if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+        return dispatch({type: UPDATE_TODAY_TASK, payload})
+    }
+
+    return dispatch({type: CHANGE_TASK, payload})
 }
 
 export const selectTask = (taskId, selectedListId) => ({type: SELECT_TASK, payload: {taskId, selectedListId}});
@@ -59,6 +75,9 @@ export const changeListSettings = (selectedListId, newValue) => async dispatch =
 export const defaultTasks = () => ({type: DEFAULT_TASKS});
 export const deleteTask = (selectedListId, selectedTaskId) => async dispatch => {
     const {data: payload} = await tasksAPI.deleteTask(selectedListId, selectedTaskId)
+    if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+        return dispatch({type: DELETE_TODAY_TASK, payload})
+    }
     dispatch({type: DELETE_TASK, payload})
 }
 

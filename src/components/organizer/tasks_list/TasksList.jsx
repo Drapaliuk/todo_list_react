@@ -16,36 +16,18 @@ import { DEFAULT_TASKS_LIST_IMPORTANT, DEFAULT_TASKS_LIST_TODAY, DEFAULT_TASKS_L
 
 export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
     const dispatch = useDispatch();
-    const {uncompletedTasks, completedTasks, isSelectDefaultAppList, title} = tasksListData;
-
+    const {uncompletedTasks, completedTasks, title} = tasksListData;
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
+
+    console.log('currentSortCriteria', currentSortCriteria)
+
     const selectedListId = useSelector(state => getSelectedListId(state));
-    const isSelectedTodayTasksList = selectedListId === DEFAULT_TASKS_LIST_TODAY;
-
-    const onSelectTask = (taskId, selectedListId) => () => dispatch(selectTask(taskId, selectedListId))
-    const onComplete =  (selectedListId, selectedTaskId) => isComplete => {
-        if(isSelectedTodayTasksList) return dispatch(updateTodayTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
-        dispatch(changeTask(selectedListId, selectedTaskId, {hasDone: isComplete}))
-    }
-    
-    const onPinTask =  (isPinned, selectedTaskId) => {
-        if(isSelectedTodayTasksList) return dispatch(updateTodayTask(selectedListId, selectedTaskId, {isPinned}))
-        dispatch(changeTask(selectedListId, selectedTaskId, {isPinned}))
-    }
-
-    const onMakeImportant =  (isImportant, selectedTaskId) => {
-        if(isSelectedTodayTasksList) return dispatch(updateTodayTask(selectedListId, selectedTaskId, {isImportant}))
-        dispatch(changeTask(selectedListId, selectedTaskId, {isImportant}))
-    }
-
-    const onSortTasks = sortBy => {
-        if(isSelectDefaultAppList) return dispatch(updateDefaultListSettings(selectedListId, {sortBy}))
-        dispatch(changeListSettings(selectedListId, {sortBy}))
-    }
-    const onSaveTask = text => {
-        if(isSelectedTodayTasksList) return dispatch(createTodayTask(selectedListId, text))
-        dispatch(saveNewTask(selectedListId, text))
-    }
+    const onSelectTask = (listId, taskId) => dispatch(selectTask(taskId, listId))
+    const onComplete =  (listId, taskId, isCompleted) => dispatch(changeTask(listId, taskId, {hasDone: isCompleted}))
+    const onPinTask =  (listId, taskId, isPinned) => dispatch(changeTask(listId, taskId, {isPinned}))
+    const onMakeImportant =  (listId, taskId, isImportant) => dispatch(changeTask(listId, taskId, {isImportant}))
+    const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {sortBy}))
+    const onCreateTask = text => dispatch(saveNewTask(selectedListId, text))
 
 
     return (
@@ -58,13 +40,13 @@ export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isS
             {
                 selectedListId === DEFAULT_TASKS_LIST_TODAY
                     ?
-                <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId}  />
+                <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedListId}  />
                     :
                 selectedListId !== DEFAULT_TASKS_LIST_TODAY &&
                 selectedListId !== DEFAULT_TASKS_LIST_WEEK && 
                 selectedListId !== DEFAULT_TASKS_LIST_IMPORTANT
                     ?
-                <NewTaskInput onSave = {onSaveTask} selectedListId = {selectedListId} />
+                <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedListId} />
                     :
                 null
             }

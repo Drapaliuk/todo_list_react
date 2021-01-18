@@ -1,3 +1,4 @@
+import produce from "immer";
 import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
 import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST,
@@ -5,11 +6,11 @@ import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST,
          DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
          SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
          UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT,
-         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
+         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST, CREATE_TODAY_TASK, UPDATE_TODAY_TASK, DELETE_TODAY_TASK, UPDATE_DEFAULT_LISTS_SETTINGS } from "../../actions_types"
 
 const initialState = {
-    todayTasks: [],
-    tasksLists: [],
+    defaultTasksLists: {},
+    userTasksLists: [],
     selectedListId: '',
     selectedAppListId: '',
     selectedTaskId: '',
@@ -18,32 +19,65 @@ const initialState = {
     isSelectedAppList: false
 }
 
-export const tasks = (prevState = initialState, action) => {
+export const organizer = (prevState = initialState, action) => {
     const {payload, type} = action;
 
 
     switch(type)  {
         case INITIALIZED_TASKS:
-            const tasksCopy = [...payload]
-            if(tasksCopy.length === 0) {
+            console.log('INITIALIZED', payload)
+            if(payload.userTasksLists.length === 0) {
                 return {
                     ...prevState,
-                    tasksLists: [],
+                    userTasksLists: [],
+                    defaultTasksLists: {...payload.defaultTasksLists},
                     selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
                     isSelectedAppList: true
                 }
             }
             return {
                 ...prevState,
-                tasksLists: tasksCopy,
-                selectedListId: tasksCopy[0]?._id || ''
+                userTasksLists: payload.userTasksLists,
+                selectedListId: payload.userTasksLists[0]?._id || '',
+                defaultTasksLists: {...payload.defaultTasksLists}
 
             }
+
+        case CREATE_TODAY_TASK:
+            return produce(prevState, draftState => {
+                draftState.defaultTasksLists[payload.listId].tasks.push(payload.savedTask)
+            })
+    
+        case UPDATE_TODAY_TASK:
+            return produce(prevState, draftState => {
+                const [key, value] = Object.entries(payload.updatedValue)[0]
+                draftState.defaultTasksLists[payload.listId].tasks.map(task => {
+                    if(task._id === payload.taskId) {
+                        task[key] = value
+                        return task
+                    }
+                    return task
+                })
+            })
+            
+        case DELETE_TODAY_TASK:
+            const newState = produce(prevState, draftState => {
+                const index = draftState.defaultTasksLists[payload.listId].tasks.findIndex(task => task._id === payload.taskId)
+                if(index !== -1) draftState.defaultTasksLists[payload.listId].tasks.splice(index, 1)
+                draftState.selectedTaskId = ''
+            })
+            return newState
+
+        case UPDATE_DEFAULT_LISTS_SETTINGS:
+            return produce(prevState, draftState => {
+                const [key, value] = Object.entries(payload.updatedValue)[0]
+                draftState.defaultTasksLists[payload.listId].settings[key] = value
+            })
 
         case CREATE_LIST: 
             return {
                 ...prevState,
-                tasksLists: [...prevState.tasksLists, {...payload}],
+                userTasksLists: [...prevState.userTasksLists, {...payload}],
                 selectedListId: payload._id,
                 selectedTaskId: ''
             }
@@ -52,7 +86,7 @@ export const tasks = (prevState = initialState, action) => {
 
         case SELECT_TASKS_LIST:
 
-            const selectedListId = prevState.tasksLists.find(list => list._id === payload.listId);
+            const selectedListId = prevState.userTasksLists.find(list => list._id === payload.listId);
             const [selectedTaskId = ''] = selectedListId.tasks.filter(task => (!task.hasDone && task.isPinned )|| (!task.hasDone && !task.isPinned))
 
             return {
@@ -76,12 +110,12 @@ export const tasks = (prevState = initialState, action) => {
 
             
         case DELETE_TASKS_LIST:
-            const filteredLists = prevState.tasksLists.filter(({_id}) => _id !== payload.deletedListId )
+            const filteredLists = prevState.userTasksLists.filter(({_id}) => _id !== payload.deletedListId )
             const isUserListsEmpty = filteredLists.length === 0;
             if(isUserListsEmpty) {
                 return {
                     ...prevState,
-                    tasksLists: filteredLists,
+                    userTasksLists: filteredLists,
                     selectedListId: '',
                     selectedTaskId: '',
                     selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
@@ -91,7 +125,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: filteredLists,
+                userTasksLists: filteredLists,
                 selectedListId: filteredLists[0]._id,
                 selectedTaskId: ''
 
@@ -108,7 +142,7 @@ export const tasks = (prevState = initialState, action) => {
             }
              return {
                 ...prevState,
-                tasksLists: changeListById(prevState.tasksLists, payload.listId, updateListLogic)
+                userTasksLists: changeListById(prevState.userTasksLists, payload.listId, updateListLogic)
 
             }
 
@@ -126,7 +160,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: changeListById(prevState.tasksLists, payload.listId, createTaskLogic)
+                userTasksLists: changeListById(prevState.userTasksLists, payload.listId, createTaskLogic)
             }
 
 
@@ -140,7 +174,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, changeTaskLogic)
+                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, changeTaskLogic)
             }
         case DELETE_TASK:
             const deleteTaskLogic = selectedList => {
@@ -152,7 +186,7 @@ export const tasks = (prevState = initialState, action) => {
             return {
                 ...prevState,
                 selectedTaskId: '',
-                tasksLists: changeListById(prevState.tasksLists, payload.listId, deleteTaskLogic)
+                userTasksLists: changeListById(prevState.userTasksLists, payload.listId, deleteTaskLogic)
             }
         
         case CLOSE_FULL_INFO: 
@@ -181,16 +215,23 @@ export const tasks = (prevState = initialState, action) => {
                 const [key, value] = Object.entries(payload.changedValue)[0]
                 selectedList.settings[key] = value
                 return selectedList
-            }       
+            } 
+
+            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+                return produce(prevState, draftState => {
+                    const [key, value] = Object.entries(payload.changedValue)[0]
+                    draftState.defaultTasksLists[payload.listId].settings[key] = value
+                })
+            }
 
             return {
                 ...prevState,
-                tasksLists: changeListById(prevState.tasksLists, payload.listId, changeListSettingsLogic)
+                userTasksLists: changeListById(prevState.userTasksLists, payload.listId, changeListSettingsLogic)
             }
 
         case DEFAULT_TASKS:
             return {
-                tasksLists: [],
+                userTasksLists: [],
                 selectedListId: '',
                 selectedTaskId: ''
             }
@@ -206,7 +247,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, createSubTaskLogic)
+                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, createSubTaskLogic)
             }
         
         case UPDATE_SUBTASK: 
@@ -217,7 +258,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: changeSubTaskById(prevState.tasksLists, payload.listId, payload.taskId, payload.subtaskId, updateSubtaskLogic)
+                userTasksLists: changeSubTaskById(prevState.userTasksLists, payload.listId, payload.taskId, payload.subtaskId, updateSubtaskLogic)
             }
 
         case DELETE_SUBTASK: 
@@ -230,7 +271,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, deleteSubtaskLogic)
+                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, deleteSubtaskLogic)
             }
 
         case SELECT_SUBTASK:
@@ -250,7 +291,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, createCommentLogic)
+                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, createCommentLogic)
             }
         
         case UPDATE_COMMENT:
@@ -261,7 +302,7 @@ export const tasks = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                tasksLists: changeCommentById(prevState.tasksLists, payload.listId, payload.taskId, payload.subtaskId, updateCommentLogic)
+                userTasksLists: changeCommentById(prevState.userTasksLists, payload.listId, payload.taskId, payload.subtaskId, updateCommentLogic)
             }
 
 
@@ -274,7 +315,7 @@ export const tasks = (prevState = initialState, action) => {
 
         return {
             ...prevState,
-            tasksLists: changeTaskById(prevState.tasksLists, payload.listId, payload.taskId, deleteCommentLogic)
+            userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, deleteCommentLogic)
         }
 
         default:

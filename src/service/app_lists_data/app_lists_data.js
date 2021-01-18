@@ -11,7 +11,6 @@ const filterHandlers = new SortByDatesCreation('monday')
 export const appListsData = [
     {
         title: 'Today',
-        // id: 'APP_LIST_today',
         id: DEFAULT_TASKS_LIST_TODAY,
         Icon: FcCalendar,
         filterHandler: task => {
@@ -20,7 +19,6 @@ export const appListsData = [
     },
     {
         title: 'Week',
-        // id: 'APP_LIST_week',
         id: DEFAULT_TASKS_LIST_WEEK,
         Icon: FcCalendar,
         filterHandler: task => {
@@ -30,7 +28,6 @@ export const appListsData = [
     },
     {
         title: 'Important',
-        // id: 'APP_LIST_important',
         id: DEFAULT_TASKS_LIST_IMPORTANT,
         Icon: AiOutlineStar,
         filterHandler: task => task.isImportant

@@ -1,5 +1,6 @@
 import { initializeAPI } from "../../../API";
 import { updateDefaultRequestHeaders } from "../../../API/configs/instance";
+import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { initializeAppParts, localStorageManipulator } from "../../../utils";
 import { IS_FETCHING_INIT_DATA, IS_INITIALIZED } from '../../actions_types';
 import { isAuthorization } from "../authorization/authorization";
@@ -26,7 +27,13 @@ export const initializeApp = () => async dispatch => {
         }
 
         const {tasks, settings, biography, personalData, defaultTasksLists} = payload;
-        dispatch( initializeTasks(tasks) );
+        const todayTasks = defaultTasksLists[DEFAULT_TASKS_LIST_TODAY].tasks
+        const forTasksInit = {userTasksLists: tasks, defaultTasksLists: defaultTasksLists }
+        console.log('TODAY TASKS', forTasksInit)
+
+        // dispatch( initializeTasks({userListTasks: tasks, todayTasks:todayTasks}) );
+        
+        dispatch( initializeTasks(forTasksInit) );
         dispatch( initializeSettings(settings) );
         dispatch( initializeBiography(biography) );
         dispatch( initializePersonalData(personalData));

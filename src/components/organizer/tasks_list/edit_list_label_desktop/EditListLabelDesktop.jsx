@@ -25,7 +25,6 @@ export function EditListLabelDesktop() {
     };
     const isEmptyField = !newName.split(' ').some(el => el)
 
-
     const onWriteNewName = event => {
         setNewName(event.target.value)
         setInvalidFlag(false)

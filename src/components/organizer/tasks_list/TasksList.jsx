@@ -1,22 +1,24 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
-import { changeListSettings, changeTask, saveNewTask, selectTask, createTodayTask, updateDefaultListSettings, updateTodayTask } from '../../../redux/actions';
+import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../redux/actions';
 
 import { getSelectedListId, getSelectedListSettings } from '../../../redux/selectors';
 import { ProfileSettings } from '../../settings/ProfileSettings';
 
-import { UncompletedTasksList, CompletedTasksList, EditListLabelDesktop, TodoListSettings, NewTaskInput } from './'
+import { CompletedTasksList, EditListLabelDesktop, TodoListSettings, NewTaskInput } from './'
  
 import classNames from 'classnames';
 import { MobileNav } from '../../common/mobile_nav/mobile_nav';
 import { DEFAULT_TASKS_LIST_IMPORTANT, DEFAULT_TASKS_LIST_TODAY, DEFAULT_TASKS_LIST_WEEK } from '../../../service';
+import { Task } from './task/Task';
 
 
 
 export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const {uncompletedTasks, completedTasks, title} = tasksListData;
+    console.log('tasksListData', tasksListData)
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
 
     console.log('currentSortCriteria', currentSortCriteria)
@@ -29,7 +31,7 @@ export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isS
     const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {sortBy}))
     const onCreateTask = text => dispatch(saveNewTask(selectedListId, text))
 
-
+    
     return (
         <section className = {classNames('todo-section', {
             'todo-section_theme_dark': currentTheme === 'dark',
@@ -53,31 +55,18 @@ export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isS
             
             <Route exact path = '/app/edit-list' component = {EditListLabelDesktop} />
             <Route path = '/app/settings' component = {ProfileSettings} />
-            {
-                isCreatedTasksLists
-                &&
-                <Fragment>
-                    <UncompletedTasksList uncompletedTasks = {uncompletedTasks} 
-                                          onComplete = {onComplete} 
-                                          onSelectTask = {onSelectTask} 
-                                          onPin = {onPinTask}
-                                          onMakeImportant = {onMakeImportant}
-                                          isSelectedTask = {isSelectedTask}
-                                        />
-                    {
-                        completedTasks.length > 0 &&
-                        <CompletedTasksList completedTasks = {completedTasks} 
-                                            onSelectTask = {onSelectTask}
-                                            onComplete = {onComplete}
-                                    />
-                    }
-                    <TodoListSettings onSortTasks = {onSortTasks} 
-                                      currentSortCriteria = {currentSortCriteria}
-                                        />
-                    
-                </Fragment>
-            }
-           
+            <>
+                <ul className="todo-list">
+                    {uncompletedTasks.map(currentTask => {
+                        return <Task {...{key: currentTask._id, onComplete, onSelectTask, onPinTask, onMakeImportant, currentTask, isSelectedTask}} />
+                    })}
+                </ul>
+                {
+                    completedTasks.length > 0 &&
+                    <CompletedTasksList {...{completedTasks, onSelectTask, onComplete,}} />
+                }
+                <TodoListSettings {...{onSortTasks, currentSortCriteria}} />
+            </>
         </section>
     )
 }

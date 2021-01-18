@@ -18,11 +18,11 @@ console.log('isInitialized', isInitialized)
     }
   }, []);
 
-  // if(isFetchingInitData) {
-  //   return <div className = "authorization">
-  //     <h1>Loading</h1>
-  //   </div>
-  // }
+  if(isFetchingInitData) {
+    return <div className = "authorization">
+      <h1>Loading</h1>
+    </div>
+  }
   return (
         <BrowserRouter >
             {isAuthorization && <Redirect to = '/app' />}

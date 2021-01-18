@@ -4,11 +4,8 @@ import classNames from 'classnames';
 import { IconPin } from '../../../../assets/svg/IconPin';
 import { TaskFullInfo } from '../../';
 
-export function Task({onSelectTask, onComplete, onPin, onMakeImportant, currentTask,  isSelectedTask}) {
+export function Task({onSelectTask, onComplete, onPinTask, onMakeImportant, currentTask,  isSelectedTask}) {
     const {text, _id: taskId, isPinned, isImportant, belongToList, hasDone} = currentTask;
-    const [completedStatus, setCompletedStatus] = React.useState(hasDone)
-
-
     const taskHandler = event => {
         const role = event.target.dataset.role
         if(role === 'complete') {
@@ -22,7 +19,7 @@ export function Task({onSelectTask, onComplete, onPin, onMakeImportant, currentT
         }
     }
 
-    const pinHandler = () => onPin(belongToList, taskId, !isPinned)
+    const pinHandler = () => onPinTask(belongToList, taskId, !isPinned)
     const makeImportantHandler = () => onMakeImportant(belongToList, taskId, !isImportant)
     return (
         <li onClick = {taskHandler} className="todo-list__item">

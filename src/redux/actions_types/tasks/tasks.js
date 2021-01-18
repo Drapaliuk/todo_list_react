@@ -14,9 +14,10 @@ export const CHANGE_TASKS_LIST_SETTINGS = 'tasks/CHANGE_TASKS_LIST_SETTINGS';
 export const DEFAULT_TASKS = 'tasks/DEFAULT_TASKS';
 export const CLOSE_FULL_INFO = 'tasks/CLOSE_FULL_INFO';
 export const CREATE_SUBTASK = 'tasks/CREATE_SUBTASK';
+
 export const DELETE_SUBTASK = 'tasks/DELETE_SUBTASK';
 export const UPDATE_SUBTASK = 'tasks/UPDATE_SUBTASK';
-export const SELECT_SUBTASK = 'task/SELECT_SUBTASK'; //! не використовується
+export const SELECT_SUBTASK = 'task/SELECT_SUBTASK';
 
 export const CREATE_COMMENT = 'tasks/CREATE_COMMENT';
 export const DELETE_COMMENT = 'tasks/DELETE_COMMENT';

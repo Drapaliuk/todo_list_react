@@ -24,8 +24,7 @@ export function Sorting({sortByHandler, currentSortCriteria}) {
                             Icon = {AiFillStar} 
                             isActive = {sortBy === 'isImportant'} />
 
-
-            <SortingOrder sortByHandler = {sortByHandler} sortOrder = {sortOrder} sortBy = {sortBy} />
+            <SortingOrder {...{sortByHandler, sortOrder, sortBy}} />
         </ul>
 
     )

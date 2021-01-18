@@ -11,8 +11,8 @@ export function Header({onLogOut, onThemeChange, currentTheme}) {
                 <IoSettingsOutline className = 'icon icon-settings' />
             </NavLink>
             <ThemeSwitcher onThemeChange = {onThemeChange} currentTheme = {currentTheme}/>
-            <button className = 'logout-btn' onClick = {() => onLogOut()}><BiLogOut className = 'logout-btn__icon' /></button>
-        </header>
+            <NavLink to = '/' className = 'logout-btn' onClick = {() => onLogOut()}><BiLogOut className = 'logout-btn__icon' /></NavLink>
+        </header> 
     )
 }
 

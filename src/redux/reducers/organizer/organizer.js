@@ -6,17 +6,18 @@ import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST,
          DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
          SAVE_NEW_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
          UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT,
-         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST, CREATE_TODAY_TASK, UPDATE_TODAY_TASK, DELETE_TODAY_TASK, UPDATE_DEFAULT_LISTS_SETTINGS } from "../../actions_types"
+         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST,
+         CREATE_TODAY_TASK, UPDATE_TODAY_TASK, DELETE_TODAY_TASK, UPDATE_DEFAULT_LISTS_SETTINGS } from "../../actions_types"
 
 const initialState = {
     defaultTasksLists: {},
     userTasksLists: [],
-    selectedListId: '',
-    selectedAppListId: '',
+    selectedListId: DEFAULT_TASKS_LIST_TODAY,
+    selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
     selectedTaskId: '',
     selectedSubtaskId: '',
     selectedCommentId: '',
-    isSelectedAppList: false
+    isSelectedAppList: true
 }
 
 export const organizer = (prevState = initialState, action) => {
@@ -25,7 +26,6 @@ export const organizer = (prevState = initialState, action) => {
 
     switch(type)  {
         case INITIALIZED_TASKS:
-            console.log('INITIALIZED', payload)
             if(payload.userTasksLists.length === 0) {
                 return {
                     ...prevState,
@@ -63,7 +63,7 @@ export const organizer = (prevState = initialState, action) => {
         case DELETE_TODAY_TASK:
             const newState = produce(prevState, draftState => {
                 const index = draftState.defaultTasksLists[payload.listId].tasks.findIndex(task => task._id === payload.taskId)
-                if(index !== -1) draftState.defaultTasksLists[payload.listId].tasks.splice(index, 1)
+                if(index !== -1) draftState.defaultTasksLists[payload.listId].tasks.splice()(index, 1)
                 draftState.selectedTaskId = ''
             })
             return newState
@@ -237,6 +237,12 @@ export const organizer = (prevState = initialState, action) => {
             }
         
         case CREATE_SUBTASK:
+            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+                return produce(prevState, draftState => {
+                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
+                    selectedTask.subtasks.push(payload.createdSubtask)
+                })
+            }
 
             const createSubTaskLogic = selectedTask => {
                 const {subtasks} = selectedTask
@@ -251,9 +257,17 @@ export const organizer = (prevState = initialState, action) => {
             }
         
         case UPDATE_SUBTASK: 
-            const updateSubtaskLogic = selectedSubtask => {
-                const [key, value] = Object.entries(payload.changedSubTask)[0]
-                return {...selectedSubtask, [key]: value} // це копіювання, обов'язкове?
+            const [key, value] = Object.entries(payload.changedSubTask)[0]
+            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+                return produce(prevState, draftState => {
+                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
+                    const updatedSubtask = selectedTask.subtasks.find(subtask => subtask._id === payload.subtaskId)
+                    updatedSubtask[key] = value
+                })
+            }
+
+            const updateSubtaskLogic = subtasks => {
+                return {...subtasks, [key]: value} // це копіювання, обов'язкове?
             }
 
             return {
@@ -262,6 +276,14 @@ export const organizer = (prevState = initialState, action) => {
             }
 
         case DELETE_SUBTASK: 
+            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+                return produce(prevState, draftState => {
+                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
+                    const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === payload.subtaskId)
+                    selectedTask.subtasks.splice(deletedSubtaskIndex, 1)
+                })
+            }
+            
 
             const deleteSubtaskLogic = selectedTask => {
                 const filteredSubtasks = selectedTask.subtasks.filter(subtask => subtask._id !== payload.subtaskId)
@@ -281,6 +303,13 @@ export const organizer = (prevState = initialState, action) => {
             }
 
         case CREATE_COMMENT:
+            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+                return produce(prevState, draftState => {
+                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
+                    selectedTask.comments.push(payload.createdElement)
+                })
+            }
+
 
             const createCommentLogic = selectedTask => {
                 const {comments} = selectedTask
@@ -295,6 +324,13 @@ export const organizer = (prevState = initialState, action) => {
             }
         
         case UPDATE_COMMENT:
+            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+                return produce(prevState, draftState => {
+                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
+                    const updatedComment = selectedTask.comments.find(subtask => subtask._id === payload.commentId)
+                    updatedComment[key] = value
+                })
+            }
             const updateCommentLogic = selectedComment => {
                 const [key, value] = Object.entries(payload.changedSubTask)[0]
                 return {...selectedComment, [key]: value} // це копіювання, обов'язкове?
@@ -302,11 +338,20 @@ export const organizer = (prevState = initialState, action) => {
 
             return {
                 ...prevState,
-                userTasksLists: changeCommentById(prevState.userTasksLists, payload.listId, payload.taskId, payload.subtaskId, updateCommentLogic)
+                userTasksLists: changeCommentById(prevState.userTasksLists, payload.listId, payload.taskId, payload.deletedCommentId, updateCommentLogic)
             }
 
 
         case DELETE_COMMENT:
+
+        if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+            return produce(prevState, draftState => {
+                const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
+                const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === payload.deletedCommentId)
+                selectedTask.comments.splice(deletedCommentIndex, 1)
+            })
+        }
+
         const deleteCommentLogic = selectedTask => {
             const filteredComments = selectedTask.comments.filter(comment => comment._id !== payload.deletedCommentId)
             selectedTask.comments = filteredComments

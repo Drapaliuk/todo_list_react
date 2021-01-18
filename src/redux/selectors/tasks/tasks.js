@@ -1,6 +1,6 @@
 import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { appListsData } from "../../../service/app_lists_data/app_lists_data";
-import { SortByDatesCreation, SortHandler } from "../../../utils";
+import { SortHandler } from "../../../utils";
 
 
 export const isCreatedTasksLists = state => state.organizer.userTasksLists.length > 0
@@ -13,7 +13,6 @@ export const getSelectedListId = state => {
     return state.organizer.selectedListId
 }
 export const getSelectedTaskId = state => {
-    if(!isCreatedTasksLists(state)) return
     return state.organizer.selectedTaskId;
 }
 
@@ -34,23 +33,27 @@ export const getSelectedListProperty = (state, property) => {
     return currentUserList[property];  
 }
 
-export const getSelectedAppListData = state => { //!
+export const getSelectedAppListData = state => {
     const currentAppListId = state.organizer.selectedAppListId
     return appListsData.find(list => list.id === currentAppListId)
 } 
 
 export const getAmountTasksForAppLists = state => {
+    const userListTasks = state.organizer.userTasksLists.reduce((acc, list) => {
+        acc.push(...list.tasks)
+        return acc
+    }, [])
+
+    const defaultListTasks = state.organizer.defaultTasksLists[DEFAULT_TASKS_LIST_TODAY].tasks
+    const allTasks = [...userListTasks, ...defaultListTasks]
     const taskAmounts = appListsData.reduce((acc, el, idx) => {
-        const amount = state.organizer.userTasksLists.reduce((acc, list) => {
-            const filteredElements = list.tasks.filter(task => {
-                return el.filterHandler(task) && !task.hasDone
-            })
-            acc += filteredElements.length
-            return acc
-        }, 0)
-        acc = {...acc,  [el.id]: amount}
+        const filteredElements = allTasks.filter(task => {
+            return el.filterHandler(task) && !task.hasDone
+        })
+        acc = {...acc,  [el.id]: filteredElements.length}
         return acc
     }, {})
+
     return taskAmounts
 }
 
@@ -63,7 +66,7 @@ export const getDefaultAppListTitle = state => {
 
 
 export const getTasks = state => {
-    if(!isCreatedTasksLists(state)) return
+    // if(!isCreatedTasksLists(state)) return {completedTasks: [], uncompletedTasks: []}
     const isSelectedDefaultAppList = state.organizer.isSelectedAppList
     const currentSortCriteria = getSelectedListSettings(state, 'sortBy')
     const [sortBy, sortOrder] = currentSortCriteria.split('/');
@@ -71,9 +74,9 @@ export const getTasks = state => {
     let separatedTasks;
     
     if(isSelectedDefaultAppList) {
+        console.log('inside')
         const currentDefaultListId = state.organizer.selectedAppListId
         const selectedAppListData = appListsData.find(list => list.id === currentDefaultListId)
-        // const todayTasks = state.defaultTasksLists.data[DEFAULT_TASKS_LIST_TODAY].tasks
         const todayTasks = state.organizer.defaultTasksLists[DEFAULT_TASKS_LIST_TODAY].tasks
 
         const userListTasks = state.organizer.userTasksLists.reduce((acc, taskList) => {
@@ -153,7 +156,6 @@ export const getSelectedTaskProperty = (state, property) => {
 }
 
 export const getSelectedListSettings = (state, property) => {
-    if(!isCreatedTasksLists(state)) return
     const isSelectedDefaultAppList = state.organizer.isSelectedAppList
     if(isSelectedDefaultAppList) {
         console.log('inside if')
@@ -162,12 +164,15 @@ export const getSelectedListSettings = (state, property) => {
         if(!property) return settings
         return settings[property]
     }
+
+    if(!isCreatedTasksLists(state)) return
+
     const selectedListId = state.organizer.selectedListId;
     const list = state.organizer.userTasksLists.find(list => list._id === selectedListId)
     console.log('list', list)
     if(!list) return false
     if(!property) return list.settings
-    // console.log('PROPERTY', property)
+
     return list.settings[property]
 }
 

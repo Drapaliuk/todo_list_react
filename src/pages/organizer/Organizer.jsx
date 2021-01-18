@@ -18,7 +18,6 @@ export function Organizer() {
     }
 
     const isSelectedTask = useSelector(state => getSelectedTaskId(state));
-    const isCreatedTasksListsValue = useSelector(state => isCreatedTasksLists(state));
     const selectedTask = useSelector(state => getSelectedTaskProperty(state))
     const tasksLists = useSelector(state => getTasksLists(state));
     const currentTheme = useSelector(state => state.settings.theme);
@@ -29,29 +28,17 @@ export function Organizer() {
         return {...getTasks(state), title: getSelectedListProperty(state, 'name')}
     })
 
-
-
-
-
-    if(!tasksListData) return null
     return (
         <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
-            <Bar isVisibleInMobVer = {mobileVersionVisiblePage.bar} currentTheme = {currentTheme} isCreatedTasksLists = {isCreatedTasksListsValue} tasksLists = {tasksLists} />
-            <TasksList isVisibleSettingsInMobVer = {mobileVersionVisiblePage.settings}  
-                       isVisibleInMobVer = {mobileVersionVisiblePage.list} 
-                       isSelectedTask = {isSelectedTask} 
-                       currentTheme = {currentTheme} 
-                       isCreatedTasksLists = {isCreatedTasksListsValue} 
-                       tasksListData = {tasksListData}
+            <Bar {...{isVisibleInMobVer: mobileVersionVisiblePage.bar, currentTheme, isCreatedTasksLists, tasksLists}} />
+            <TasksList {...{isVisibleSettingsInMobVer: mobileVersionVisiblePage.settings,
+                            isVisibleInMobVer: mobileVersionVisiblePage.list,
+                            isSelectedTask, currentTheme, isCreatedTasksLists, tasksListData}}
                     />
-                
             {
                 isSelectedTask 
                     && 
-                <TaskFullInfo isMobileVer = {false} 
-                              currentTheme = {currentTheme} 
-                              selectedTask = {selectedTask} 
-                              tasksLists = {tasksLists} />
+                <TaskFullInfo {...{isMobileVer: false, currentTheme, selectedTask, tasksLists }}/>
             }
         </div>
     )

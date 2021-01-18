@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeTask, closeFullInfo, deleteTask, createSubtask, 
          deleteSubtask, updateSubtask,
-         createComment, deleteComment, updateComment } from '../../../redux/actions';
+         createComment, deleteComment } from '../../../redux/actions';
 
 import { getSelectedListId } from '../../../redux/selectors';
 

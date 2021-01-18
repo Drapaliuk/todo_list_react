@@ -38,7 +38,8 @@ export function Task({onSelectTask, onComplete, onPinTask, onMakeImportant, curr
                         </button>
                     </>
                         :
-                    <button>del</button>
+                    null
+                    // <button>del</button>
                 }
                 
             </div>

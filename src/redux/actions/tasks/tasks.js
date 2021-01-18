@@ -5,7 +5,7 @@ import { INITIALIZED_TASKS,
          SELECT_TASKS_LIST,
          DELETE_TASKS_LIST,
          CLEAR_SELECTED_LIST,
-         SAVE_NEW_TASK,
+         CREATE_TASK,
          CHANGE_TASK,
          SELECT_TASK,
          CHANGE_TASKS_LIST_SETTINGS,
@@ -34,7 +34,6 @@ export const deleteTasksList = listId => async dispatch => {
 }
 
 export const updateTasksList = (listId, newValue) => async dispatch => {
-    console.log('newValue', newValue)
     const {data: payload} = (await listsAPI.update(listId, newValue));
     return dispatch({type: UPDATE_TASKS_LIST, payload})
 }
@@ -45,20 +44,11 @@ export const clearSelectedList = () => ({type: CLEAR_SELECTED_LIST})
 
 export const saveNewTask = (selectedListId, text) => async dispatch => {
     const {data: payload} = (await tasksAPI.saveNewTask(selectedListId, text));
-    console.log('payload', payload)
-    if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-        return dispatch({type: CREATE_TODAY_TASK, payload})
-    }
-    return dispatch({type: SAVE_NEW_TASK, payload})
+    return dispatch({type: CREATE_TASK, payload})
 };
 
 export const changeTask = (selectedListId, selectedTaskId, newValue) => async dispatch => {
     const {data: payload} = (await tasksAPI.changeTask(selectedListId, selectedTaskId, newValue))
-
-    if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-        return dispatch({type: UPDATE_TODAY_TASK, payload})
-    }
-
     return dispatch({type: CHANGE_TASK, payload})
 }
 
@@ -75,9 +65,6 @@ export const changeListSettings = (selectedListId, newValue) => async dispatch =
 export const defaultTasks = () => ({type: DEFAULT_TASKS});
 export const deleteTask = (selectedListId, selectedTaskId) => async dispatch => {
     const {data: payload} = await tasksAPI.deleteTask(selectedListId, selectedTaskId)
-    if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-        return dispatch({type: DELETE_TODAY_TASK, payload})
-    }
     dispatch({type: DELETE_TASK, payload})
 }
 

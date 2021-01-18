@@ -135,9 +135,8 @@ export const getTasks = state => {
 export const getSelectedTaskProperty = (state, property) => {
     const selectedListId = state.organizer.selectedListId;
     const selectedTaskId = state.organizer.selectedTaskId;
-    const selectedDefaultListId = state.organizer.selectedAppListId;
     
-    if(selectedDefaultListId === selectedListId) {
+    if(DEFAULT_TASKS_LIST_TODAY === selectedListId) {
         const foundList = state.organizer.defaultTasksLists[DEFAULT_TASKS_LIST_TODAY]
         if(!foundList) return 
         const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)

@@ -4,8 +4,6 @@ import { changeTask, closeFullInfo, deleteTask, createSubtask,
          deleteSubtask, updateSubtask,
          createComment, deleteComment } from '../../../redux/actions';
 
-import { getSelectedListId } from '../../../redux/selectors';
-
 import { Subtasks, Notes, TaskDateOption, ChangeText,
          FullInfoManipulations, Comments } from '.';
 
@@ -17,10 +15,13 @@ import classNames from 'classnames';
 
 export function TaskFullInfo({selectedTask, isMobileVer}) {
     const dispatch = useDispatch();
-    const {text, hasDone, isImportant, term, remind, repeat, subtasks, comments, notes, _id:selectedTaskId} = selectedTask;
-    const selectedListId = useSelector(state => getSelectedListId(state))
+    const {text, hasDone, isImportant, belongToList, term, remind, repeat, subtasks, comments, notes, _id:selectedTaskId} = selectedTask;
+
+    console.log('selectedTask', selectedTask)
+
+
     const currentTheme = useSelector(state => state.settings.theme )
-    const ids = [selectedListId, selectedTaskId]
+    const ids = [belongToList, selectedTaskId]
 
     const onComplete =  isComplete => dispatch(changeTask(...ids, {hasDone: isComplete}))
     const onMakeImportant =  isImportant => dispatch(changeTask(...ids, {isImportant: isImportant}))

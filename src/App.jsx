@@ -10,7 +10,6 @@ export function App() {
   const isAuthorization = useSelector(state => getAuthStatus(state));
   const isInitialized = useSelector(state => getInitializeStatus(state));
   const isFetchingInitData = useSelector(state => getFetchingInitDataStatus(state));
-  
 console.log('isInitialized', isInitialized)
   React.useEffect(() => {
     if(!isInitialized) {
@@ -20,7 +19,15 @@ console.log('isInitialized', isInitialized)
 
   if(isFetchingInitData) {
     return <div className = "authorization">
-      <h1>Loading</h1>
+      <div class="preloader-container">
+        <div class="dash uno"></div>
+        <div class="dash dos"></div>
+        <div class="dash tres"></div>
+        <div class="dash cuatro"></div>
+      </div>
+      <div className = 'preloader-title'>
+        Loading...
+      </div>
     </div>
   }
   return (

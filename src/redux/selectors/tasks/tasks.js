@@ -3,7 +3,7 @@ import { appListsData } from "../../../service/app_lists_data/app_lists_data";
 import { SortHandler } from "../../../utils";
 
 
-export const isCreatedTasksLists = state => state.organizer.userTasksLists.length > 0
+const isCreatedTasksLists = state => state.organizer.userTasksLists.length > 0
 export const getTasksLists = state => state.organizer.userTasksLists;
 export const getSelectedListId = state => {
     const isSelectedDefaultAppList = state.organizer.isSelectedAppList
@@ -157,7 +157,6 @@ export const getSelectedTaskProperty = (state, property) => {
 export const getSelectedListSettings = (state, property) => {
     const isSelectedDefaultAppList = state.organizer.isSelectedAppList
     if(isSelectedDefaultAppList) {
-        console.log('inside if')
         const selectedDefaultList = state.organizer.selectedAppListId
         const settings = state.organizer.defaultTasksLists[selectedDefaultList].settings
         if(!property) return settings

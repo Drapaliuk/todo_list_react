@@ -7,7 +7,7 @@ import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from '.';
 import { FiPlus } from 'react-icons/fi';
 import classNames from 'classnames';
 
-export function Bar({isCreatedTasksLists, tasksLists, currentTheme, isVisibleInMobVer}) {
+export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));
     const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false);
@@ -43,8 +43,6 @@ export function Bar({isCreatedTasksLists, tasksLists, currentTheme, isVisibleInM
                 <DefaultAppLabels appListTaskAmounts = {appListTaskAmounts} onSelectList = {onSelectAppList} selectedListId = {selectedListId} />
                 
                 {
-                    isCreatedTasksLists
-                    &&
                     tasksLists.map(({name, tasks, _id}) => {
                         const tasksAmount = tasks.filter(task => !task.hasDone).length
                         return <TasksListLabel key = {_id}

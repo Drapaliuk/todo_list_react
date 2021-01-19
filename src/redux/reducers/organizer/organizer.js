@@ -1,13 +1,12 @@
 import produce from "immer";
 import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
-import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS, CLEAR_SELECTED_LIST,
+import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS,
          CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK,
          DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
          CREATE_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
          UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT,
-         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST,
-         CREATE_TODAY_TASK, UPDATE_TODAY_TASK, DELETE_TODAY_TASK, UPDATE_DEFAULT_LISTS_SETTINGS } from "../../actions_types"
+         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
 
 const initialState = {
     defaultTasksLists: {},
@@ -26,28 +25,23 @@ export const organizer = (prevState = initialState, action) => {
 
     switch(type)  {
         case INITIALIZED_TASKS:
-            if(payload.userTasksLists.length === 0) {
-                return {
-                    ...prevState,
-                    userTasksLists: [],
-                    defaultTasksLists: {...payload.defaultTasksLists},
-                    selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
-                    isSelectedAppList: true
-                }
-            }
-            return {
-                ...prevState,
-                userTasksLists: payload.userTasksLists,
-                selectedListId: payload.userTasksLists[0]?._id || '',
-                defaultTasksLists: {...payload.defaultTasksLists}
-
-            }
-
-
-        case UPDATE_DEFAULT_LISTS_SETTINGS:
             return produce(prevState, draftState => {
-                const [key, value] = Object.entries(payload.updatedValue)[0]
-                draftState.defaultTasksLists[payload.listId].settings[key] = value
+                if(payload.userTasksLists.length === 0) {
+                    draftState.userTasksLists = []
+                    draftState.defaultTasksLists = {...payload.defaultTasksLists}
+                    draftState.selectedAppListId = DEFAULT_TASKS_LIST_TODAY
+                    draftState.isSelectedAppList = true
+                    return draftState
+                }
+
+                
+                draftState.userTasksLists = payload.userTasksLists
+                // draftState.selectedListId = payload.userTasksLists[0]?._id || ''
+                draftState.selectedListId = payload.userTasksLists[0]._id
+                draftState.selectedAppListId = ''
+                draftState.isSelectedAppList = false
+                draftState.defaultTasksLists = {...payload.defaultTasksLists}
+                return draftState
             })
 
         case CREATE_LIST: 
@@ -55,12 +49,13 @@ export const organizer = (prevState = initialState, action) => {
                 draftState.userTasksLists.push(payload)
                 draftState.selectedListId = payload._id
                 draftState.selectedTaskId = ''
-                draftState.selectedListId = ''
                 draftState.selectedAppListId = ''
+                draftState.isSelectedAppList = false
             })
 
         case SELECT_TASKS_LIST:
             return produce(prevState, draftState  => {
+                console.log(SELECT_TASKS_LIST)
                 draftState.selectedListId = payload.listId
                 draftState.selectedTaskId = ''
                 draftState.isSelectedAppList = false
@@ -68,6 +63,7 @@ export const organizer = (prevState = initialState, action) => {
 
         case SELECT_APP_LIST:
             return produce(prevState, draftState => {
+                console.log(SELECT_APP_LIST)
                 draftState.isSelectedAppList = true
                 draftState.selectedAppListId = payload.listId
                 draftState.selectedListId = ''

@@ -1,10 +1,8 @@
 import { listsAPI, tasksAPI } from "../../../API";
-import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
 import { INITIALIZED_TASKS,
          CREATE_LIST,
          SELECT_TASKS_LIST,
          DELETE_TASKS_LIST,
-         CLEAR_SELECTED_LIST,
          CREATE_TASK,
          CHANGE_TASK,
          SELECT_TASK,
@@ -15,9 +13,6 @@ import { INITIALIZED_TASKS,
          SELECT_APP_LIST,
          SELECT_TASK_FROM_APP_LIST,
          UPDATE_TASKS_LIST,
-         CREATE_TODAY_TASK,
-         UPDATE_TODAY_TASK,
-         DELETE_TODAY_TASK
         } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
@@ -37,10 +32,6 @@ export const updateTasksList = (listId, newValue) => async dispatch => {
     const {data: payload} = (await listsAPI.update(listId, newValue));
     return dispatch({type: UPDATE_TASKS_LIST, payload})
 }
-
-export const clearSelectedList = () => ({type: CLEAR_SELECTED_LIST})
-
-
 
 export const saveNewTask = (selectedListId, text) => async dispatch => {
     const {data: payload} = (await tasksAPI.saveNewTask(selectedListId, text));

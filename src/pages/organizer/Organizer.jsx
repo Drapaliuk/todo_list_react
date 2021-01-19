@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { getSelectedTaskId, getSelectedTaskProperty,
-         getTasksLists, isCreatedTasksLists,
+         getTasksLists,
          getSelectedListProperty,
          getTasks} from '../../redux/selectors';
 
@@ -30,10 +30,10 @@ export function Organizer() {
 
     return (
         <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
-            <Bar {...{isVisibleInMobVer: mobileVersionVisiblePage.bar, currentTheme, isCreatedTasksLists, tasksLists}} />
+            <Bar {...{isVisibleInMobVer: mobileVersionVisiblePage.bar, currentTheme, tasksLists}} />
             <TasksList {...{isVisibleSettingsInMobVer: mobileVersionVisiblePage.settings,
                             isVisibleInMobVer: mobileVersionVisiblePage.list,
-                            isSelectedTask, currentTheme, isCreatedTasksLists, tasksListData}}
+                            isSelectedTask, currentTheme, tasksListData}}
                     />
             {
                 isSelectedTask 

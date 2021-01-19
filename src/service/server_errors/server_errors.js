@@ -1,5 +1,6 @@
 export const serverErrorsMessages = {
     authorization: {
+        
         'LOGIN NOT REGISTERED': {
             message: 'Login is not registered!'
         },

@@ -15,7 +15,7 @@ import { Task } from './task/Task';
 
 
 
-export function TasksList({tasksListData, isCreatedTasksLists, currentTheme, isSelectedTask, isVisibleInMobVer}) {
+export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const {uncompletedTasks, completedTasks, title} = tasksListData;
     console.log('tasksListData', tasksListData)

@@ -123,29 +123,54 @@ export const organizer = (prevState = initialState, action) => {
 
 
         case CHANGE_TASK:
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const [key, value] = Object.entries(payload.updatedValue)[0]
-                    draftState.defaultTasksLists[payload.listId].tasks.map(task => {
-                        if(task._id === payload.taskId) {
+
+            return produce(prevState, draftState => {
+                console.log('PAYLOAD', payload)
+                const {listId, taskId, updatedValue} = payload;
+                const [key, value] = Object.entries(updatedValue)[0]
+                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                    draftState.defaultTasksLists[listId].tasks.map(task => {
+                        if(task._id === taskId) {
                             task[key] = value
                             return task
                         }
                         return task
                     })
-                })
-            }
+                    return
+                }
+    
+                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
+                    selectedTask[key] = value
+                    return selectedTask
+                } )
+            })
 
-            const changeTaskLogic = selectedTask => {
-                const [key, value] = Object.entries(payload.changedValue)[0]
-                selectedTask[key] = value
-                return selectedTask
-            } 
 
-            return {
-                ...prevState,
-                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, changeTaskLogic)
-            }
+
+
+            // if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+            //     return produce(prevState, draftState => {
+            //         const [key, value] = Object.entries(payload.updatedValue)[0]
+            //         draftState.defaultTasksLists[payload.listId].tasks.map(task => {
+            //             if(task._id === payload.taskId) {
+            //                 task[key] = value
+            //                 return task
+            //             }
+            //             return task
+            //         })
+            //     })
+            // }
+
+            // const changeTaskLogic = selectedTask => {
+            //     const [key, value] = Object.entries(payload.changedValue)[0]
+            //     selectedTask[key] = value
+            //     return selectedTask
+            // } 
+
+            // return {
+            //     ...prevState,
+            //     userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, changeTaskLogic)
+            // }
         case DELETE_TASK:
             if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
                 return produce(prevState, draftState => {

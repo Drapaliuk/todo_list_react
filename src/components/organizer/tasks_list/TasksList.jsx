@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
 import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../redux/actions';
 
-import { getSelectedDefaultListId, getSelectedListId, getSelectedListSettings } from '../../../redux/selectors';
+import { getSelectedDefaultListId, getSelectedListSettings, getSelectedListsIds } from '../../../redux/selectors';
 import { ProfileSettings } from '../../settings/ProfileSettings';
 
 import { CompletedTasksList, EditListLabelDesktop, TodoListSettings, NewTaskInput } from './'
@@ -19,17 +19,19 @@ export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibl
     const dispatch = useDispatch();
     const {uncompletedTasks, completedTasks, title} = tasksListData;
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
+    const {selectedUserListId, selectedDefaultListId} = useSelector(state => getSelectedListsIds(state));
 
-    const selectedDefaultListId = useSelector(state => getSelectedDefaultListId(state))
-    console.log(
-        'selectedDefaultListId', selectedDefaultListId
-    )
-    const selectedListId = useSelector(state => getSelectedListId(state));
     const onSelectTask = (listId, taskId) => dispatch(selectTask(taskId, listId))
     const onComplete =  (listId, taskId, isCompleted) => dispatch(changeTask(listId, taskId, {hasDone: isCompleted}))
     const onPinTask =  (listId, taskId, isPinned) => dispatch(changeTask(listId, taskId, {isPinned}))
     const onMakeImportant =  (listId, taskId, isImportant) => dispatch(changeTask(listId, taskId, {isImportant}))
-    const onSortTasks = sortBy => dispatch(changeListSettings(selectedListId, {sortBy}))
+    const onSortTasks = sortBy => {
+        if(selectedDefaultListId) {
+            return dispatch(changeListSettings(selectedDefaultListId, {sortBy}))
+        }
+        return dispatch(changeListSettings(selectedUserListId, {sortBy}))
+
+    }
     const onCreateTask = (selectedListId, text) => dispatch(saveNewTask(selectedListId, text))
 
     
@@ -43,13 +45,13 @@ export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibl
             {
                 selectedDefaultListId === DEFAULT_TASKS_LIST_TODAY
                     ?
-                <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedListId}  />
+                <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedDefaultListId}  />
                     :
                 selectedDefaultListId !== DEFAULT_TASKS_LIST_TODAY &&
                 selectedDefaultListId !== DEFAULT_TASKS_LIST_WEEK && 
                 selectedDefaultListId !== DEFAULT_TASKS_LIST_IMPORTANT
                     ?
-                <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedListId} />
+                <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedUserListId} />
                     :
                 null
             }

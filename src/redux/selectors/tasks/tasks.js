@@ -14,6 +14,11 @@ export const getSelectedListId = state => {
     return state.organizer.selectedListId
 }
 
+export const getSelectedListsIds = state => {
+    return {selectedUserListId: state.organizer.selectedListId, 
+            selectedDefaultListId: state.organizer.selectedAppListId}
+}
+
 export const getSelectedDefaultListId = state => state.organizer.selectedAppListId
 
 export const getSelectedTaskId = state => {

@@ -2,7 +2,7 @@ import React from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { defaultBiography, defaultSettings, isInitialized, updateSettings, logOut,
          saveNewList, selectTasksList, defaultTasks, selectAppList, clearPersonalData } from '../../../redux/actions';
-import { getAmountTasksForAppLists, getSelectedListId } from '../../../redux/selectors';
+import { getAmountTasksForAppLists, getSelectedListId, getSelectedListsIds } from '../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from '.';
 import { FiPlus } from 'react-icons/fi';
 import classNames from 'classnames';
@@ -10,6 +10,10 @@ import classNames from 'classnames';
 export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const selectedListId = useSelector(state => getSelectedListId(state));
+
+    const {selectedUserListId, selectedDefaultListId} = useSelector(state => getSelectedListsIds(state))
+
+
     const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false);
     const [openedEditListId, setOpenEditListId] = React.useState('')
 
@@ -50,8 +54,8 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
                                                name = {name} 
                                                tasksAmount = {tasksAmount} 
                                                onSelectList = {onSelectUserList}
-                                               isThisListSelected = {selectedListId === _id}
-                                               selectedListId = {selectedListId}
+                                               isThisListSelected = {selectedUserListId === _id}
+                                               selectedListId = {selectedUserListId}
                                                isOpenedEditMenu = {_id === openedEditListId}
                                                onOpenEditMenu = {setOpenEditListId}
 

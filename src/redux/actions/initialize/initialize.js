@@ -15,7 +15,7 @@ const fetchingInitData = payload => ({type: IS_FETCHING_INIT_DATA, payload})
 export const initializeApp = () => async dispatch => {
     dispatch(fetchingInitData(true))
     try {
-        const response = await initializeAPI.initialize();
+        var response = await initializeAPI.initialize();
         const {shouldUpdateTokens, payload} = response.data;
 
         if(shouldUpdateTokens) {

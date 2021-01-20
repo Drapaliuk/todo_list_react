@@ -10,7 +10,6 @@ export function App() {
   const isAuthorization = useSelector(state => getAuthStatus(state));
   const isInitialized = useSelector(state => getInitializeStatus(state));
   const isFetchingInitData = useSelector(state => getFetchingInitDataStatus(state));
-console.log('isInitialized', isInitialized)
   React.useEffect(() => {
     if(!isInitialized) {
       dispatch(initializeApp())

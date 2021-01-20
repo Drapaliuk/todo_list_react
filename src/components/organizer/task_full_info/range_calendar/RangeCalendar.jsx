@@ -12,8 +12,6 @@ export const RangeCalendar = ({onManipulation, placeholder, initialDate}) => {
     }, [initialDate])
 
   const dateChangeHandler = dates => {
-    console.log('dates', dates)
-
     const [start = null, end = null] = dates;
     setStartDate(start)
     setEndDate(end)

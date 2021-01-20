@@ -36,7 +36,6 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
     }
 
     const createSubtaskByKeyboard = ({keyCode}) => {
-        console.log('isEmptyField', isEmptyField)
         if(keyCode === KEY_ENTER && !isEmptyField) {
             writeText('')
             onCreate(text)

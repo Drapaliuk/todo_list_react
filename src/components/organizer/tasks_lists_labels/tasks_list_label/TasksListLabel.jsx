@@ -5,8 +5,11 @@ import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
 import { MobileEditListLabel } from '../mobile_edit_list_label/MobileEditListLabel';
 
-export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedListId, isOpenedEditMenu, onOpenEditMenu}) {
+export function TasksListLabel({name, tasksAmount, id, isThisListSelected, onSelectList, selectedListId, isOpenedEditMenu, onOpenEditMenu}) {
     const isItSelectedList = id === selectedListId
+    console.log('id', id)
+    console.log('selectedListId', selectedListId)
+    console.log('compare', id === selectedListId)
     let touchStartTimestamp;
     
     const pointerDownHandler = () => {
@@ -16,7 +19,6 @@ export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedLis
     const pointerUpHandler = () => {
         let currentTime = Date.now();
         if(currentTime - touchStartTimestamp >= 700) {
-            console.log('open menu')
             onOpenEditMenu(id)
         }
     }
@@ -29,17 +31,17 @@ export function TasksListLabel({name, tasksAmount, id, onSelectList, selectedLis
             onPointerUp = {pointerUpHandler}
             onClick = {onSelectList(id)} 
             onContextMenu = {contextMenuHandler}
-            class={classNames("bar-section__labels-list-item", {'bar-section__labels-list-item_selected': isItSelectedList})}>
+            class={classNames("bar-section__labels-list-item", {'bar-section__labels-list-item_selected': isThisListSelected})}>
             
             
             <NavLink className = 'bar-section__labels-link' to = '/app/list'>
                 <div class="todo-list-label todo-list-label_with_correct_btn">
                     <FaClipboardList className = 'todo-list-label__icon' />
                     <span class="todo-list-label__name">{name} </span>
-                    <span class= {classNames("todo-list-label__task-amount", {'todo-list-label__task-amount_selected': isItSelectedList})}  >{tasksAmount}</span>
+                    <span class= {classNames("todo-list-label__task-amount", {'todo-list-label__task-amount_selected': isThisListSelected})}  >{tasksAmount}</span>
                     <NavLink onClick = {onSelectList(id, name)} 
                             to = '/app/edit-list' 
-                            className = {classNames("todo-list-label__correct-btn", {'todo-list-label__correct-btn_selected': isItSelectedList})}>
+                            className = {classNames("todo-list-label__correct-btn", {'todo-list-label__correct-btn_selected': isThisListSelected})}>
                         <BiPencil className = 'todo-list-label__icon' />
                     </NavLink>
                 </div>

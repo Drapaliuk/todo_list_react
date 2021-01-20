@@ -32,7 +32,6 @@ export function FullInfoManipulations({onClose, onDeleteTask, onCreateComment}) 
     }
 
     const createSubtaskByKeyboard = ({keyCode}) => {
-        console.log('isEmptyField', isEmptyField)
         if(keyCode === KEY_ENTER && !isEmptyField) {
             writeCommentText('')
             onCreateComment(commentText)

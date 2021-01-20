@@ -50,6 +50,7 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
                                                name = {name} 
                                                tasksAmount = {tasksAmount} 
                                                onSelectList = {onSelectUserList}
+                                               isThisListSelected = {selectedListId === _id}
                                                selectedListId = {selectedListId}
                                                isOpenedEditMenu = {_id === openedEditListId}
                                                onOpenEditMenu = {setOpenEditListId}

@@ -2,7 +2,6 @@ import { initializeBiography, initializePersonalData, initializeSettings, initia
 
 export const initializeAppParts = (dispatch, user) => {
     const {tasks, settings, biography, personalData} = user;
-    console.log('+++++++++++++', user)
  
 
 }

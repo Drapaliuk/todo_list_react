@@ -17,9 +17,6 @@ export function TaskFullInfo({selectedTask, isMobileVer}) {
     const dispatch = useDispatch();
     const {text, hasDone, isImportant, belongToList, term, remind, repeat, subtasks, comments, notes, _id:selectedTaskId} = selectedTask;
 
-    console.log('selectedTask', selectedTask)
-
-
     const currentTheme = useSelector(state => state.settings.theme )
     const ids = [belongToList, selectedTaskId]
 

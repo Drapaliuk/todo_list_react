@@ -5,7 +5,6 @@ import classNames from 'classnames';
 export function NewTaskInput({onSave, selectedListId}) {
     const [isInvalidTaskText, setInvalidFlag] = React.useState(false)
     const [taskText, setTaskText] = React.useState('');
-
     React.useEffect(() => {
         setInvalidFlag(false)
         setTaskText('')
@@ -20,7 +19,7 @@ export function NewTaskInput({onSave, selectedListId}) {
         const isEmptyField = !taskText.split(' ').some(el => el)
         if(keyCode === KEY_ENTER && !isEmptyField) {
             setTaskText('')
-            onSave(taskText)
+            onSave(selectedListId, taskText)
             return
         }
 

@@ -10,8 +10,12 @@ export const getSelectedListId = state => {
     if(isSelectedDefaultAppList) {
         return state.organizer.selectedAppListId
     }
+    
     return state.organizer.selectedListId
 }
+
+export const getSelectedDefaultListId = state => state.organizer.selectedAppListId
+
 export const getSelectedTaskId = state => {
     return state.organizer.selectedTaskId;
 }
@@ -74,7 +78,6 @@ export const getTasks = state => {
     let separatedTasks;
     
     if(isSelectedDefaultAppList) {
-        console.log('inside')
         const currentDefaultListId = state.organizer.selectedAppListId
         const selectedAppListData = appListsData.find(list => list.id === currentDefaultListId)
         const todayTasks = state.organizer.defaultTasksLists[DEFAULT_TASKS_LIST_TODAY].tasks
@@ -167,7 +170,6 @@ export const getSelectedListSettings = (state, property) => {
 
     const selectedListId = state.organizer.selectedListId;
     const list = state.organizer.userTasksLists.find(list => list._id === selectedListId)
-    console.log('list', list)
     if(!list) return false
     if(!property) return list.settings
 

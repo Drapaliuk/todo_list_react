@@ -55,15 +55,17 @@ export const organizer = (prevState = initialState, action) => {
 
         case SELECT_TASKS_LIST:
             return produce(prevState, draftState  => {
-                console.log(SELECT_TASKS_LIST)
                 draftState.selectedListId = payload.listId
+
+                draftState.selectedAppListId = ''
+
+
                 draftState.selectedTaskId = ''
                 draftState.isSelectedAppList = false
             })
 
         case SELECT_APP_LIST:
             return produce(prevState, draftState => {
-                console.log(SELECT_APP_LIST)
                 draftState.isSelectedAppList = true
                 draftState.selectedAppListId = payload.listId
                 draftState.selectedListId = ''
@@ -149,7 +151,6 @@ export const organizer = (prevState = initialState, action) => {
                 return produce(prevState, draftState => {
                     const tasks = draftState.defaultTasksLists[payload.listId].tasks
                     const deletedTaskIndex = tasks.findIndex(task => payload.taskId === task._id)
-                    console.log('deletedTaskIndex', deletedTaskIndex)
                     tasks.splice(deletedTaskIndex, 1)
                     draftState.selectedTaskId =  ''
                 })
@@ -174,7 +175,6 @@ export const organizer = (prevState = initialState, action) => {
             }
 
         case SELECT_TASK: 
-            console.log('payload', payload)
             return {
                 ...prevState,
                 selectedListId: payload.selectedListId,
@@ -189,23 +189,19 @@ export const organizer = (prevState = initialState, action) => {
         }
 
         case CHANGE_TASKS_LIST_SETTINGS:
-            const changeListSettingsLogic = selectedList => {
+            return produce(prevState, draftState => {
                 const [key, value] = Object.entries(payload.changedValue)[0]
-                selectedList.settings[key] = value
-                return selectedList
-            } 
-
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const [key, value] = Object.entries(payload.changedValue)[0]
+                if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
                     draftState.defaultTasksLists[payload.listId].settings[key] = value
-                })
-            }
+                    return 
+                }
 
-            return {
-                ...prevState,
-                userTasksLists: changeListById(prevState.userTasksLists, payload.listId, changeListSettingsLogic)
-            }
+                draftState.userTasksLists = changeListById(draftState.userTasksLists, payload.listId, selectedList => {
+                    selectedList.settings[key] = value
+                    return selectedList
+                } )
+            })
+            
 
         case DEFAULT_TASKS:
             return {

@@ -5,7 +5,6 @@ import { IS_AUTHORIZATION, SET_AUTH_ERROR, IS_FETCHING_CHECK_AUTH, RESET_AUTH } 
 import { initializeApp, isInitialized } from "../initialize/initialize";
 
 export const isAuthorization = payload => {
-    console.log('is authorization', payload)
     return {type: IS_AUTHORIZATION, payload}
 }
 const authReset = () => ({type: RESET_AUTH})

@@ -19,6 +19,5 @@ export const SELECT_SUBTASK = 'task/SELECT_SUBTASK';
 
 export const CREATE_COMMENT = 'tasks/CREATE_COMMENT';
 export const DELETE_COMMENT = 'tasks/DELETE_COMMENT';
-export const UPDATE_COMMENT = 'tasks/UPDATE_COMMENT';
 
 

@@ -11,7 +11,6 @@ import { INITIALIZED_TASKS,
          DELETE_TASK,
          CLOSE_FULL_INFO,
          SELECT_APP_LIST,
-         SELECT_TASK_FROM_APP_LIST,
          UPDATE_TASKS_LIST,
         } from "../../actions_types";
 
@@ -44,9 +43,6 @@ export const changeTask = (selectedListId, selectedTaskId, newValue) => async di
 }
 
 export const selectTask = (taskId, selectedListId) => ({type: SELECT_TASK, payload: {taskId, selectedListId}});
-export const selectTaskFromAppList = (listId, taskId) => ({type: SELECT_TASK_FROM_APP_LIST, payload: {listId, taskId}});
-
-
 
 export const changeListSettings = (selectedListId, newValue) => async dispatch => {
     const {data: payload} = await listsAPI.changeSettings(selectedListId, newValue)

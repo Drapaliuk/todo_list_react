@@ -1,12 +1,12 @@
 import produce from "immer";
 import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
-import { changeCommentById, changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
+import { changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
 import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS,
          CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK,
          DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
          CREATE_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
-         UPDATE_SUBTASK, CREATE_COMMENT, UPDATE_COMMENT, DELETE_COMMENT,
-         SELECT_APP_LIST, SELECT_TASK_FROM_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
+         UPDATE_SUBTASK, CREATE_COMMENT, DELETE_COMMENT,
+         SELECT_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
 
 const initialState = {
     defaultTasksLists: {},
@@ -26,22 +26,20 @@ export const organizer = (prevState = initialState, action) => {
     switch(type)  {
         case INITIALIZED_TASKS:
             return produce(prevState, draftState => {
-                if(payload.userTasksLists.length === 0) {
+                const {userTasksLists, defaultTasksLists} = payload;
+                if(userTasksLists.length === 0) {
                     draftState.userTasksLists = []
-                    draftState.defaultTasksLists = {...payload.defaultTasksLists}
+                    draftState.defaultTasksLists = {...defaultTasksLists}
                     draftState.selectedAppListId = DEFAULT_TASKS_LIST_TODAY
                     draftState.isSelectedAppList = true
-                    return draftState
+                    return
                 }
-
                 
-                draftState.userTasksLists = payload.userTasksLists
-                // draftState.selectedListId = payload.userTasksLists[0]?._id || ''
-                draftState.selectedListId = payload.userTasksLists[0]._id
+                draftState.userTasksLists = userTasksLists
+                draftState.selectedListId = userTasksLists[0]._id
                 draftState.selectedAppListId = ''
                 draftState.isSelectedAppList = false
-                draftState.defaultTasksLists = {...payload.defaultTasksLists}
-                return draftState
+                draftState.defaultTasksLists = {...defaultTasksLists}
             })
 
         case CREATE_LIST: 
@@ -56,10 +54,7 @@ export const organizer = (prevState = initialState, action) => {
         case SELECT_TASKS_LIST:
             return produce(prevState, draftState  => {
                 draftState.selectedListId = payload.listId
-
                 draftState.selectedAppListId = ''
-
-
                 draftState.selectedTaskId = ''
                 draftState.isSelectedAppList = false
             })
@@ -73,59 +68,58 @@ export const organizer = (prevState = initialState, action) => {
             })
             
         case DELETE_TASKS_LIST:
-            const filteredLists = prevState.userTasksLists.filter(({_id}) => _id !== payload.deletedListId )
-            const isUserListsEmpty = filteredLists.length === 0;
-            
-            if(isUserListsEmpty) {
-                return {
-                    ...prevState,
-                    userTasksLists: filteredLists,
-                    selectedListId: '',
-                    selectedTaskId: '',
-                    selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
-                    isSelectedAppList: true
+            return produce(prevState, draftState => {
+                const {deletedListId} = payload;
+
+                const deletedListIndex = draftState.userTasksLists.findIndex(list => list._id === deletedListId)
+                if(deletedListIndex !== -1) {
+                    draftState.userTasksLists.splice(deletedListIndex, 1)
                 }
-            }
+                const selectedListIndexAfterDeleting = deletedListIndex > 0 ? deletedListIndex - 1 : 0
 
-            return {
-                ...prevState,
-                userTasksLists: filteredLists,
-                selectedListId: filteredLists[0]._id,
-                selectedTaskId: ''
+                const isUserListsEmpty = draftState.userTasksLists.length === 0;
+                
+                if(isUserListsEmpty) {
+                    draftState.selectedListId = ''
+                    draftState.selectedTaskId = ''
+                    draftState.selectedAppListId = DEFAULT_TASKS_LIST_TODAY
+                    draftState.isSelectedAppList = true
+                    return
+                }
 
-            }
-            
+                draftState.selectedListId = draftState.userTasksLists[selectedListIndexAfterDeleting]._id
+                draftState.selectedTaskId = ''
+            })
 
         case UPDATE_TASKS_LIST:
-            const updateListLogic = selectedList => {
-                const [key, value] = Object.entries(payload.changedValue)[0];
-                selectedList[key] = value;
-                return selectedList
-            }
-
             return produce(prevState, draftState => {
-                draftState.userTasksLists = changeListById(prevState.userTasksLists, payload.listId, updateListLogic)
+                const {listId, changedValue} = payload;
+                const [key, value] = Object.entries(changedValue)[0];
+
+                draftState.userTasksLists = changeListById(draftState.userTasksLists, listId, selectedList => {
+                    selectedList[key] = value;
+                    return selectedList
+                })
             })
+            
       
         case CREATE_TASK:
             return produce(prevState, draftState => {
                 const {listId, savedTask} = payload;
                 if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                        draftState.defaultTasksLists[listId].tasks.push(savedTask)
+                        draftState.defaultTasksLists[listId].tasks.unshift(savedTask)
                         return
                 }
 
                 draftState.userTasksLists = changeListById(draftState.userTasksLists, listId, selectedList => {
-                    selectedList.tasks = [...selectedList.tasks, savedTask]
+                    selectedList.tasks.unshift(savedTask)
                     return selectedList
                 })
             })
 
 
         case CHANGE_TASK:
-
             return produce(prevState, draftState => {
-                console.log('PAYLOAD', payload)
                 const {listId, taskId, updatedValue} = payload;
                 const [key, value] = Object.entries(updatedValue)[0]
                 if(listId === DEFAULT_TASKS_LIST_TODAY) {
@@ -145,53 +139,28 @@ export const organizer = (prevState = initialState, action) => {
                 } )
             })
 
-
-
-
-            // if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-            //     return produce(prevState, draftState => {
-            //         const [key, value] = Object.entries(payload.updatedValue)[0]
-            //         draftState.defaultTasksLists[payload.listId].tasks.map(task => {
-            //             if(task._id === payload.taskId) {
-            //                 task[key] = value
-            //                 return task
-            //             }
-            //             return task
-            //         })
-            //     })
-            // }
-
-            // const changeTaskLogic = selectedTask => {
-            //     const [key, value] = Object.entries(payload.changedValue)[0]
-            //     selectedTask[key] = value
-            //     return selectedTask
-            // } 
-
-            // return {
-            //     ...prevState,
-            //     userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, changeTaskLogic)
-            // }
         case DELETE_TASK:
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const tasks = draftState.defaultTasksLists[payload.listId].tasks
-                    const deletedTaskIndex = tasks.findIndex(task => payload.taskId === task._id)
+            return produce(prevState, draftState => {
+                const {listId, taskId} = payload;
+
+                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                    const tasks = draftState.defaultTasksLists[listId].tasks
+                    const deletedTaskIndex = tasks.findIndex(task => taskId === task._id)
                     tasks.splice(deletedTaskIndex, 1)
-                    draftState.selectedTaskId =  ''
+                    draftState.selectedTaskId = '';
+                    return
+                }
+    
+                draftState.userTasksLists = changeListById(draftState.userTasksLists, listId, selectedList => {
+                    const deletedTaskIndex = selectedList.tasks.findIndex(task => task._id === taskId)
+                    selectedList.tasks.splice(deletedTaskIndex, 1)
+                    return selectedList
                 })
-            }
+                draftState.selectedTaskId = '';
+            })
 
-            const deleteTaskLogic = selectedList => {
-                const filteredTasks = selectedList.tasks.filter(task => task._id !== payload.taskId)
-                selectedList.tasks = [...filteredTasks]
-                return selectedList
-            }
 
-            return {
-                ...prevState,
-                selectedTaskId: '',
-                userTasksLists: changeListById(prevState.userTasksLists, payload.listId, deleteTaskLogic)
-            }
+ 
         
         case CLOSE_FULL_INFO: 
             return {
@@ -200,18 +169,12 @@ export const organizer = (prevState = initialState, action) => {
             }
 
         case SELECT_TASK: 
+            const isTheSameList = prevState.selectedTaskId === payload.taskId
             return {
                 ...prevState,
                 selectedListId: payload.selectedListId,
-                selectedTaskId: prevState.selectedTaskId === payload.taskId ? '' : payload.taskId,
+                selectedTaskId: isTheSameList ? '' : payload.taskId,
             }
-
-        case SELECT_TASK_FROM_APP_LIST: 
-            return {
-                ...prevState,
-                selectedListId: payload.listId,
-                selectedTaskId: prevState.selectedTaskId === payload.taskId ? '' : payload.taskId
-        }
 
         case CHANGE_TASKS_LIST_SETTINGS:
             return produce(prevState, draftState => {
@@ -230,70 +193,70 @@ export const organizer = (prevState = initialState, action) => {
 
         case DEFAULT_TASKS:
             return {
+                defaultTasksLists: {},
                 userTasksLists: [],
-                selectedListId: '',
-                selectedTaskId: ''
+                selectedListId: DEFAULT_TASKS_LIST_TODAY,
+                selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
+                selectedTaskId: '',
+                selectedSubtaskId: '',
+                selectedCommentId: '',
+                isSelectedAppList: true
             }
         
         case CREATE_SUBTASK:
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
-                    selectedTask.subtasks.push(payload.createdSubtask)
+            return produce(prevState, draftState => {
+                const {listId, taskId, createdSubtask} = payload;
+
+                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
+                    selectedTask.subtasks.unshift(createdSubtask)
+                    return
+                }
+    
+                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
+                    selectedTask.subtasks.unshift(createdSubtask)
+                    return selectedTask
                 })
-            }
-
-            const createSubTaskLogic = selectedTask => {
-                const {subtasks} = selectedTask
-                const {createdSubtask} = payload
-                selectedTask.subtasks = [...subtasks, createdSubtask]
-                return selectedTask
-            }
-
-            return {
-                ...prevState,
-                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, createSubTaskLogic)
-            }
+            })
         
         case UPDATE_SUBTASK: 
-            const [key, value] = Object.entries(payload.changedSubTask)[0]
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
-                    const updatedSubtask = selectedTask.subtasks.find(subtask => subtask._id === payload.subtaskId)
+            return produce(prevState, draftState => {
+                const {listId, taskId, subtaskId, changedSubTask} = payload;
+                const [key, value] = Object.entries(changedSubTask)[0];
+
+                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
+                    const updatedSubtask = selectedTask.subtasks.find(subtask => subtask._id === subtaskId)
                     updatedSubtask[key] = value
+                    return
+                }
+
+                draftState.userTasksLists = changeSubTaskById(draftState.userTasksLists, listId, taskId, subtaskId, selectedSubtask => {
+                    selectedSubtask[key] = value
+                    return selectedSubtask
                 })
-            }
-
-            const updateSubtaskLogic = subtasks => {
-                return {...subtasks, [key]: value} // це копіювання, обов'язкове?
-            }
-
-            return {
-                ...prevState,
-                userTasksLists: changeSubTaskById(prevState.userTasksLists, payload.listId, payload.taskId, payload.subtaskId, updateSubtaskLogic)
-            }
+            })
+           
 
         case DELETE_SUBTASK: 
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
-                    const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === payload.subtaskId)
+            return produce(prevState, draftState => {
+                const {listId, taskId, subtaskId} = payload
+
+                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
+                    const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === subtaskId)
                     selectedTask.subtasks.splice(deletedSubtaskIndex, 1)
+                    return
+                }
+                
+                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
+                    const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === subtaskId)
+                    selectedTask.subtasks.splice(deletedSubtaskIndex, 1)
+                    return selectedTask 
                 })
-            }
+            });
+
             
-
-            const deleteSubtaskLogic = selectedTask => {
-                const filteredSubtasks = selectedTask.subtasks.filter(subtask => subtask._id !== payload.subtaskId)
-                selectedTask.subtasks = filteredSubtasks
-                return selectedTask 
-            }
-
-            return {
-                ...prevState,
-                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, deleteSubtaskLogic)
-            }
 
         case SELECT_SUBTASK:
             return {
@@ -302,65 +265,37 @@ export const organizer = (prevState = initialState, action) => {
             }
 
         case CREATE_COMMENT:
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
-                    selectedTask.comments.push(payload.createdElement)
+            return produce(prevState, draftState => {
+                const {listId, taskId, createdElement} = payload;
+                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
+                    selectedTask.comments.push(createdElement)
+                }
+
+                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
+                    selectedTask.comments.push(createdElement)
+                    return selectedTask
                 })
-            }
-
-
-            const createCommentLogic = selectedTask => {
-                const {comments} = selectedTask
-                const {createdElement} = payload
-                selectedTask.comments = [...comments, createdElement]
-                return selectedTask
-            }
-
-            return {
-                ...prevState,
-                userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, createCommentLogic)
-            }
+            })
         
-        case UPDATE_COMMENT:
-            if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
-                return produce(prevState, draftState => {
-                    const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
-                    const updatedComment = selectedTask.comments.find(subtask => subtask._id === payload.commentId)
-                    updatedComment[key] = value
-                })
-            }
-            const updateCommentLogic = selectedComment => {
-                const [key, value] = Object.entries(payload.changedSubTask)[0]
-                return {...selectedComment, [key]: value} // це копіювання, обов'язкове?
-            }
-
-            return {
-                ...prevState,
-                userTasksLists: changeCommentById(prevState.userTasksLists, payload.listId, payload.taskId, payload.deletedCommentId, updateCommentLogic)
-            }
-
 
         case DELETE_COMMENT:
-
-        if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
             return produce(prevState, draftState => {
-                const selectedTask = draftState.defaultTasksLists[payload.listId].tasks.find(task => task._id === payload.taskId)
-                const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === payload.deletedCommentId)
-                selectedTask.comments.splice(deletedCommentIndex, 1)
+                const {listId, taskId, deletedCommentId} = payload;
+
+                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
+                    const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === deletedCommentId)
+                    selectedTask.comments.splice(deletedCommentIndex, 1)
+                    return
+                }
+        
+                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
+                        const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === deletedCommentId)
+                        selectedTask.comments.splice(deletedCommentIndex, 1)
+                        return selectedTask 
+                    })
             })
-        }
-
-        const deleteCommentLogic = selectedTask => {
-            const filteredComments = selectedTask.comments.filter(comment => comment._id !== payload.deletedCommentId)
-            selectedTask.comments = filteredComments
-            return selectedTask 
-        }
-
-        return {
-            ...prevState,
-            userTasksLists: changeTaskById(prevState.userTasksLists, payload.listId, payload.taskId, deleteCommentLogic)
-        }
 
         default:
             return prevState

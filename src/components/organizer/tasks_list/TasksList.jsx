@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
 import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../redux/actions';
 
-import { getSelectedDefaultListId, getSelectedListSettings, getSelectedListsIds } from '../../../redux/selectors';
+import { getSelectedDefaultListId, getSelectedListSettings, getSelectedListsIds, getSelectedTaskId } from '../../../redux/selectors';
 import { ProfileSettings } from '../../settings/ProfileSettings';
 
 import { CompletedTasksList, EditListLabelDesktop, TodoListSettings, NewTaskInput } from './'
@@ -33,7 +33,7 @@ export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibl
 
     }
     const onCreateTask = (selectedListId, text) => dispatch(saveNewTask(selectedListId, text))
-
+    const selectedTaskId = useSelector(state => getSelectedTaskId(state))
     
     return (
         <section className = {classNames('todo-section', {
@@ -61,12 +61,12 @@ export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibl
             <>
                 <ul className="todo-list">
                     {uncompletedTasks.map(currentTask => {
-                        return <Task {...{key: currentTask._id, onComplete, onSelectTask, onPinTask, onMakeImportant, currentTask, isSelectedTask}} />
+                        return <Task {...{key: currentTask._id, onComplete, onSelectTask, onPinTask, onMakeImportant, currentTask, selectedTaskId}} />
                     })}
                 </ul>
                 {
                     completedTasks.length > 0 &&
-                    <CompletedTasksList {...{completedTasks, onSelectTask, onComplete,}} />
+                    <CompletedTasksList {...{completedTasks, onSelectTask, onComplete, selectedTaskId}} />
                 }
                 <TodoListSettings {...{onSortTasks, currentSortCriteria}} />
             </>

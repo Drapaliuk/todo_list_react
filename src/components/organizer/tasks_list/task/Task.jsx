@@ -4,26 +4,31 @@ import classNames from 'classnames';
 import { IconPin } from '../../../../assets/svg/IconPin';
 import { TaskFullInfo } from '../../';
 
-export function Task({onSelectTask, onComplete, onPinTask, onMakeImportant, currentTask,  isSelectedTask}) {
-    const {text, _id: taskId, isPinned, isImportant, belongToList, hasDone} = currentTask;
+export function Task({onSelectTask, onComplete, onPinTask, onMakeImportant, currentTask,  selectedTaskId}) {
+    const {text, _id: currentTaskId, isPinned, isImportant, belongToList, hasDone} = currentTask;
     const taskHandler = event => {
         const role = event.target.dataset.role
         if(role === 'complete') {
             const isCompleted = event.target.checked
-            onComplete(belongToList, taskId, isCompleted)
+            onComplete(belongToList, currentTaskId, isCompleted)
 
         }
         if(role === 'task') {
-             onSelectTask(belongToList, taskId)
+             onSelectTask(belongToList, currentTaskId)
              return
         }
     }
 
-    const pinHandler = () => onPinTask(belongToList, taskId, !isPinned)
-    const makeImportantHandler = () => onMakeImportant(belongToList, taskId, !isImportant)
+    const pinHandler = () => onPinTask(belongToList, currentTaskId, !isPinned)
+    const makeImportantHandler = () => onMakeImportant(belongToList, currentTaskId, !isImportant)
     return (
-        <li onClick = {taskHandler} className="todo-list__item">
-            <div {...{'data-role':'task'}} className={classNames('todo', {todo_completed: hasDone})} >
+        <li onClick = {taskHandler} className = {classNames('todo-list__item', {
+            
+        })}>
+            <div {...{'data-role':'task'}} className={classNames('todo', {
+                todo_completed: hasDone,
+                'todo_selected': selectedTaskId === currentTaskId
+            })} >
                 <input {...{'data-role':'complete'}} checked = {hasDone} className="todo__check-input" type="checkbox"/>
                 <div {...{'data-role':'task'}} className="todo__text">{text}</div>
                 {
@@ -44,7 +49,7 @@ export function Task({onSelectTask, onComplete, onPinTask, onMakeImportant, curr
                 
             </div>
             {
-                isSelectedTask === taskId &&
+                selectedTaskId === currentTaskId &&
                 <TaskFullInfo isMobileVer = {true} selectedTask = {currentTask} currentTheme = 'dark' />
             }
         </li>

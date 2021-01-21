@@ -174,8 +174,6 @@
     color: #fff;
 }
 
-
-
 .todo-list {
     margin-bottom: 15px;
 }
@@ -185,6 +183,7 @@
     box-shadow: 0 0 2px #fff;
     border-radius: 4px;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 .todo {
@@ -196,12 +195,20 @@
     position: relative;
     cursor: pointer;
     background-color: #6d6969;
+    transition: all .35s linear;
 
     @media (max-width: 767px) {
         height: 41px;
     }
 }
 
+.todo.todo_selected,
+.todo-section.todo-section_theme_dark .todo.todo_selected {
+    background-color: #227dcc;
+    color: #000;
+    transition: all .35s linear;
+
+}
 
 
 .todo__check-input {
@@ -215,9 +222,6 @@
     background-color: #303030;
     box-shadow: 0 0 2px #fff;
 }
-
-
-
 
 .todo_completed {
     text-decoration: line-through;

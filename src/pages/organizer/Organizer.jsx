@@ -21,6 +21,8 @@ export function Organizer() {
     const selectedTask = useSelector(state => getSelectedTaskProperty(state))
     const tasksLists = useSelector(state => getTasksLists(state));
     const currentTheme = useSelector(state => state.settings.theme);
+    const isLostConnection = useSelector(state => state.initialize.isLostConnection)
+
     const tasksListData = useSelector(state => {
         if(state.organizer.isSelectedAppList) {
             return {...getTasks(state), title: getSelectedListProperty(state, 'title')}
@@ -30,6 +32,7 @@ export function Organizer() {
 
     return (
         <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
+            {/* {isLostConnection && <div>LOST</div>} */}
             <Bar {...{isVisibleInMobVer: mobileVersionVisiblePage.bar, currentTheme, tasksLists}} />
             <TasksList {...{isVisibleSettingsInMobVer: mobileVersionVisiblePage.settings,
                             isVisibleInMobVer: mobileVersionVisiblePage.list,

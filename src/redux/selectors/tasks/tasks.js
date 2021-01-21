@@ -168,6 +168,7 @@ export const getSelectedListSettings = (state, property) => {
         const selectedDefaultList = state.organizer.selectedAppListId
         const settings = state.organizer.defaultTasksLists[selectedDefaultList].settings
         if(!property) return settings
+        
         return settings[property]
     }
 

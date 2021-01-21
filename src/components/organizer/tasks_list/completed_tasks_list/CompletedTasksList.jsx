@@ -2,7 +2,7 @@ import React from 'react'
 import { IoMdEyeOff, IoMdEye } from 'react-icons/io';
 import { Task } from '../task/Task';
 
-export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
+export function CompletedTasksList({completedTasks, onSelectTask, onComplete, selectedTaskId}) {
     const [isVisibleCompletedTasks, setVisibleCompletedTasks] = React.useState(false);
     const onVisibleCompletedTasks = () => setVisibleCompletedTasks(!isVisibleCompletedTasks)
 
@@ -28,7 +28,7 @@ export function CompletedTasksList({completedTasks, onSelectTask, onComplete}) {
             {
                 isVisibleCompletedTasks &&
                 <ul className="todo-list">
-                    {completedTasks.map(currentTask => <Task {...{key: currentTask._id, onSelectTask, onComplete, currentTask}} />)}
+                    {completedTasks.map(currentTask => <Task {...{key: currentTask._id, onSelectTask, onComplete, currentTask, selectedTaskId}} />)}
                 </ul>
             }
         </>

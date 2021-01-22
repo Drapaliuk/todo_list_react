@@ -4,7 +4,7 @@ const initState = {
     isInitialized: false,
     isFetchingInitData: true,
     isConnectionToNetwork: true,
-    isLostConnection: false
+    wasLostConnection: false
 }
 
 
@@ -28,7 +28,7 @@ export const initialize = (prevState = initState, action) => {
         case LOST_CONNECTION: 
             return {
                 ...prevState,
-                isLostConnection: action.payload.isLostConnection
+                wasLostConnection: action.payload.wasLostConnection
             }
         
         default:

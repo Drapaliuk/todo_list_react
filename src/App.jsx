@@ -5,16 +5,17 @@ import { Organizer, Authorization, Introduction } from './pages';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { getAuthStatus, getFetchingInitDataStatus, getInitializeStatus } from './redux/selectors';
 import { initializeApp, lostConnection, networkConnectionStatus } from './redux/actions';
+import { RiWifiOffLine } from 'react-icons/ri';
 export function App() {
   const dispatch = useDispatch()
   const isAuthorization = useSelector(state => getAuthStatus(state));
   const isInitialized = useSelector(state => getInitializeStatus(state));
   const isFetchingInitData = useSelector(state => getFetchingInitDataStatus(state));
   const isConnectionToNetwork = useSelector(state => state.initialize.isConnectionToNetwork)
-  const isLostConnection = useSelector(state => state.initialize.isLostConnection)
-
-  console.log('isLostConnection', isLostConnection)
-
+  const refreshAppHandler = () => {
+    console.log('refreshing')
+    dispatch(initializeApp())
+  } 
 
   React.useEffect(() => {
     if(!isInitialized) {
@@ -52,7 +53,15 @@ export function App() {
 
 
   if(!isConnectionToNetwork) {
-    return <h1>NOT CONNECTION TO NETWORK</h1>
+    return <div className = "authorization">
+      <div className = 'not-network__wrapper'>
+        <RiWifiOffLine className = 'not-network__icon' />
+        <h1 className = 'not-network__message'>There are not network connection!</h1>
+        <div>
+          Waiting to reconnection!
+        </div>
+      </div>
+    </div>
   }
 
   if(isFetchingInitData) {

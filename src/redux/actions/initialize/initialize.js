@@ -12,9 +12,8 @@ export const isInitialized = payload => ({type: IS_INITIALIZED, payload})
 const fetchingInitData = payload => ({type: IS_FETCHING_INIT_DATA, payload})
 
 export const networkConnectionStatus = status => ({type: NETWORK_CONNECTION_STATUS, payload: {status}})
-export const lostConnection = isLostConnection => ({type: LOST_CONNECTION, payload: {isLostConnection}})
+export const lostConnection = wasLostConnection => ({type: LOST_CONNECTION, payload: {wasLostConnection}})
 export const initializeApp = () => async dispatch => {
-    console.log('initializeApp')
     dispatch(fetchingInitData(true))
     try {
 

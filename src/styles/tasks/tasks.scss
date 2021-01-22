@@ -503,3 +503,42 @@
 .todo-additional-option__time-options-item {
     margin-bottom: 8px;
 }
+
+.network-lost__message-wrapper {
+    background-color: rgba(190, 77, 75, 1);
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    padding: 6px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.network-lost__icon {
+    width: 23px;
+    height: 23px;
+    margin-right: 10px;
+}
+
+.network-lost__message {
+    font-weight: 700;
+}
+
+.not-network__wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-network__icon {
+    width: 80px;
+    height: 80px;
+    fill: rgb(61, 31, 31);
+
+}
+
+.not-network__message {
+
+}

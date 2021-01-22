@@ -9,23 +9,25 @@ const REFRESH_TOKEN = localStorageManipulator.getRefreshToken();
 const herokuServerURL = 'https://drapaliuk-to-do-list-server.herokuapp.com/'
 const localHost = 'http://localhost:4000'
 
-export const instance = Axios.create({baseURL: localHost});
+export const instance = Axios.create({baseURL: herokuServerURL});
   
 
 instance.interceptors.request.use(request => {
-    const isAccessToNetwork = window.navigator.onLine
-    console.log('isAccessToNetwork', isAccessToNetwork)
+    const isAccessToNetwork = window.navigator.onLine;
+
     if(!isAccessToNetwork) {
-        console.log('inside if')
-        const notConnectionError = new Error('there are not connection with internet')
-        notConnectionError.name = 'NO CONNECTION'
-        store.dispatch(networkConnectionStatus(false))
+        const notConnectionError = new Error('there are not network connection')
+        notConnectionError.name = 'NO CONNECTION';
+
+        store.dispatch(networkConnectionStatus(false));
+
         return Promise.reject({
             response: {
                 data: notConnectionError 
             }
         })
     }
+
     return request
 })
 

@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import { MobileNav } from '../../common/mobile_nav/mobile_nav';
 import { DEFAULT_TASKS_LIST_IMPORTANT, DEFAULT_TASKS_LIST_TODAY, DEFAULT_TASKS_LIST_WEEK } from '../../../service';
 import { Task } from './task/Task';
+import { RiWifiOffLine } from 'react-icons/ri';
 
 
 
@@ -20,6 +21,9 @@ export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibl
     const {uncompletedTasks, completedTasks, title} = tasksListData;
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
     const {selectedUserListId, selectedDefaultListId} = useSelector(state => getSelectedListsIds(state));
+    const wasLostConnection = useSelector(state => state.initialize.wasLostConnection)
+
+
 
     const onSelectTask = (listId, taskId) => dispatch(selectTask(taskId, listId))
     const onComplete =  (listId, taskId, isCompleted) => dispatch(changeTask(listId, taskId, {hasDone: isCompleted}))
@@ -40,6 +44,16 @@ export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibl
             'todo-section_theme_dark': currentTheme === 'dark',
             'todo-section_invisible': !isVisibleInMobVer
             })}>
+
+            {
+                wasLostConnection &&
+                <div className = 'network-lost__message-wrapper'>
+                    <RiWifiOffLine className = 'network-lost__icon' /> <span className = 'network-lost__message'>Network connection has been lost!</span>
+                </div>
+            }
+            
+
+
             <MobileNav partName = {'selectedListName'} />
             <h2 className ='todo-list__title'>{title}</h2>
             {

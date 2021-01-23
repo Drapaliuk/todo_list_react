@@ -546,11 +546,12 @@
     left: 50%;
     transform: translateX(-50%);
     height: 55px;
-    padding: 8px;
-    padding-left: 45px;
+    padding: 8px 45px;
     border: 1px solid rgb(78, 75, 75);
+    background-color:  rgb(78, 75, 75);
     border-radius: 4px;
     box-shadow: 0 0 3px gray;
+    z-index: 99999999999;
 }
 
 .search-task-by-letters__input {
@@ -564,8 +565,30 @@
     font-size: 1.3rem;
 }
 
-.search-task-by-letters__icon {
+.search-task-by-letters__icon-search,
+.search-task-by-letters__btn-cancel {
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+}
+
+.search-task-by-letters__icon-search {
     left: 10px;
-    
+}
+
+.search-task-by-letters__btn-cancel {
+    right: 10px;
+    background-color: transparent;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    border: none;
+
+}
+
+.search-task-by-letters__icon-cancel {
+    width: 20px;
+    height: 20px;
 }

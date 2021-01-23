@@ -1,10 +1,11 @@
-const { IS_INITIALIZED, IS_FETCHING_INIT_DATA, NETWORK_CONNECTION_STATUS, LOST_CONNECTION } = require("../../actions_types")
+const { IS_INITIALIZED, IS_FETCHING_INIT_DATA, NETWORK_CONNECTION_STATUS, LOST_CONNECTION, SERVER_INACCESSIBLE } = require("../../actions_types")
 
 const initState = {
     isInitialized: false,
     isFetchingInitData: true,
     isConnectionToNetwork: true,
-    wasLostConnection: false
+    wasLostConnection: false,
+    isServerInaccessible: false
 }
 
 
@@ -29,6 +30,11 @@ export const initialize = (prevState = initState, action) => {
             return {
                 ...prevState,
                 wasLostConnection: action.payload.wasLostConnection
+            }
+        case SERVER_INACCESSIBLE:
+            return {
+                ...prevState,
+                isServerInaccessible: action.payload.status
             }
         
         default:

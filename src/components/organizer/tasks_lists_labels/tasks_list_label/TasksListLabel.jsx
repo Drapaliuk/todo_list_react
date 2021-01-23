@@ -7,9 +7,6 @@ import { MobileEditListLabel } from '../mobile_edit_list_label/MobileEditListLab
 
 export function TasksListLabel({name, tasksAmount, id, isThisListSelected, onSelectList, selectedListId, isOpenedEditMenu, onOpenEditMenu}) {
     const isItSelectedList = id === selectedListId
-    console.log('id', id)
-    console.log('selectedListId', selectedListId)
-    console.log('compare', id === selectedListId)
     let touchStartTimestamp;
     
     const pointerDownHandler = () => {

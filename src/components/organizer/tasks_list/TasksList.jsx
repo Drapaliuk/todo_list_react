@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
 import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../redux/actions';
 
-import { getSelectedDefaultListId, getSelectedListSettings, getSelectedListsIds, getSelectedTaskId } from '../../../redux/selectors';
+import { getSelectedListSettings, getSelectedListsIds, getSelectedTaskId } from '../../../redux/selectors';
 import { ProfileSettings } from '../../settings/ProfileSettings';
 
 import { CompletedTasksList, EditListLabelDesktop, TodoListSettings, NewTaskInput } from './'
@@ -12,11 +12,12 @@ import classNames from 'classnames';
 import { MobileNav } from '../../common/mobile_nav/mobile_nav';
 import { DEFAULT_TASKS_LIST_IMPORTANT, DEFAULT_TASKS_LIST_TODAY, DEFAULT_TASKS_LIST_WEEK } from '../../../service';
 import { Task } from './task/Task';
-import { RiWifiOffLine } from 'react-icons/ri';
+import { LostConnection } from '../../';
+import { SearchTaskByLetters } from './todo_list_settings/SearchTaskByLetter';
 
 
 
-export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibleInMobVer}) {
+export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
     const dispatch = useDispatch();
     const {uncompletedTasks, completedTasks, title} = tasksListData;
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
@@ -45,15 +46,8 @@ export function TasksList({tasksListData, currentTheme, isSelectedTask, isVisibl
             'todo-section_invisible': !isVisibleInMobVer
             })}>
 
-            {
-                wasLostConnection &&
-                <div className = 'network-lost__message-wrapper'>
-                    <RiWifiOffLine className = 'network-lost__icon' /> <span className = 'network-lost__message'>Network connection has been lost!</span>
-                </div>
-            }
-            
-
-
+            {wasLostConnection && <LostConnection />}
+            <SearchTaskByLetters />
             <MobileNav partName = {'selectedListName'} />
             <h2 className ='todo-list__title'>{title}</h2>
             {

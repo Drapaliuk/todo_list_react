@@ -2,10 +2,10 @@ import React from 'react'
 import { BsSearch } from 'react-icons/bs'
 import { GrClose } from 'react-icons/gr';
 
-export function SearchTaskByLettersInput({onSearchByLetters, onVisibleSearchTaskInput, currentSearchTaskPattern}) {
-    const onCloseSearchInput = () => onVisibleSearchTaskInput()
+export function SearchTaskByLettersInput({onSearchByLetters, onCloseSearchTasksInput, currentSearchTaskPattern}) {
+    const onCloseSearchInput = () => onCloseSearchTasksInput()
     const writeTextHandler = e =>  onSearchByLetters(e.target.value)
-    
+
     return (
         <div className = 'search-task-by-letters'>
             <BsSearch className = 'search-task-by-letters__icon-search' />

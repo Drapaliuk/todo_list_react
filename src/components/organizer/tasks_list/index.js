@@ -4,3 +4,4 @@ export { EditListLabelDesktop } from './edit_list_label_desktop/EditListLabelDes
 export { NewTaskInput } from './new_task_input/NewTaskInput';
 export { TasksList } from './TasksList';
 export { SearchTaskByLettersInput } from './todo_list_settings/SearchTaskByLetter';
+export { NotFoundTasks } from './not_found_tasks/not_found_tasks';

@@ -32,7 +32,6 @@ export function Organizer() {
 
     return (
         <div class= {classNames("container", {'container_full_info_closed': !isSelectedTask})}>
-            {/* {isLostConnection && <div>LOST</div>} */}
             <Bar {...{isVisibleInMobVer: mobileVersionVisiblePage.bar, currentTheme, tasksLists}} />
             <TasksList {...{isVisibleSettingsInMobVer: mobileVersionVisiblePage.settings,
                             isVisibleInMobVer: mobileVersionVisiblePage.list,

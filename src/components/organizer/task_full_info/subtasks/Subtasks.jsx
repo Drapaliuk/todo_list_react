@@ -5,6 +5,8 @@ import { RiArrowDownSLine, RiArrowUpSLine, RiArrowUpLine, RiCloseLine, RiFilterL
 import { AiOutlineSortAscending,  AiOutlineSortDescending} from 'react-icons/ai'
 import { VscSearchStop, VscSearch } from 'react-icons/vsc';
 import classNames from 'classnames';
+import { sortHandler } from "../../../../utils";
+
 
 export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete}) {
     const [text, writeText] = React.useState('')
@@ -12,7 +14,12 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
     const [isInvalidSubtaskText, setInvalidSubtaskFlag] = React.useState(false)
     const [isVisibleList, setVisibleSubtasksList] = React.useState(false); 
     const [isVisibleSorting, setVisibleSubtasksSorting] = React.useState(false); 
-    const [isVisibleSearchInput, setVisibleSearchInput] = React.useState(false); 
+    const [isVisibleSearchInput, setVisibleSearchInput] = React.useState(false);
+    const [sortCriteria, setSortCriteria] = React.useState({sortBy: '', order: '', searchByLetters: ''})
+    const onChangeSortCriteria = (newSortCriteria) => {
+        setSortCriteria(prevState => ({...prevState, ...newSortCriteria}))
+    }
+    console.log('subtasks', subtasks)
 
     const onOpenSubtask = id => setOpenFullText(id)
     const visibleSubtasksListHandler = () => setVisibleSubtasksList(!isVisibleList);
@@ -20,6 +27,7 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
     const visibleSearchInputHandler = () => setVisibleSearchInput(!isVisibleSearchInput)
     const inVisibleSearchInputHandler = () => setVisibleSearchInput(false)
     const isEmptyField = !text.split(' ').some(el => el)
+    const sortedSubtasks = sortHandler(sortCriteria.sortBy, sortCriteria.order, sortCriteria.searchByLetters)(subtasks)
 
     const createSubtaskByClick = () => {
         if(!isEmptyField) {
@@ -79,7 +87,7 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
             {
                 isVisibleList && subtasks.length > 0 &&
                 <ul class="todo-subtasks__list">
-                    { subtasks.map(({_id, text, hasDone}) => <SubTask key = {_id}
+                    { sortedSubtasks.map(({_id, text, hasDone}) => <SubTask key = {_id}
                                                                id = {_id} 
                                                                onDelete = {onDelete}
                                                                onComplete = {onComplete} 
@@ -92,12 +100,15 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
                         {
                             isVisibleSorting && !isVisibleSearchInput &&
                             <div className = 'subtasks__sort-by'>
-                                <button className="subtasks__sort-by-item">
+                                <button onClick = {() => onChangeSortCriteria({sortBy: 'text', order: 'asc'})} className="subtasks__sort-by-item">
                                     <AiOutlineSortAscending className = 'subtasks__settings-icon' />
                                 </button>
-                                <button className="subtasks__sort-by-item">
+                                <button onClick = {() => onChangeSortCriteria({sortBy: 'text', order: 'desc'})} className="subtasks__sort-by-item">
                                     <AiOutlineSortDescending className = 'subtasks__settings-icon' />
                                 </button>
+                                {/* <button onClick = {() => onChangeSortCriteria({sortBy: 'hasDone', order: 'desc'})} className="subtasks__sort-by-item">
+                                    <div className = 'subtasks__settings-icon'>X</div>
+                                </button> */}
                                 <button onClick = {visibleSearchInputHandler} className="subtasks__sort-by-item">
                                     <VscSearch className = 'subtasks__settings-icon' />
                                 </button>
@@ -110,7 +121,7 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
                                 <button onClick = {inVisibleSearchInputHandler} className = 'subtasks__search-stop'>
                                     <VscSearchStop className = 'subtasks__settings-icon' />
                                 </button>
-                                <input className = 'subtasks__search-input' placeholder = 'search' />
+                                <input value = {sortCriteria.searchByLetters} onChange = {e => onChangeSortCriteria({sortBy: 'searchByLetters', searchByLetters: e.target.value }) } className = 'subtasks__search-input' placeholder = 'search' />
                             </div>
                         }
 

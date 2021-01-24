@@ -195,7 +195,6 @@ export const getTasks = createSelector(
 
 
 
-
 export const getSelectedTaskProperty = (state, property) => {
     const selectedListId = state.organizer.selectedListId;
     const selectedTaskId = state.organizer.selectedTaskId;

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
-import { changeListSettings, changeTask, saveNewTask, selectTask } from '../../../redux/actions';
+import { changeListSettings, changeTask, saveNewTask, searchByLetters, selectTask } from '../../../redux/actions';
 
 import { getSelectedListSettings, getSelectedListsIds, getSelectedTaskId } from '../../../redux/selectors';
 import { ProfileSettings } from '../../settings/ProfileSettings';
@@ -10,36 +10,41 @@ import { CompletedTasksList, EditListLabelDesktop, TodoListSettings, NewTaskInpu
  
 import classNames from 'classnames';
 import { MobileNav } from '../../common/mobile_nav/mobile_nav';
-import { DEFAULT_TASKS_LIST_IMPORTANT, DEFAULT_TASKS_LIST_TODAY, DEFAULT_TASKS_LIST_WEEK } from '../../../service';
+import { defaultTasksListsIds } from '../../../service';
 import { Task } from './task/Task';
 import { LostConnection } from '../../';
-import { SearchTaskByLetters } from './todo_list_settings/SearchTaskByLetter';
+import { SearchTaskByLettersInput } from './todo_list_settings/SearchTaskByLetter';
 
 
 
 export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
+    const [isVisibleSearchTaskInput, setVisibleSearchTaskInput] = React.useState(false)
+
     const dispatch = useDispatch();
     const {uncompletedTasks, completedTasks, title} = tasksListData;
-    const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sortBy'));
+    const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sort'));
     const {selectedUserListId, selectedDefaultListId} = useSelector(state => getSelectedListsIds(state));
     const wasLostConnection = useSelector(state => state.initialize.wasLostConnection)
-
+    const currentSearchTaskPattern = useSelector(state => state.organizer.searchByLettersPattern)
 
 
     const onSelectTask = (listId, taskId) => dispatch(selectTask(taskId, listId))
     const onComplete =  (listId, taskId, isCompleted) => dispatch(changeTask(listId, taskId, {hasDone: isCompleted}))
     const onPinTask =  (listId, taskId, isPinned) => dispatch(changeTask(listId, taskId, {isPinned}))
     const onMakeImportant =  (listId, taskId, isImportant) => dispatch(changeTask(listId, taskId, {isImportant}))
-    const onSortTasks = sortBy => {
+    const onVisibleSearchTaskInput = () => setVisibleSearchTaskInput(!isVisibleSearchTaskInput)
+    const onSearchByLetters = pattern => dispatch(searchByLetters(pattern))
+
+    const onSortTasks = sort => {
         if(selectedDefaultListId) {
-            return dispatch(changeListSettings(selectedDefaultListId, {sortBy}))
+            return dispatch(changeListSettings(selectedDefaultListId, {sort}))
         }
-        return dispatch(changeListSettings(selectedUserListId, {sortBy}))
+        return dispatch(changeListSettings(selectedUserListId, {sort}))
 
     }
     const onCreateTask = (selectedListId, text) => dispatch(saveNewTask(selectedListId, text))
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
-    
+
     return (
         <section className = {classNames('todo-section', {
             'todo-section_theme_dark': currentTheme === 'dark',
@@ -47,17 +52,15 @@ export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
             })}>
 
             {wasLostConnection && <LostConnection />}
-            <SearchTaskByLetters />
+            { isVisibleSearchTaskInput && <SearchTaskByLettersInput {...{onSearchByLetters, onVisibleSearchTaskInput, currentSearchTaskPattern}} />}
             <MobileNav partName = {'selectedListName'} />
             <h2 className ='todo-list__title'>{title}</h2>
             {
-                selectedDefaultListId === DEFAULT_TASKS_LIST_TODAY
+                selectedDefaultListId === defaultTasksListsIds.DEFAULT_LIST__today
                     ?
                 <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedDefaultListId}  />
                     :
-                selectedDefaultListId !== DEFAULT_TASKS_LIST_TODAY &&
-                selectedDefaultListId !== DEFAULT_TASKS_LIST_WEEK && 
-                selectedDefaultListId !== DEFAULT_TASKS_LIST_IMPORTANT
+                !defaultTasksListsIds.hasOwnProperty(selectedDefaultListId)
                     ?
                 <NewTaskInput onSave = {onCreateTask} selectedListId = {selectedUserListId} />
                     :
@@ -76,7 +79,7 @@ export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
                     completedTasks.length > 0 &&
                     <CompletedTasksList {...{completedTasks, onSelectTask, onComplete, selectedTaskId}} />
                 }
-                <TodoListSettings {...{onSortTasks, currentSortCriteria}} />
+                <TodoListSettings {...{onSortTasks, currentSortCriteria, onVisibleSearchTaskInput}} />
             </>
         </section>
     )

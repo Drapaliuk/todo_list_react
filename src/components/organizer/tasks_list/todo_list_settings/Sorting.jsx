@@ -1,59 +1,40 @@
 import React from 'react'
 import { SortingOption } from './SortingOption'
 import { AiFillStar} from 'react-icons/ai';
-import { BsCalendar } from 'react-icons/bs';
+import { BsCalendar, BsSearch } from 'react-icons/bs';
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai';
 import { SortingOrder } from './SortingOrder';
-export function Sorting({sortByHandler, currentSortCriteria}) {
-    const [sortBy, sortOrder] = currentSortCriteria.split('/')
+export function Sorting({sortByHandler, sortOrderHandler, currentSortCriteria, onVisibleSearchTaskInput}) {
+    const {sortBy, order} = currentSortCriteria;
+    const searchTaskHandler = () => {
+        sortByHandler({sortBy: 'searchByLetters', order: 'asc'})()
+        onVisibleSearchTaskInput()
+    }
 
     return (
         <ul className="options">
-            <SortingOption  sortByHandler = {sortByHandler('text/asc')} 
+            <SortingOption  handler = {sortByHandler({sortBy: 'text', order: 'asc'})} 
                             title = 'Sort Alphabetically' 
                             Icon = {AiOutlineSortAscending} 
                             isActive = {sortBy === 'text'} />
 
-            <SortingOption  sortByHandler = {sortByHandler('dateCreation/asc')} 
+            <SortingOption  handler = {sortByHandler({sortBy: 'dateCreation', order: 'asc'})} 
                             title = 'Sort by Creation Date' 
                             Icon = {BsCalendar} 
                             isActive = {sortBy === 'dateCreation'} />
 
-            <SortingOption  sortByHandler = {sortByHandler('isImportant/asc')} 
+            <SortingOption  handler = {sortByHandler({sortBy: 'isImportant', order: 'asc'})} 
                             title = 'Sort by Priority' 
                             Icon = {AiFillStar} 
                             isActive = {sortBy === 'isImportant'} />
 
-             {/* <SortingOption  sortByHandler = {sortByHandler('isImportant/asc')} 
-                            title = 'Sort by Priority' 
-                            Icon = {AiFillStar} 
-                            isActive = {sortBy === 'isImportant'} /> */}
+            <SortingOption  handler = {searchTaskHandler} 
+                            title = 'Search task' 
+                            Icon = {BsSearch} 
+                            isActive = {sortBy === 'searchByLetters'} />
 
-            <SortingOrder {...{sortByHandler, sortOrder, sortBy}} />
+            <SortingOrder {...{sortOrderHandler, order, sortBy}} />
         </ul>
 
     )
 }
-
-
-
-
-
-
-// const possibleSortedBy = [
-//     {
-//         sortBy: 'text/asc',
-//         title: 'Sort Alphabetically',
-//         icon: AiOutlineSortAscending
-//     },
-//     {
-//         sortBy: 'dateCreation/asc',
-//         title: 'Sort by Creation Date',
-//         icon: BsCalendar
-//     },
-//     {
-//         sortBy: 'isImportant/asc',
-//         title: 'Sort by Priority',
-//         icon: AiFillStar
-//     },
-// ]

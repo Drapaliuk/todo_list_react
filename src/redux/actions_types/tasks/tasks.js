@@ -12,6 +12,7 @@ export const CHANGE_TASKS_LIST_SETTINGS = 'tasks/CHANGE_TASKS_LIST_SETTINGS';
 export const DEFAULT_TASKS = 'tasks/DEFAULT_TASKS';
 export const CLOSE_FULL_INFO = 'tasks/CLOSE_FULL_INFO';
 export const CREATE_SUBTASK = 'tasks/CREATE_SUBTASK';
+export const SEARCH_BY_LETTERS = 'tasks/SEARCH_BY_LETTERS'
 
 export const DELETE_SUBTASK = 'tasks/DELETE_SUBTASK';
 export const UPDATE_SUBTASK = 'tasks/UPDATE_SUBTASK';

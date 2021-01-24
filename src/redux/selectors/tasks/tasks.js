@@ -1,14 +1,14 @@
 import { createSelector } from "reselect";
-import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
+import { defaultTasksListsIds,  } from "../../../service";
 import { appListsData } from "../../../service/app_lists_data/app_lists_data";
-import { SortHandler } from "../../../utils";
+import { sortHandler, SortHandler } from "../../../utils";
 
 const isCreatedTasksLists = state => state.organizer.userTasksLists.length > 0;
 const isSelectedDefaultAppList = state => state.organizer.isSelectedAppList;
 const getCurrentDefaultListId = state => state.organizer.selectedAppListId;
 const getSelectedListTasks = state => getSelectedListProperty(state, 'tasks');
 const getUserTasksLists = state => state.organizer.userTasksLists;
-const getDefaultListTasks = state => state.organizer.defaultTasksLists[DEFAULT_TASKS_LIST_TODAY].tasks;
+const getDefaultListTasks = state => state.organizer.defaultTasksLists[defaultTasksListsIds.DEFAULT_LIST__today].tasks;
 const getSelectedDefaultListId = state => state.organizer.selectedAppListId
 const getSelectedUserListId = state => state.organizer.selectedListId;
 const getDefaultTasksLists = state => state.organizer.defaultTasksLists
@@ -23,11 +23,9 @@ export const getSelectedListSettings = createSelector(
      defaultTasksLists,
      selectedDefaultListId, selectedUserListId,
      defaultListTasks, userTasksLists, property) => {
-    console.log('RECALCULATE GET SETTINGS', property)
 
     if(isSelectedDefaultAppList) {
         if(!property) return defaultListTasks.settings
-        console.log('123', defaultTasksLists)
         return defaultTasksLists[selectedDefaultListId].settings[property]
     }
 
@@ -40,7 +38,7 @@ export const getSelectedListSettings = createSelector(
     return selectedUserList.settings[property]
 })
 
-const getCurrentSortCriteria = state => getSelectedListSettings(state, 'sortBy');
+const getCurrentSortCriteria = state => getSelectedListSettings(state, 'sort');
 
 
 
@@ -95,17 +93,38 @@ export const getAmountTasksForAppLists = createSelector(
 
     return taskAmounts
 })
+const getSearchByLettersPattern = state => state.organizer.searchByLettersPattern;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const getTasks = createSelector(
     [ getUserTasksLists, getDefaultListTasks,
       getCurrentSortCriteria, isSelectedDefaultAppList,
-      getCurrentDefaultListId, getSelectedListTasks ], 
+      getCurrentDefaultListId, getSelectedListTasks, getSearchByLettersPattern ], 
     ( userTasksLists, defaultListTasks, currentSortCriteria,
-      isSelectedDefaultAppList, currentDefaultListId, selectedListTasks ) => {
-
-    const [sortBy, sortOrder] = currentSortCriteria.split('/');
-    const {getSortHandler} = new SortHandler(sortBy);
-    
+      isSelectedDefaultAppList, currentDefaultListId, selectedListTasks, searchByLettersPattern ) => {
+    const {sortBy, order} = currentSortCriteria
+    const forTaskSort = sortHandler(sortBy, order, searchByLettersPattern)
     let separatedTasks;
 
     if(isSelectedDefaultAppList) {
@@ -115,7 +134,7 @@ export const getTasks = createSelector(
             return acc
         }, [])
 
-        const addedTodayTasks = [...userListTasks, ...defaultListTasks]
+        const addedTodayTasks = [...userListTasks, ...defaultListTasks];
         const filteredTasks = addedTodayTasks.filter(task => selectedAppListData.filterHandler(task))
 
         separatedTasks = taskSeparator([...filteredTasks])
@@ -126,46 +145,63 @@ export const getTasks = createSelector(
     }
 
     function taskSeparator (tasks) {
-        return {
+        const tasksCopy = [...tasks]
+        const result = {
             uncompletedTasks: {
-                pinnedTasks: tasks.filter(task => !task.hasDone && task.isPinned),
-                unpinnedTasks: tasks.filter(task => !task.hasDone && !task.isPinned)
+                pinnedTasks: forTaskSort(tasksCopy.filter(task => !task.hasDone && task.isPinned)),
+                unpinnedTasks: forTaskSort(tasksCopy.filter(task => !task.hasDone && !task.isPinned))
             },
             completedTasks: {
-                pinnedTasks: tasks.filter(task => task.hasDone && task.isPinned),
-                unpinnedTasks: tasks.filter(task => task.hasDone && !task.isPinned)
+                pinnedTasks: forTaskSort (tasksCopy.filter(task => task.hasDone && task.isPinned)),
+                unpinnedTasks: forTaskSort(tasksCopy.filter(task => task.hasDone && !task.isPinned))
             }
         }
-    }
-
-    function taskSorter (separatedTasks, sortHandler) {
-        separatedTasks.uncompletedTasks.pinnedTasks.sort(sortHandler);
-        separatedTasks.uncompletedTasks.unpinnedTasks.sort(sortHandler);
-        separatedTasks.completedTasks.pinnedTasks.sort(sortHandler);
-        separatedTasks.completedTasks.unpinnedTasks.sort(sortHandler);
-        return separatedTasks
+        return result
     }
 
     function resultCreator (sortedTasks) {
+        console.log('sortedTasks', sortedTasks)
+
         const {completedTasks} = sortedTasks
         const {uncompletedTasks} = sortedTasks
+
         return {
             completedTasks: [ ...completedTasks.pinnedTasks, ...completedTasks.unpinnedTasks ],
             uncompletedTasks: [ ...uncompletedTasks.pinnedTasks, ...uncompletedTasks.unpinnedTasks ]
         }
     }
 
-    const sortedTasks = taskSorter(separatedTasks, getSortHandler(sortOrder))
-    return resultCreator(sortedTasks)
+    return resultCreator(separatedTasks) 
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 export const getSelectedTaskProperty = (state, property) => {
     const selectedListId = state.organizer.selectedListId;
     const selectedTaskId = state.organizer.selectedTaskId;
     
-    if(DEFAULT_TASKS_LIST_TODAY === selectedListId) {
-        const foundList = state.organizer.defaultTasksLists[DEFAULT_TASKS_LIST_TODAY]
+    if(defaultTasksListsIds.DEFAULT_LIST__today === selectedListId) {
+        const foundList = state.organizer.defaultTasksLists[defaultTasksListsIds.DEFAULT_LIST__today]
         if(!foundList) return 
         const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
         if(!property) return selectedTask

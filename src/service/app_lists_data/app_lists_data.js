@@ -1,7 +1,7 @@
 import { FcCalendar } from 'react-icons/fc';
 import { AiOutlineStar } from 'react-icons/ai';
 import { SortByDatesCreation } from '../../utils';
-import { DEFAULT_TASKS_LIST_TODAY, DEFAULT_TASKS_LIST_WEEK, DEFAULT_TASKS_LIST_IMPORTANT } from '../constants/constants';
+import { defaultTasksListsIds } from '../constants/constants';
 
 
 const filterHandlers = new SortByDatesCreation('monday')
@@ -11,7 +11,7 @@ const filterHandlers = new SortByDatesCreation('monday')
 export const appListsData = [
     {
         title: 'Today',
-        id: DEFAULT_TASKS_LIST_TODAY,
+        id: defaultTasksListsIds.DEFAULT_LIST__today,
         Icon: FcCalendar,
         filterHandler: task => {
             return filterHandlers.compareTwoDates.call(filterHandlers, task.dateCreation, Date.now())
@@ -19,7 +19,7 @@ export const appListsData = [
     },
     {
         title: 'Week',
-        id: DEFAULT_TASKS_LIST_WEEK,
+        id: defaultTasksListsIds.DEFAULT_LIST__week,
         Icon: FcCalendar,
         filterHandler: task => {
             return filterHandlers.isThisWeek.call(filterHandlers, task.dateCreation, Date.now())
@@ -28,7 +28,7 @@ export const appListsData = [
     },
     {
         title: 'Important',
-        id: DEFAULT_TASKS_LIST_IMPORTANT,
+        id: defaultTasksListsIds.DEFAULT_LIST__important,
         Icon: AiOutlineStar,
         filterHandler: task => task.isImportant
     }

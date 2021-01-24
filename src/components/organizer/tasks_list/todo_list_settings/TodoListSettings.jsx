@@ -6,7 +6,7 @@ import { Sorting } from './Sorting';
 import { Settings } from './Settings';
 
 
-export function TodoListSettings({onSortTasks, currentSortCriteria}) {
+export function TodoListSettings({onSortTasks, currentSortCriteria, onVisibleSearchTaskInput}) {
     
     const [isVisibleSorting, setVisibleSorting] = React.useState(false);
     const [isVisibleSettings, setVisibleSettings] = React.useState(false);
@@ -21,17 +21,21 @@ export function TodoListSettings({onSortTasks, currentSortCriteria}) {
         setVisibleSorting(false)
     }
     
-    const sortByHandler = sortBy => () => {
-        if(sortBy === currentSortCriteria) return onSortTasks('')
-        onSortTasks(sortBy)
+    const sortByHandler = sort => () => {
+        if(sort.sortBy === currentSortCriteria.sortBy) return onSortTasks({sortBy: '', order: ''})
+        onSortTasks(sort)
     }
+
+    const sortOrderHandler = (sortBy, order) => () => onSortTasks({sortBy, order})
 
 
 
     return (
         <div className="todo-list-settings">
             { isVisibleSettings && <Settings />}
-            { isVisibleSorting && <Sorting sortByHandler = {sortByHandler} currentSortCriteria = {currentSortCriteria}/> }
+            { isVisibleSorting &&
+            //   currentSortCriteria.sortBy !== 'searchByLetters' &&
+              <Sorting {...{sortOrderHandler, sortByHandler, currentSortCriteria, onVisibleSearchTaskInput}} /> }
             
             <div className="todo-list-settings__panel todo-list-settings__panel_theme_dark">
                 <SettingsPart value = 'sort' 

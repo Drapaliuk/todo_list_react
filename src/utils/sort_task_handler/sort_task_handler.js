@@ -6,8 +6,7 @@ import { ASC, DESC, SEARCH_BY_LETTERS } from "../../service/constants/constants"
 
 
 
-const sort = (sortBy, order) => (tasks) => {
-    
+export const sortHandler = (sortBy, order, searchByLettersPattern) => (tasks) => {
     const tasksCopy = [...tasks];
     const sortHandlers = {
         [DESC]: (valueA, valueB) => {
@@ -44,6 +43,12 @@ const sort = (sortBy, order) => (tasks) => {
     
         return tasksCopy.sort(sortHandlers[order])
     }
+
+    if(sortBy === 'searchByLetters') {
+        const regExpPattern = new RegExp(searchByLettersPattern)
+        return tasksCopy.filter(task => regExpPattern.test(task.text))
+    }
+    return tasks
 }
 
 
@@ -51,7 +56,6 @@ const sort = (sortBy, order) => (tasks) => {
 export const SortHandler = function(sortBy) {
     this.sortBy = sortBy
     this.getSortHandler = function(sortOrder) {
-        console.log('this.sortBy',this.sortBy)
         const ordersHandlers = {
             [DESC]: (valueA, valueB) => {
                 const innerFunc = () => {

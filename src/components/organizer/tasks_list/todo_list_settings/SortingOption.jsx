@@ -1,11 +1,11 @@
 import React from 'react';
 import classNames from 'classnames'
 
-export function SortingOption({title, sortByHandler, Icon, isActive}) {
+export function SortingOption({title, handler, Icon, isActive}) {
 
     return (
         <li className="todo-list-settings__item">
-            <button onClick = {sortByHandler} className={
+            <button onClick = {handler} className={
                 classNames("todo-list-settings-option",
                             {'todo-list-settings-option_active': isActive})
                 }>

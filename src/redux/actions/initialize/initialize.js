@@ -11,7 +11,6 @@ import { initializeTasks } from "../tasks/tasks";
 export const isInitialized = payload => ({type: IS_INITIALIZED, payload})
 const fetchingInitData = payload => ({type: IS_FETCHING_INIT_DATA, payload})
 export const checkAccessabilityServer = () => async dispatch => {
-    console.log('INSIDE ACTION')
     const {status} = await initializeAPI.checkAccessabilityServer()
     if(status === 200) {
         dispatch(serverInaccessible(false))

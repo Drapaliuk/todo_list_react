@@ -1,22 +1,23 @@
 import produce from "immer";
-import { DEFAULT_TASKS_LIST_TODAY } from "../../../service";
+import {defaultTasksListsIds} from "../../../service";
 import { changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
 import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS,
          CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK,
          DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
          CREATE_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
          UPDATE_SUBTASK, CREATE_COMMENT, DELETE_COMMENT,
-         SELECT_APP_LIST, UPDATE_TASKS_LIST } from "../../actions_types"
+         SELECT_APP_LIST, UPDATE_TASKS_LIST, SEARCH_BY_LETTERS } from "../../actions_types"
 
 const initialState = {
     defaultTasksLists: {},
     userTasksLists: [],
-    selectedListId: DEFAULT_TASKS_LIST_TODAY,
-    selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
+    selectedListId: defaultTasksListsIds.DEFAULT_LIST__today,
+    selectedAppListId: defaultTasksListsIds.DEFAULT_LIST__today,
     selectedTaskId: '',
     selectedSubtaskId: '',
     selectedCommentId: '',
-    isSelectedAppList: true
+    isSelectedAppList: true,
+    searchByLettersPattern: ''
 }
 
 export const organizer = (prevState = initialState, action) => {
@@ -30,7 +31,7 @@ export const organizer = (prevState = initialState, action) => {
                 if(userTasksLists.length === 0) {
                     draftState.userTasksLists = []
                     draftState.defaultTasksLists = {...defaultTasksLists}
-                    draftState.selectedAppListId = DEFAULT_TASKS_LIST_TODAY
+                    draftState.selectedAppListId = defaultTasksListsIds.DEFAULT_LIST__today
                     draftState.isSelectedAppList = true
                     return
                 }
@@ -82,7 +83,7 @@ export const organizer = (prevState = initialState, action) => {
                 if(isUserListsEmpty) {
                     draftState.selectedListId = ''
                     draftState.selectedTaskId = ''
-                    draftState.selectedAppListId = DEFAULT_TASKS_LIST_TODAY
+                    draftState.selectedAppListId = defaultTasksListsIds.DEFAULT_LIST__today
                     draftState.isSelectedAppList = true
                     return
                 }
@@ -106,7 +107,7 @@ export const organizer = (prevState = initialState, action) => {
         case CREATE_TASK:
             return produce(prevState, draftState => {
                 const {listId, savedTask} = payload;
-                if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(payload.listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                         draftState.defaultTasksLists[listId].tasks.unshift(savedTask)
                         return
                 }
@@ -122,7 +123,7 @@ export const organizer = (prevState = initialState, action) => {
             return produce(prevState, draftState => {
                 const {listId, taskId, updatedValue} = payload;
                 const [key, value] = Object.entries(updatedValue)[0]
-                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     draftState.defaultTasksLists[listId].tasks.map(task => {
                         if(task._id === taskId) {
                             task[key] = value
@@ -143,7 +144,7 @@ export const organizer = (prevState = initialState, action) => {
             return produce(prevState, draftState => {
                 const {listId, taskId} = payload;
 
-                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     const tasks = draftState.defaultTasksLists[listId].tasks
                     const deletedTaskIndex = tasks.findIndex(task => taskId === task._id)
                     tasks.splice(deletedTaskIndex, 1)
@@ -179,7 +180,8 @@ export const organizer = (prevState = initialState, action) => {
         case CHANGE_TASKS_LIST_SETTINGS:
             return produce(prevState, draftState => {
                 const [key, value] = Object.entries(payload.changedValue)[0]
-                if(payload.listId === DEFAULT_TASKS_LIST_TODAY) {
+
+                if(defaultTasksListsIds.hasOwnProperty(payload.listId)) {
                     draftState.defaultTasksLists[payload.listId].settings[key] = value
                     return 
                 }
@@ -195,8 +197,8 @@ export const organizer = (prevState = initialState, action) => {
             return {
                 defaultTasksLists: {},
                 userTasksLists: [],
-                selectedListId: DEFAULT_TASKS_LIST_TODAY,
-                selectedAppListId: DEFAULT_TASKS_LIST_TODAY,
+                selectedListId: defaultTasksListsIds.DEFAULT_LIST__today,
+                selectedAppListId: defaultTasksListsIds.DEFAULT_LIST__today,
                 selectedTaskId: '',
                 selectedSubtaskId: '',
                 selectedCommentId: '',
@@ -207,7 +209,7 @@ export const organizer = (prevState = initialState, action) => {
             return produce(prevState, draftState => {
                 const {listId, taskId, createdSubtask} = payload;
 
-                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
                     selectedTask.subtasks.unshift(createdSubtask)
                     return
@@ -224,7 +226,7 @@ export const organizer = (prevState = initialState, action) => {
                 const {listId, taskId, subtaskId, changedSubTask} = payload;
                 const [key, value] = Object.entries(changedSubTask)[0];
 
-                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
                     const updatedSubtask = selectedTask.subtasks.find(subtask => subtask._id === subtaskId)
                     updatedSubtask[key] = value
@@ -242,7 +244,7 @@ export const organizer = (prevState = initialState, action) => {
             return produce(prevState, draftState => {
                 const {listId, taskId, subtaskId} = payload
 
-                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
                     const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === subtaskId)
                     selectedTask.subtasks.splice(deletedSubtaskIndex, 1)
@@ -267,7 +269,7 @@ export const organizer = (prevState = initialState, action) => {
         case CREATE_COMMENT:
             return produce(prevState, draftState => {
                 const {listId, taskId, createdElement} = payload;
-                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
                     selectedTask.comments.push(createdElement)
                 }
@@ -283,7 +285,7 @@ export const organizer = (prevState = initialState, action) => {
             return produce(prevState, draftState => {
                 const {listId, taskId, deletedCommentId} = payload;
 
-                if(listId === DEFAULT_TASKS_LIST_TODAY) {
+                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
                     const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === deletedCommentId)
                     selectedTask.comments.splice(deletedCommentIndex, 1)
@@ -296,6 +298,12 @@ export const organizer = (prevState = initialState, action) => {
                         return selectedTask 
                     })
             })
+        case SEARCH_BY_LETTERS:
+            console.log('PAYLOAD', payload)
+            return {
+                ...prevState,
+                searchByLettersPattern: payload.pattern
+            }
 
         default:
             return prevState

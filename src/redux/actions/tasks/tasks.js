@@ -12,6 +12,7 @@ import { INITIALIZED_TASKS,
          CLOSE_FULL_INFO,
          SELECT_APP_LIST,
          UPDATE_TASKS_LIST,
+         SEARCH_BY_LETTERS
         } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
@@ -36,6 +37,9 @@ export const saveNewTask = (selectedListId, text) => async dispatch => {
     const {data: payload} = (await tasksAPI.saveNewTask(selectedListId, text));
     return dispatch({type: CREATE_TASK, payload})
 };
+
+export const searchByLetters = pattern => ({type: SEARCH_BY_LETTERS, payload: {pattern}})
+
 
 export const changeTask = (selectedListId, selectedTaskId, newValue) => async dispatch => {
     const {data: payload} = (await tasksAPI.changeTask(selectedListId, selectedTaskId, newValue))

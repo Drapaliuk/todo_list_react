@@ -141,7 +141,11 @@
     background-color: rgba(190, 77, 75, .45);
     border: none;
 }
-
+.todo-subtask__text {}
+.todo-subtask.todo-subtask_done {
+    text-decoration: line-through;
+    opacity: .3;
+}
 
 .add-todo {
     width: 100%;

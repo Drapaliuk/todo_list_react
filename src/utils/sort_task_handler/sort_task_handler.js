@@ -39,8 +39,9 @@ export const sortHandler = (sortBy, order, searchByLettersPattern) => (tasks) =>
 
     if(sortBy === 'isImportant' ||
        sortBy === 'text' ||
-       sortBy === 'dateCreation') {
-    
+       sortBy === 'dateCreation' ||
+       sortBy === 'hasDone') {
+        console.log('sortHandlers[order]', sortHandlers[order])
         return tasksCopy.sort(sortHandlers[order])
     }
 

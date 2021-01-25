@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { defaultTasksListsIds,  } from "../../../service";
 import { appListsData } from "../../../service/app_lists_data/app_lists_data";
-import { sortHandler, SortHandler } from "../../../utils";
+import { sortHandler } from "../../../utils";
 
 const isCreatedTasksLists = state => state.organizer.userTasksLists.length > 0;
 const isSelectedDefaultAppList = state => state.organizer.isSelectedAppList;

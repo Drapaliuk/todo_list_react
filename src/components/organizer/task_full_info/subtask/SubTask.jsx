@@ -39,10 +39,11 @@ export function SubTask({id, text, onUpdateText, onComplete, onOpen, isOpen, has
         }
     }
 
-
     return (
-        <li onClick = {visibleFullTextHandler} onDoubleClick = {correctionHandler} class="todo-subtasks__list-item">
-            <div class="todo-subtask">
+        <li onClick = {visibleFullTextHandler}
+            onDoubleClick = {correctionHandler}
+            className = 'todo-subtasks__list-item' >
+            <div className = {classNames('todo-subtask', {'todo-subtask_done': hasDone})}>
                 {
                     isVisibleCorrecting 
                     ?

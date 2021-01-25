@@ -4,20 +4,24 @@ import { MdKeyboardArrowRight } from 'react-icons/md';
 import { KEY_ENTER } from '../../../../service';
 import classNames from 'classnames';
 
-export function FullInfoManipulations({onClose, onDeleteTask, onCreateComment}) {
+export function FullInfoManipulations({onClose, onDeleteTask, onCreateComment, belongToList, selectedTaskId}) {
     const [commentText, writeCommentText] = React.useState('');
     const [isInvalidCommentText, setInvalidCommentFlag] = React.useState(false);
 
+    console.log(belongToList, selectedTaskId)
+    React.useEffect(() => {
+        setInvalidCommentFlag(false)
+    }, [belongToList, selectedTaskId])
+
     const closeHandler = () => onClose()
     const deleteHandler = () => onDeleteTask()
-    const createCommentHandler = () => onCreateComment(commentText)
     const writeCommentHandler = event => {
         writeCommentText(event.target.value)
         if(isInvalidCommentText) return setInvalidCommentFlag(false)
     }
     const isEmptyField = !commentText.split(' ').some(el => el)
 
-    const createSubtaskByClick = () => {
+    const createCommentByClick = () => {
         if(!isEmptyField) {
             writeCommentText('')
             onCreateComment(commentText)
@@ -60,7 +64,7 @@ export function FullInfoManipulations({onClose, onDeleteTask, onCreateComment}) 
                            value = {commentText} type="text" 
                            placeholder={isInvalidCommentText ? 'This field can`t be empty!' : 'Add comment...'} />
 
-                    <button onClick = {createSubtaskByClick} class="add-comment-form__btn">Add</button>
+                    <button onClick = {createCommentByClick} class="add-comment-form__btn">Add</button>
                 </div>
                 <div class="todo-full-info__manipulations">
                     <button onClick = {closeHandler} class="todo-full-info__close-btn">

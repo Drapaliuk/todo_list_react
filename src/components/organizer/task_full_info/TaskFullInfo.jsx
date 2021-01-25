@@ -48,6 +48,8 @@ export function TaskFullInfo({selectedTask, isMobileVer}) {
                onUpdateText: onUpdateSubtaskText, 
                onDelete: onDeleteSubtask, 
                onComplete: onCompleteSubtask, 
+               belongToList,
+               selectedTaskId,
                subtasks},
 
     changeText: {initialText: text,
@@ -73,7 +75,9 @@ export function TaskFullInfo({selectedTask, isMobileVer}) {
                 initialDate: repeat},
     manipulations: {onClose: onCloseFullInfo,
                     onDeleteTask,
-                    onCreateComment
+                    onCreateComment, 
+                    belongToList, 
+                    selectedTaskId
                 },
     comments: {comments, onDeleteComment}
 

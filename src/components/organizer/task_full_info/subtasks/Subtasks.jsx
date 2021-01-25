@@ -9,12 +9,18 @@ import { sortHandler } from "../../../../utils";
 import { SubtasksSettings } from '../subtasks_settings/SubtasksSettings';
 
 
-export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete}) {
+export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete, belongToList, selectedTaskId}) {
+    const [isInvalidSubtaskText, setInvalidSubtaskFlag] = React.useState(false)
     const [text, writeText] = React.useState('')
     const [openedSubtaskId, setOpenFullText] = React.useState('');
-    const [isInvalidSubtaskText, setInvalidSubtaskFlag] = React.useState(false)
+    const [correctionSubtaskId, setCorrectionSubtaskId] = React.useState('');
     const [isVisibleList, setVisibleSubtasksList] = React.useState(false); 
     const [currentSortCriteria, setCurrentSortCriteria] = React.useState({sortBy: 'hasDone', order: DESC, searchByLetters: ''})
+
+    React.useEffect(() => {
+        setInvalidSubtaskFlag(false)
+    }, [belongToList, selectedTaskId])
+
 
     const onOpenSubtask = id => setOpenFullText(id)
     const visibleSubtasksListHandler = () => setVisibleSubtasksList(!isVisibleList);
@@ -81,14 +87,16 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
                 isVisibleList && subtasks.length > 0 &&
                 <ul class="todo-subtasks__list">
                     { sortedSubtasks.map(({_id, text, hasDone}) => <SubTask key = {_id}
-                                                               id = {_id} 
-                                                               onDelete = {onDelete}
-                                                               onComplete = {onComplete} 
-                                                               text = {text}
-                                                               onOpen = {onOpenSubtask}
-                                                               isOpen = {_id === openedSubtaskId}
-                                                               hasDone = {hasDone}
-                                                               onUpdateText = {onUpdateText} />) }
+                                                                            id = {_id} 
+                                                                            onDelete = {onDelete}
+                                                                            onComplete = {onComplete} 
+                                                                            text = {text}
+                                                                            onOpen = {onOpenSubtask}
+                                                                            isOpen = {_id === openedSubtaskId}
+                                                                            hasDone = {hasDone}
+                                                                            setCorrectionSubtaskId = {setCorrectionSubtaskId}
+                                                                            isCorrecting = {correctionSubtaskId === _id}
+                                                                            onUpdateText = {onUpdateText} />) }
 
                     <SubtasksSettings {...{setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}} />
                 </ul>

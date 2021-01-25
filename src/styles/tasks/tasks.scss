@@ -141,10 +141,20 @@
     background-color: rgba(190, 77, 75, .45);
     border: none;
 }
-.todo-subtask__text {}
+.todo-subtask {
+    transition: all .3s linear;
+}
 .todo-subtask.todo-subtask_done {
     text-decoration: line-through;
+    background-color: rgb(117, 117, 117);
+    opacity: .4;
+    transition: all .3s linear;
+}
+
+.todo-full-info.todo-full-info_theme_dark .todo-subtask.todo-subtask_done {
     opacity: .3;
+    text-decoration-color: #fff;
+    transition: all 1s linear;
 }
 
 .add-todo {

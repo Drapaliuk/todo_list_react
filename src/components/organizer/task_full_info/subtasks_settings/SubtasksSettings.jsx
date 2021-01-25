@@ -10,6 +10,7 @@ import { DESC, ASC } from '../../../../service';
 export function SubtasksSettings({setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}) {
     const [isVisibleSorting, setVisibleSubtasksSorting] = React.useState(false); 
     const [isVisibleSearchInput, setVisibleSearchInput] = React.useState(false);
+    
     const visibleSubtasksSortingHandler = () => setVisibleSubtasksSorting(!isVisibleSorting);
     const visibleSearchInputHandler = () => setVisibleSearchInput(!isVisibleSearchInput);
     const inVisibleSearchInputHandler = () => setVisibleSearchInput(false);
@@ -47,7 +48,7 @@ export function SubtasksSettings({setCurrentSortCriteria, currentSortCriteria, v
                     <button onClick = {inVisibleSearchInputHandler} className = 'subtasks__search-stop'>
                         <VscSearchStop className = 'subtasks__settings-icon' />
                     </button>
-                    <input value = {currentSortCriteria.searchByLetters} onChange = {e => onChangeSortBy({sortBy: 'searchByLetters', searchByLetters: e.target.value })() } className = 'subtasks__search-input' placeholder = 'search' />
+                    <input autoFocus = {true} value = {currentSortCriteria.searchByLetters} onChange = {e => onChangeSortBy({sortBy: 'searchByLetters', searchByLetters: e.target.value })() } className = 'subtasks__search-input' placeholder = 'search' />
                 </div>
             }
 
@@ -62,7 +63,7 @@ export function SubtasksSettings({setCurrentSortCriteria, currentSortCriteria, v
                     <RiCloseLine className = 'subtasks__settings-icon' />
                 </button>
             </div>
-                    </li>
+    </li>
     )
 }
 

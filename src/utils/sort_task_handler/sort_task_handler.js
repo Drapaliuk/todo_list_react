@@ -37,7 +37,7 @@ export const sortHandler = (sortBy, order, searchByLettersPattern) => (tasks) =>
         }
     }
 
-    function regExpFilter(str) {
+    function regExpFilter(str = '') {
         return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
     };
     
@@ -53,7 +53,19 @@ export const sortHandler = (sortBy, order, searchByLettersPattern) => (tasks) =>
 
         const regExpPattern = new RegExp(regExpFilter(searchByLettersPattern))
 
-        return tasksCopy.filter(task => regExpPattern.test(task.text))
+        return tasksCopy.filter(task => {
+            // const matches = task.text.match(regExpPattern)
+            // if(matches) {
+            //     const startIndex  = matches.index
+            //     const endIndex = matches?.input?.length
+            //     console.group()
+            //     console.log('matches', matches)
+            //     console.log('startIndex', startIndex)
+            //     console.log('endIndex', endIndex)
+            //     console.groupEnd()
+            // }
+            return regExpPattern.test(task.text)
+        })
     }
     return tasks
 }

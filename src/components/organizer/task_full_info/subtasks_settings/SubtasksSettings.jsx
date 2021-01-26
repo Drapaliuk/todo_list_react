@@ -7,14 +7,23 @@ import { DESC, ASC } from '../../../../service';
 
 
 
-export function SubtasksSettings({isVisibleUpLink, setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}) {
+export function SubtasksSettings({refSubtaskListStart, refSubtaskListEnd, isVisibleUpLink, setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}) {
     const [isVisibleSorting, setVisibleSubtasksSorting] = React.useState(false); 
     const [isVisibleSearchInput, setVisibleSearchInput] = React.useState(false);
-    
+
     const visibleSubtasksSortingHandler = () => setVisibleSubtasksSorting(!isVisibleSorting);
     const visibleSearchInputHandler = () => setVisibleSearchInput(!isVisibleSearchInput);
     const inVisibleSearchInputHandler = () => setVisibleSearchInput(false);
-    const onChangeSortBy = newSortBy => () => setCurrentSortCriteria(prevState => ({...prevState, ...newSortBy}))
+    const onChangeSortBy = newSortBy => () => setCurrentSortCriteria(prevState => ({...prevState, ...newSortBy}));
+
+    const onListNavigation = () => {
+        // refSubtaskListEnd
+        refSubtaskListStart.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        })
+    }
+
     const onChangeSortOrder = () => {
         if(currentSortCriteria.order === ASC) {
             return setCurrentSortCriteria((prevState => ({...prevState, ...{order: DESC}})))
@@ -59,7 +68,7 @@ export function SubtasksSettings({isVisibleUpLink, setCurrentSortCriteria, curre
             <div className = 'subtasks__option-container'>
                 {
                    isVisibleUpLink &&
-                    <button className = 'subtasks__settings-option'>
+                    <button onClick = {onListNavigation} className = 'subtasks__settings-option'>
                         <RiArrowUpLine className = 'subtasks__settings-icon' />
                     </button>
                 }

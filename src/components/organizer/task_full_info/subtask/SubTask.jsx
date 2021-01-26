@@ -12,11 +12,13 @@ export function SubTask({id, text, setCorrectionSubtaskId, isCorrecting,  onUpda
     const completeHandler = event => onComplete(id, event.target.checked)
     const writeTextHandler = event => writeNewText(event.target.value)
     const deleteHandler = () => onDelete(id)
-
+    console.log('isCorrecting', isCorrecting)
     const switchCorrectionMode = () => {
         writeNewText(text)
+        if(isCorrecting) {
+            return setCorrectionSubtaskId('')
+        }
         setCorrectionSubtaskId(id)
-        // setCorrectionMode(!correctionMode)
     }
     
     const cancelCorrection = () => {

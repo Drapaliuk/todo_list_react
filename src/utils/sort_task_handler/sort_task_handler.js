@@ -37,6 +37,11 @@ export const sortHandler = (sortBy, order, searchByLettersPattern) => (tasks) =>
         }
     }
 
+    function regExpFilter(str) {
+        return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+    };
+    
+
     if(sortBy === 'isImportant' ||
        sortBy === 'text' ||
        sortBy === 'dateCreation' ||
@@ -46,7 +51,9 @@ export const sortHandler = (sortBy, order, searchByLettersPattern) => (tasks) =>
     }
 
     if(sortBy === 'searchByLetters') {
-        const regExpPattern = new RegExp(searchByLettersPattern)
+
+        const regExpPattern = new RegExp(regExpFilter(searchByLettersPattern))
+
         return tasksCopy.filter(task => regExpPattern.test(task.text))
     }
     return tasks

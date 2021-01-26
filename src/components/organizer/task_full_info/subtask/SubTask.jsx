@@ -12,7 +12,6 @@ export function SubTask({id, text, setCorrectionSubtaskId, isCorrecting,  onUpda
     const completeHandler = event => onComplete(id, event.target.checked)
     const writeTextHandler = event => writeNewText(event.target.value)
     const deleteHandler = () => onDelete(id)
-    console.log('isCorrecting', isCorrecting)
     const switchCorrectionMode = () => {
         writeNewText(text)
         if(isCorrecting) {
@@ -41,11 +40,31 @@ export function SubTask({id, text, setCorrectionSubtaskId, isCorrecting,  onUpda
         }
     }
 
+    const subtaskHandler = event => {
+        console.log('DELEGATION')
+        const role = event.target.dataset.role
+        console.log(event.target)
+        if(role === 'complete') {
+            onComplete(id, event.target.checked)
+        }
+        if(role === 'subtask') {
+            if(!correctionMode) {
+                onOpen(id)
+            }
+            if(isOpen) {
+                onOpen('')
+            }
+        }
+    }
+
+    console.log('hasDone', hasDone)
+
     return (
         <li 
-            onClick = {visibleFullTextHandler}
+            onClick = {subtaskHandler}
+            
             className = 'todo-subtasks__list-item' >
-            <div className = {classNames('todo-subtask', {'todo-subtask_done': hasDone, 'todo-subtask_correction-mode': isCorrecting})}>
+            <div {...{'data-role':'subtask'}} className = {classNames('todo-subtask', {'todo-subtask_done': hasDone, 'todo-subtask_correction-mode': isCorrecting})}>
                 {
                     isCorrecting 
                     ?
@@ -63,16 +82,24 @@ export function SubTask({id, text, setCorrectionSubtaskId, isCorrecting,  onUpda
                         </button>
                     </>
                     :
-                    <Fragment>
-                        <input  checked = {hasDone} onChange = {completeHandler} class="todo-subtask__check-input-subtask" type="checkbox" />
-                        <span class= {classNames("todo-subtask__text", {'todo-subtask__text_full': isOpen})}   >{text}</span>
-                        <button onClick = {switchCorrectionMode} className = 'todo-subtask__correcting-btn'>
-                            <HiOutlinePencil className = 'todo-subtask__correcting-icon' />
-                        </button>
+                    <>
+                        <input {...{'data-role':'complete'}}
+                               checked = {hasDone} 
+                               class="todo-subtask__check-input-subtask" 
+                               type="checkbox" />
+                        <span {...{'data-role':'subtask'}} class= {classNames("todo-subtask__text", {'todo-subtask__text_full': isOpen})}>{text}</span>
+                        
+                        {
+                            !hasDone &&
+                            <button onClick = {switchCorrectionMode} className = 'todo-subtask__correcting-btn'>
+                                <HiOutlinePencil className = 'todo-subtask__correcting-icon' />
+                            </button>
+                        }
+                        
                         <button  onClick = {deleteHandler} class="delete-btn delete-btn_todo_subtask">
                             <AiOutlineClose className="delete-btn__icon" />
                         </button>
-                    </Fragment>
+                    </>
                 }
             </div>
         </li>

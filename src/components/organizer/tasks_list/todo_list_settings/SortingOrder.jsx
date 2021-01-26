@@ -3,7 +3,6 @@ import { SortingOption } from './SortingOption';
 import {GrDescend, GrAscend} from 'react-icons/gr'
 
 export function SortingOrder({sortOrderHandler, order, sortBy}) {
-    console.log('SortingOrder', order)
     const isOrderAscend = order === 'asc';
     const title = order === 'asc' ? 'ascending' : 'descending'
     const newOrder = isOrderAscend ? 'desc' : 'asc'

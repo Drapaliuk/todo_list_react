@@ -179,6 +179,7 @@ export const organizer = (prevState = initialState, action) => {
 
         case CHANGE_TASKS_LIST_SETTINGS:
             return produce(prevState, draftState => {
+                console.log('payload', payload)
                 const [key, value] = Object.entries(payload.changedValue)[0]
 
                 if(defaultTasksListsIds.hasOwnProperty(payload.listId)) {
@@ -299,7 +300,6 @@ export const organizer = (prevState = initialState, action) => {
                     })
             })
         case SEARCH_BY_LETTERS:
-            console.log('PAYLOAD', payload)
             return {
                 ...prevState,
                 searchByLettersPattern: payload.pattern

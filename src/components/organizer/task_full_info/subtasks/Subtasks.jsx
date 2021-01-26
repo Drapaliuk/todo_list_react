@@ -9,13 +9,22 @@ import { sortHandler } from "../../../../utils";
 import { SubtasksSettings } from '../subtasks_settings/SubtasksSettings';
 
 
+
 export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete, belongToList, selectedTaskId}) {
     const [isInvalidSubtaskText, setInvalidSubtaskFlag] = React.useState(false)
     const [text, writeText] = React.useState('')
     const [openedSubtaskId, setOpenFullText] = React.useState('');
     const [correctionSubtaskId, setCorrectionSubtaskId] = React.useState('');
     const [isVisibleList, setVisibleSubtasksList] = React.useState(false); 
-    const [currentSortCriteria, setCurrentSortCriteria] = React.useState({sortBy: 'hasDone', order: DESC, searchByLetters: ''})
+    const [currentSortCriteria, setCurrentSortCriteria] = React.useState({sortBy: 'hasDone', order: DESC, searchByLetters: ''});
+    const [isVisibleUpLink, setVisibleUpLink] = React.useState(false);
+    
+    const refTodoSubtasksList = React.useRef();
+    React.useEffect(() => { 
+        if(!refTodoSubtasksList.current) return
+        const isExistScroll = refTodoSubtasksList.current.clientHeight < refTodoSubtasksList.current.scrollHeight;
+        setVisibleUpLink(isExistScroll)
+    }, [isVisibleList, subtasks])
 
     React.useEffect(() => {
         setInvalidSubtaskFlag(false)
@@ -78,14 +87,14 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
             {
                 subtasks.length > 0 &&
                 <button onClick = {visibleSubtasksListHandler} className = {classNames('subtasks__open-btn', {'subtasks__open-btn_open': isVisibleList})}>
-                    <span>{subtasks.length}</span>
+                    <span className = 'subtasks__amount'>{subtasks.length}</span>
                     <span>Subtasks</span>
                     {isVisibleList ? <RiArrowUpSLine className = 'subtasks__open-icon' /> : <RiArrowDownSLine className = 'subtasks__open-icon' />}
                 </button>
             }
             {
                 isVisibleList && subtasks.length > 0 &&
-                <ul class="todo-subtasks__list">
+                <ul ref = {refTodoSubtasksList} class="todo-subtasks__list">
                     { sortedSubtasks.map(({_id, text, hasDone}) => <SubTask key = {_id}
                                                                             id = {_id} 
                                                                             onDelete = {onDelete}
@@ -98,7 +107,7 @@ export function Subtasks({subtasks, onCreate, onUpdateText, onComplete, onDelete
                                                                             isCorrecting = {correctionSubtaskId === _id}
                                                                             onUpdateText = {onUpdateText} />) }
 
-                    <SubtasksSettings {...{setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}} />
+                    <SubtasksSettings {...{isVisibleUpLink, setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}} />
                 </ul>
             }
             

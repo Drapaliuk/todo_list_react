@@ -160,8 +160,6 @@ export const getTasks = createSelector(
     }
 
     function resultCreator (sortedTasks) {
-        console.log('sortedTasks', sortedTasks)
-
         const {completedTasks} = sortedTasks
         const {uncompletedTasks} = sortedTasks
 

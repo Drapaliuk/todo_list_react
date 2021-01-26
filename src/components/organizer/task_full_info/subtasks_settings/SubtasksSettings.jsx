@@ -7,7 +7,7 @@ import { DESC, ASC } from '../../../../service';
 
 
 
-export function SubtasksSettings({setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}) {
+export function SubtasksSettings({isVisibleUpLink, setCurrentSortCriteria, currentSortCriteria, visibleSubtasksListHandler}) {
     const [isVisibleSorting, setVisibleSubtasksSorting] = React.useState(false); 
     const [isVisibleSearchInput, setVisibleSearchInput] = React.useState(false);
     
@@ -46,16 +46,24 @@ export function SubtasksSettings({setCurrentSortCriteria, currentSortCriteria, v
                 isVisibleSearchInput &&
                 <div className = 'subtasks__search-wrapper'>
                     <button onClick = {inVisibleSearchInputHandler} className = 'subtasks__search-stop'>
-                        <VscSearchStop className = 'subtasks__settings-icon' />
+                        <VscSearchStop className = 'subtasks__search-icon' />
                     </button>
-                    <input autoFocus = {true} value = {currentSortCriteria.searchByLetters} onChange = {e => onChangeSortBy({sortBy: 'searchByLetters', searchByLetters: e.target.value })() } className = 'subtasks__search-input' placeholder = 'search' />
+                    <input autoFocus = {true} 
+                           value = {currentSortCriteria.searchByLetters} 
+                           onChange = {e => onChangeSortBy({sortBy: 'searchByLetters', searchByLetters: e.target.value })() } 
+                           className = 'subtasks__search-input' 
+                           placeholder = 'search' />
                 </div>
             }
 
             <div className = 'subtasks__option-container'>
-                <button className = 'subtasks__settings-option'>
-                    <RiArrowUpLine className = 'subtasks__settings-icon' />
-                </button>
+                {
+                   isVisibleUpLink &&
+                    <button className = 'subtasks__settings-option'>
+                        <RiArrowUpLine className = 'subtasks__settings-icon' />
+                    </button>
+                }
+                
                 <button onClick = {visibleSubtasksSortingHandler} className = 'subtasks__settings-option'>
                     <RiFilterLine className = 'subtasks__settings-icon' />
                 </button>

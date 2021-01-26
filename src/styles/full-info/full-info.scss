@@ -269,7 +269,7 @@
     display: flex;
     line-height: 30px;
     align-items: center;
-    padding: 1px 25px 1px 10px;
+    padding: 1px 55px 1px 10px;
     background-color: #fff;
     position: relative;
 }
@@ -302,6 +302,10 @@
     align-items: center;
     padding: 0 10px 0 15px;
     margin-bottom: 15px;
+}
+
+.subtasks__amount {
+    font-size: 1.2rem;
 }
 
 .subtasks__open-btn.subtasks__open-btn_open {
@@ -398,24 +402,6 @@
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .subtasks__search-input {
     width: 100%;
     background-color: transparent;
@@ -423,17 +409,38 @@
     outline: none;
     border-bottom: 1px solid #4e4949;
     color: #d1c3c3;
+    font-size: 1.1rem;
 }
 
 .subtasks__search-stop {
     background-color: #fff;
     border: none;
+    transition: all .3s linear;
+}
+
+.subtasks__search-stop:hover {
+    box-shadow: 0 0 4px inset #000;
+
 }
 
 .todo-full-info.todo-full-info_theme_dark .subtasks__search-stop {
     background-color: #242424;
+}
+
+.todo-full-info.todo-full-info_theme_dark .subtasks__search-stop:hover {
+    box-shadow: 0 0 4px inset rgb(161, 157, 157);
 
 }
+
+.todo-full-info.todo-full-info_theme_dark .subtasks__search-icon {
+    fill: rgb(179, 174, 174);
+}
+.subtasks__search-icon {
+    width: 25px;
+    height: 25px;
+}
+
+
 
 .todo-subtasks__list {
     border-radius: 4px;

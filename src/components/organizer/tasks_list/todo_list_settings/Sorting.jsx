@@ -4,7 +4,7 @@ import { AiFillStar} from 'react-icons/ai';
 import { BsCalendar, BsSearch } from 'react-icons/bs';
 import { AiOutlineSortAscending, AiOutlineSortDescending } from 'react-icons/ai';
 import { SortingOrder } from './SortingOrder';
-export function Sorting({sortByHandler, sortOrderHandler, currentSortCriteria}) {
+export function Sorting({sortByHandler, sortOrderHandler, currentSortCriteria, searchHandler}) {
     const {sortBy, order} = currentSortCriteria;
 
     return (
@@ -24,7 +24,7 @@ export function Sorting({sortByHandler, sortOrderHandler, currentSortCriteria}) 
                             Icon = {AiFillStar} 
                             isActive = {sortBy === 'isImportant'} />
 
-            <SortingOption  handler = {sortByHandler({sortBy: 'searchByLetters', order: 'asc'})} 
+            <SortingOption  handler = {searchHandler({sortBy: 'searchByLetters', order: 'asc'})} 
                             title = 'Search task' 
                             Icon = {BsSearch} 
                             isActive = {sortBy === 'searchByLetters'} />

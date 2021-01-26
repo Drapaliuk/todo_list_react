@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Route } from 'react-router-dom'
-import { changeListSettings, changeTask, saveNewTask, searchByLetters, selectTask } from '../../../redux/actions';
+import { changeListSettings, changeTask, saveNewTask, searchByLetters, searchTaskByLetters, selectTask } from '../../../redux/actions';
 
 import { getSelectedListSettings, getSelectedListsIds, getSelectedTaskId } from '../../../redux/selectors';
 import { ProfileSettings } from '../../settings/ProfileSettings';
@@ -42,6 +42,13 @@ export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
         }
         return dispatch(changeListSettings(selectedUserListId, {sort}))
     }
+    
+    const onSearchTasks = sort => {
+        if(selectedDefaultListId) {
+            return dispatch(searchTaskByLetters(selectedDefaultListId, {sort}))
+        }
+        return dispatch(searchTaskByLetters(selectedUserListId, {sort}))
+    }
 
 
     return (
@@ -73,7 +80,7 @@ export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
                     completedTasks.length > 0 &&
                     <CompletedTasksList {...{completedTasks, onSelectTask, onComplete, selectedTaskId}} />
                 }
-                <TodoListSettings {...{onSortTasks, currentSortCriteria}} />
+                <TodoListSettings {...{onSortTasks, currentSortCriteria, onSearchTasks}} />
             </>
         </section>
     )

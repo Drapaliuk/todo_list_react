@@ -53,6 +53,10 @@ export const changeListSettings = (selectedListId, newValue) => async dispatch =
     dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload})
 }
 
+export const searchTaskByLetters = (listId, changedValue) => async dispatch => {
+    dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload: {listId, changedValue}})
+}
+
 export const defaultTasks = () => ({type: DEFAULT_TASKS});
 export const deleteTask = (selectedListId, selectedTaskId) => async dispatch => {
     const {data: payload} = await tasksAPI.deleteTask(selectedListId, selectedTaskId)
@@ -60,4 +64,5 @@ export const deleteTask = (selectedListId, selectedTaskId) => async dispatch => 
 }
 
 export const closeFullInfo = () => ({type: CLOSE_FULL_INFO})
+
 

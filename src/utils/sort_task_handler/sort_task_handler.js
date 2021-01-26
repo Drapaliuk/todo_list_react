@@ -46,7 +46,6 @@ export const sortHandler = (sortBy, order, searchByLettersPattern) => (tasks) =>
        sortBy === 'text' ||
        sortBy === 'dateCreation' ||
        sortBy === 'hasDone') {
-        console.log('sortHandlers[order]', sortHandlers[order])
         return tasksCopy.sort(sortHandlers[order])
     }
 

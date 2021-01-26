@@ -8,7 +8,6 @@ export function FullInfoManipulations({onClose, onDeleteTask, onCreateComment, b
     const [commentText, writeCommentText] = React.useState('');
     const [isInvalidCommentText, setInvalidCommentFlag] = React.useState(false);
 
-    console.log(belongToList, selectedTaskId)
     React.useEffect(() => {
         setInvalidCommentFlag(false)
     }, [belongToList, selectedTaskId])

@@ -1,4 +1,31 @@
-export const changeListById = (lists, listId, callBack) => {
+export class StateSelectors {
+
+    static getFolder(state, folderID) {
+        return state.userTasksFolders.find(({_id}) => _id === folderID)
+    }
+
+    static getList(state, folderID, listID) {
+        if(!folderID) {
+            return state.userTasksLists.find(({_id}) => _id === listID)
+        }
+
+        return this.getFolder(state, folderID).tasksLists.find(({_id}) => _id === listID)
+    }
+
+    static getTask(state, folderID, listID, taskID) {
+        return this.getList(state, folderID, listID).tasks.find(({_id}) => _id === taskID)
+    }
+    static getSubTask(state, folderID, listID, taskID, subtaskID) {
+        return this.getTask(state, folderID, listID, taskID).subtasks.find(({_id}) => _id === subtaskID)
+    }
+    static getComment(state, folderID, listID, taskID, commentID) {
+        return this.getTask(state, folderID, listID, taskID).comments.find(({_id}) => _id === commentID)
+    }
+}
+
+
+
+export const changeListById = (lists, listId, belongToFolder, callBack) => {
     const listsCopy = [...lists]
     return listsCopy.map(list => {
         if(list._id === listId) {
@@ -23,6 +50,9 @@ export const changeTaskById = (lists, listId, taskId, callBack) => {
 
     return changeListById(lists, listId, logic)
 }
+
+
+
 
 export const changeSubTaskById = (lists, listId, taskId, subtaskId, callBack) => {
     const logic = selectedTask => {

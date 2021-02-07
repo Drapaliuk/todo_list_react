@@ -21,4 +21,12 @@ export const SELECT_SUBTASK = 'task/SELECT_SUBTASK';
 export const CREATE_COMMENT = 'tasks/CREATE_COMMENT';
 export const DELETE_COMMENT = 'tasks/DELETE_COMMENT';
 
+export const CREATE_FOLDER = 'tasks/CREATE_FOLDER'
+export const DELETE_FOLDER = 'tasks/DELETE_FOLDER'
+export const UPDATE_FOLDER = 'tasks/UPDATE_FOLDER'
+export const INSERT_LIST_TO_FOLDER = 'tasks/INSERT_LIST_TO_FOLDER'
+export const CREATE_LIST_IN_FOLDER = 'tasks/CREATE_LIST_IN_FOLDER'
+export const SELECT_LIST_FROM_FOLDER = 'tasks/SELECT_LIST_FROM_FOLDER'
+
+
 

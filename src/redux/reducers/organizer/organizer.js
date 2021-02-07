@@ -1,23 +1,28 @@
 import produce from "immer";
 import {defaultTasksListsIds} from "../../../service";
-import { changeListById, changeSubTaskById, changeTaskById } from "../../../utils";
+import { changeListById, changeSubTaskById, changeTaskById, StateSelectors } from "../../../utils";
 import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS,
          CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK,
          DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
          CREATE_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
          UPDATE_SUBTASK, CREATE_COMMENT, DELETE_COMMENT,
-         SELECT_APP_LIST, UPDATE_TASKS_LIST, SEARCH_BY_LETTERS } from "../../actions_types"
+         SELECT_APP_LIST, UPDATE_TASKS_LIST, SEARCH_BY_LETTERS, CREATE_FOLDER, CREATE_LIST_IN_FOLDER, SELECT_LIST_FROM_FOLDER } from "../../actions_types"
 
 const initialState = {
     defaultTasksLists: {},
     userTasksLists: [],
+    userTasksFolders: [],
     selectedListId: defaultTasksListsIds.DEFAULT_LIST__today,
     selectedAppListId: defaultTasksListsIds.DEFAULT_LIST__today,
     selectedTaskId: '',
     selectedSubtaskId: '',
     selectedCommentId: '',
+    selectedFolderID: '',
     isSelectedAppList: true,
-    searchByLettersPattern: ''
+    searchByLettersPattern: '',
+    isSelectedListFromFolder: false, 
+    selectedFolderID: ''
+
 }
 
 export const organizer = (prevState = initialState, action) => {
@@ -27,12 +32,14 @@ export const organizer = (prevState = initialState, action) => {
     switch(type)  {
         case INITIALIZED_TASKS:
             return produce(prevState, draftState => {
-                const {userTasksLists, defaultTasksLists} = payload;
+                
+                const {userTasksLists, defaultTasksLists, userTasksFolders} = payload;
                 if(userTasksLists.length === 0) {
                     draftState.userTasksLists = []
                     draftState.defaultTasksLists = {...defaultTasksLists}
                     draftState.selectedAppListId = defaultTasksListsIds.DEFAULT_LIST__today
                     draftState.isSelectedAppList = true
+                    draftState.userTasksFolders = userTasksFolders
                     return
                 }
                 
@@ -41,6 +48,20 @@ export const organizer = (prevState = initialState, action) => {
                 draftState.selectedAppListId = ''
                 draftState.isSelectedAppList = false
                 draftState.defaultTasksLists = {...defaultTasksLists}
+                draftState.userTasksFolders = userTasksFolders
+            })
+
+        case CREATE_LIST_IN_FOLDER:
+            return produce(prevState, draftState => {
+                const {createdList, folderID} = payload
+                console.log(payload)
+                const selectedFolder = draftState.userTasksFolders.find(folder => {
+                    console.log(folder)
+                    console.log(folderID)
+                    return folder._id === folderID
+                })
+                selectedFolder.tasksLists.push(createdList)
+
             })
 
         case CREATE_LIST: 
@@ -58,7 +79,25 @@ export const organizer = (prevState = initialState, action) => {
                 draftState.selectedAppListId = ''
                 draftState.selectedTaskId = ''
                 draftState.isSelectedAppList = false
+                draftState.isSelectedListFromFolder = false
+                draftState.selectedFolderID = ''
             })
+        
+        case SELECT_LIST_FROM_FOLDER:
+            return produce(prevState, draftState => {
+                draftState.selectedListId = payload.listID
+                draftState.selectedAppListId = ''
+                draftState.selectedTaskId = ''
+                draftState.isSelectedAppList = false
+                draftState.isSelectedListFromFolder = true
+                draftState.selectedFolderID = payload.folderID
+            })
+
+        case CREATE_FOLDER:
+            return produce(prevState, draftState  => {
+                draftState.userTasksFolders.push(payload.createdFolder)
+            })
+            
 
         case SELECT_APP_LIST:
             return produce(prevState, draftState => {
@@ -66,6 +105,8 @@ export const organizer = (prevState = initialState, action) => {
                 draftState.selectedAppListId = payload.listId
                 draftState.selectedListId = ''
                 draftState.selectedTaskId = ''
+                draftState.isSelectedListFromFolder = false
+                draftState.selectedFolderID = ''
             })
             
         case DELETE_TASKS_LIST:
@@ -106,22 +147,33 @@ export const organizer = (prevState = initialState, action) => {
       
         case CREATE_TASK:
             return produce(prevState, draftState => {
-                const {listId, savedTask} = payload;
+                console.log(payload)
+                const {listId, savedTask, folderID} = payload;
+                console.log('payload', payload)
                 if(payload.listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                        draftState.defaultTasksLists[listId].tasks.unshift(savedTask)
-                        return
+                    draftState.defaultTasksLists[listId].tasks.unshift(savedTask)
+                    return
                 }
 
-                draftState.userTasksLists = changeListById(draftState.userTasksLists, listId, selectedList => {
-                    selectedList.tasks.unshift(savedTask)
-                    return selectedList
-                })
+                StateSelectors.getList(draftState, folderID, listId).tasks.unshift(savedTask)
+                // if(folderID) {
+                //     draftState.userTasksFolders.find(folder => folder._id === folderID)
+                //                                .tasksLists.find(list => list._id === listId)
+                //                                .tasks.unshift(savedTask)
+                //     return
+                // }
+                
+                // draftState.userTasksLists = changeListById(draftState.userTasksLists, listId, selectedList => {
+                    
+                //     selectedList.tasks.unshift(savedTask)
+                //     return selectedList
+                // })
             })
 
 
         case CHANGE_TASK:
             return produce(prevState, draftState => {
-                const {listId, taskId, updatedValue} = payload;
+                const {folderID, listId, taskId, updatedValue} = payload;
                 const [key, value] = Object.entries(updatedValue)[0]
                 if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
                     draftState.defaultTasksLists[listId].tasks.map(task => {
@@ -133,11 +185,13 @@ export const organizer = (prevState = initialState, action) => {
                     })
                     return
                 }
+                StateSelectors.getTask(draftState, folderID, listId, taskId)[key] = value
+              
     
-                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
-                    selectedTask[key] = value
-                    return selectedTask
-                } )
+                // draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
+                //     selectedTask[key] = value
+                //     return selectedTask
+                // } )
             })
 
         case DELETE_TASK:

@@ -1,6 +1,7 @@
 export { authAPI } from './auth/auth';
 export { listsAPI } from './lists/lists';
 export { tasksAPI } from './tasks/tasks';
+export { folderAPI } from './folders/folders';
 export { settingsAPI } from './settings/settings';
 export { personalDataAPI } from './personal_data/personal_data';
 export { initializeAPI } from './initialize/initialize';

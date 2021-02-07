@@ -45,7 +45,7 @@ export function App() {
     return () => window.removeEventListener('offline', networkStatusHandler)
   }, [])
 
-  if(!isConnectionToNetwork) return <NoConnection />
+  // if(!isConnectionToNetwork) return <NoConnection />
   if(isServerInaccessible) return <InaccessibleServer />
   if(isFetchingInitData) return <InitializePreloader />
 

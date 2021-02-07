@@ -31,10 +31,10 @@ export const initializeApp = () => async dispatch => {
             localStorageManipulator.saveTokens(newToken, newRefreshToken)
             updateDefaultRequestHeaders(newToken, newRefreshToken)
         }
-
-        const {tasks, settings, biography, personalData, defaultTasksLists} = payload;
-        const forTasksInit = {userTasksLists: tasks, defaultTasksLists: defaultTasksLists }
         
+        const {tasks, settings, folders, biography, personalData, defaultTasksLists} = payload;
+        const forTasksInit = {userTasksLists: tasks, userTasksFolders: folders, defaultTasksLists: defaultTasksLists }
+        console.log('forTasksInit', forTasksInit)
         dispatch( initializeTasks(forTasksInit) );
         dispatch( initializeSettings(settings) );
         dispatch( initializeBiography(biography) );

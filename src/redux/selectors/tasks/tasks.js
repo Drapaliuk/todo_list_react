@@ -45,7 +45,7 @@ const getCurrentSortCriteria = state => getSelectedListSettings(state, 'sort');
 
 export const getTasksLists = state => state.organizer.userTasksLists;
 export const getSelectedTaskId = state => state.organizer.selectedTaskId;
-
+export const getTasksFolders = state => state.organizer.userTasksFolders
 
 export const getSelectedListId = state => {
     if(state.organizer.isSelectedAppList) return state.organizer.selectedAppListId
@@ -57,20 +57,30 @@ export const getSelectedListsIds = state => {
             selectedDefaultListId: state.organizer.selectedAppListId}
 }
 
+
 export const getSelectedListProperty = (state, property) => {
     const isSelectedDefaultAppList = state.organizer.isSelectedAppList
+    const isSelectedListFromFolder = state.organizer.isSelectedListFromFolder
+    const selectedListId = state.organizer.selectedListId;
+
+
     if(isSelectedDefaultAppList) {
         const currentDefaultAppList = appListsData.find(list => list.id === state.organizer.selectedAppListId)
         if(!property) return currentDefaultAppList
         return currentDefaultAppList[property]
     }
 
-    if(!isCreatedTasksLists(state)) return
+    if(isSelectedListFromFolder) {
+        const selectedFolderID = state.organizer.selectedFolderID
+        const currentFolder = state.organizer.userTasksFolders.find(folder => folder._id === selectedFolderID)
+        const currentList = currentFolder.tasksLists.find(list => list._id === selectedListId)
+        if(!property) return currentList
+        return currentList[property]
+    }
 
-
-    const selectedListId = state.organizer.selectedListId;
+    if(!isCreatedTasksLists(state)) return //! ?
+    
     const currentUserList = state.organizer.userTasksLists.find(list => list._id === selectedListId);
-
     if(!property) return currentUserList
     return currentUserList[property];  
 }
@@ -120,12 +130,20 @@ const getSearchByLettersPattern = state => state.organizer.searchByLettersPatter
 export const getTasks = createSelector(
     [ getUserTasksLists, getDefaultListTasks,
       getCurrentSortCriteria, isSelectedDefaultAppList,
-      getCurrentDefaultListId, getSelectedListTasks, getSearchByLettersPattern ], 
+      getCurrentDefaultListId, getSelectedListTasks, getSearchByLettersPattern,   ], 
     ( userTasksLists, defaultListTasks, currentSortCriteria,
       isSelectedDefaultAppList, currentDefaultListId, selectedListTasks, searchByLettersPattern ) => {
-    const {sortBy, order} = currentSortCriteria
+    
+    
+        const {sortBy, order} = currentSortCriteria
     const forTaskSort = sortHandler(sortBy, order, searchByLettersPattern)
     let separatedTasks;
+
+    console.log('selectedListTasks', selectedListTasks)
+    
+
+    
+
 
     if(isSelectedDefaultAppList) {
         const selectedAppListData = appListsData.find(list => list.id === currentDefaultListId)

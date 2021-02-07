@@ -24,17 +24,18 @@ export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
     const {uncompletedTasks, completedTasks, title} = tasksListData;
     const currentSortCriteria = useSelector(state => getSelectedListSettings(state, 'sort'));
     const wasLostConnection = useSelector(state => state.initialize.wasLostConnection)
+    const selectedFolderID = useSelector(state => state.organizer.selectedFolderID)
     const currentSearchTaskPattern = useSelector(state => state.organizer.searchByLettersPattern)
     const {selectedUserListId, selectedDefaultListId} = useSelector(state => getSelectedListsIds(state));
     const selectedTaskId = useSelector(state => getSelectedTaskId(state))
 
     const onSelectTask = (listId, taskId) => dispatch(selectTask(taskId, listId))
-    const onComplete =  (listId, taskId, isCompleted) => dispatch(changeTask(listId, taskId, {hasDone: isCompleted}))
-    const onPinTask =  (listId, taskId, isPinned) => dispatch(changeTask(listId, taskId, {isPinned}))
-    const onMakeImportant =  (listId, taskId, isImportant) => dispatch(changeTask(listId, taskId, {isImportant}))
+    const onComplete =  (listId, taskId, isCompleted) => dispatch(changeTask(listId, taskId, {hasDone: isCompleted}, selectedFolderID))
+    const onPinTask =  (listId, taskId, isPinned) => dispatch(changeTask(listId, taskId, {isPinned}, selectedFolderID))
+    const onMakeImportant =  (listId, taskId, isImportant) => dispatch(changeTask(listId, taskId, {isImportant}, selectedFolderID))
     const onSearchByLetters = pattern => dispatch(searchByLetters(pattern))
     const onCloseSearchTasksInput = () => onSortTasks({sortBy: '', order: ''})
-    const onCreateTask = (selectedListId, text) => dispatch(saveNewTask(selectedListId, text))
+    const onCreateTask = (selectedListId, text) => dispatch(saveNewTask(selectedListId, text, selectedFolderID))
 
     const onSortTasks = sort => {
         if(selectedDefaultListId) {
@@ -68,18 +69,15 @@ export function TasksList({tasksListData, currentTheme, isVisibleInMobVer}) {
             <Route exact path = '/app/edit-list' component = {EditListLabelDesktop} />
             <Route path = '/app/settings' component = {ProfileSettings} />
             {currentSearchTaskPattern && uncompletedTasks.length === 0 && completedTasks.length === 0 &&
-                <NotFoundTasks {...{currentSearchTaskPattern}} />
-            }
+                <NotFoundTasks {...{currentSearchTaskPattern}} />}
             <>
                 <ul className="todo-list">
                     {uncompletedTasks.map(currentTask => {
                         return <Task {...{key: currentTask._id, onComplete, onSelectTask, onPinTask, onMakeImportant, currentTask, selectedTaskId}} />
                     })}
                 </ul>
-                {
-                    completedTasks.length > 0 &&
-                    <CompletedTasksList {...{completedTasks, onSelectTask, onComplete, selectedTaskId}} />
-                }
+                {completedTasks.length > 0 &&
+                <CompletedTasksList {...{completedTasks, onSelectTask, onComplete, selectedTaskId}} />}
                 <TodoListSettings {...{onSortTasks, currentSortCriteria, onSearchTasks}} />
             </>
         </section>

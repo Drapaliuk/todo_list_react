@@ -24,9 +24,11 @@ export function TasksListLabel({name, tasksAmount, id, isThisListSelected, onSel
 
 
     return (
+        
         <li onPointerDown = {pointerDownHandler}
             onPointerUp = {pointerUpHandler}
-            onClick = {onSelectList(id)} 
+            onClick = {onSelectList(id)}
+            draggable = {true} 
             onContextMenu = {contextMenuHandler}
             class={classNames("bar-section__labels-list-item", {'bar-section__labels-list-item_selected': isThisListSelected})}>
             

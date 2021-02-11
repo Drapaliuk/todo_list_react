@@ -16,27 +16,27 @@ import classNames from 'classnames';
 export function TaskFullInfo({selectedTask, isMobileVer}) {
     const dispatch = useDispatch();
     const {text, hasDone, isImportant, belongToList, term, remind, repeat, subtasks, comments, notes, _id:selectedTaskId} = selectedTask;
-    
+    const selectedFolderID = useSelector(state => state.organizer.selectedFolderID)
     const currentTheme = useSelector(state => state.settings.theme )
     const ids = [belongToList, selectedTaskId]
 
-    const onComplete =  isComplete => dispatch(changeTask(...ids, {hasDone: isComplete}))
-    const onMakeImportant =  isImportant => dispatch(changeTask(...ids, {isImportant: isImportant}))
-    const onSaveNewText = newText => dispatch(changeTask(...ids, {text: newText}))
-    const onDeleteTask = () => dispatch(deleteTask(...ids))
+    const onComplete =  isComplete => dispatch(changeTask(...ids, {hasDone: isComplete}, selectedFolderID))
+    const onMakeImportant =  isImportant => dispatch(changeTask(...ids, {isImportant: isImportant}, selectedFolderID))
+    const onSaveNewText = newText => dispatch(changeTask(...ids, {text: newText}, selectedFolderID))
+    const onDeleteTask = () => dispatch(deleteTask(...ids, selectedFolderID))
     
-    const onManipulationDateOption = optionName => date => dispatch(changeTask(...ids, {[optionName]: date}))
+    const onManipulationDateOption = optionName => date => dispatch(changeTask(...ids, {[optionName]: date}, selectedFolderID))
     const onCloseFullInfo = () => dispatch(closeFullInfo())
 
 
-    const onCreateSubtask = text => dispatch(createSubtask(...ids, text))
-    const onUpdateSubtaskText = (id, newText) => dispatch(updateSubtask(...ids, id, {text: newText}))
-    const onDeleteSubtask = id => dispatch(deleteSubtask(...ids, id))
-    const onCompleteSubtask = (id, isComplete) => dispatch(updateSubtask(...ids, id, {hasDone: isComplete}))
+    const onCreateSubtask = text => dispatch(createSubtask(...ids, text, selectedFolderID))
+    const onUpdateSubtaskText = (id, newText) => dispatch(updateSubtask(...ids, id, {text: newText}, selectedFolderID))
+    const onDeleteSubtask = id => dispatch(deleteSubtask(...ids, id, selectedFolderID))
+    const onCompleteSubtask = (id, isComplete) => dispatch(updateSubtask(...ids, id, {hasDone: isComplete}, selectedFolderID))
     
-    const onCreateComment = text => dispatch(createComment(...ids, text))
-    const onDeleteComment = id => dispatch(deleteComment(...ids, id))
-    const onUpdateNote = newNote => dispatch(changeTask(...ids, {notes: newNote}))
+    const onCreateComment = text => dispatch(createComment(...ids, text, selectedFolderID))
+    const onDeleteComment = id => dispatch(deleteComment(...ids, id, selectedFolderID))
+    const onUpdateNote = newNote => dispatch(changeTask(...ids, {notes: newNote}, selectedFolderID))
 
 
 

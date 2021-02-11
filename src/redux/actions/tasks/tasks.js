@@ -23,7 +23,6 @@ import { INITIALIZED_TASKS,
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
 export const saveNewList = (newListName, belongToFolder) => async dispatch => { 
-    console.log('belongToFolder', belongToFolder)
     const { list } = (await listsAPI.saveNewList(newListName, belongToFolder)).data; //!
     dispatch({type: CREATE_LIST, payload: list})
 }
@@ -66,21 +65,12 @@ export const searchTaskByLetters = (listId, changedValue) => async dispatch => {
 }
 
 export const defaultTasks = () => ({type: DEFAULT_TASKS});
-export const deleteTask = (selectedListId, selectedTaskId) => async dispatch => {
-    const {data: payload} = await tasksAPI.deleteTask(selectedListId, selectedTaskId)
+export const deleteTask = (selectedListId, selectedTaskId, folderID) => async dispatch => {
+    const {data: payload} = await tasksAPI.deleteTask(selectedListId, selectedTaskId, folderID)
     dispatch({type: DELETE_TASK, payload})
 }
 
 export const closeFullInfo = () => ({type: CLOSE_FULL_INFO})
-
-
-
-
-
-
-
-
-
 
 export const createFolder = name => async dispatch => {
     const {createdFolder} = (await folderAPI.create(name)).data;

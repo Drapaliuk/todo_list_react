@@ -122,7 +122,6 @@
   display: block;
   width: 100%;
   height: 70px;
-  /* position: absolute; */
   color: #000;
   bottom: 0;
   left: 0;
@@ -133,7 +132,11 @@
   cursor: pointer;
   outline: none;
   padding: 0;
-  box-shadow: 0px 0px 10px gray;
+  transition: all .5s linear;
+
+  &:hover {
+    box-shadow: 0 0 5px inset gray;
+  }
 
   @media (max-width: 767px) {
     height: 50px;
@@ -141,24 +144,26 @@
 }
 
 .bar-section__add-new-folder-icon {
-  transition: all .3s linear;
+  color: #c9a026;
+  transition: all .5s linear;
 }
 
-.bar-section.bar-section_theme_dark .bar-section__add-new-folder-icon {
-  color: #279b37;
-}
-
-.bar-section.bar-section_theme_dark .bar-section__add-new-folder-icon.bar-section__add-new-folder-icon_active,
 .bar-section__add-new-folder-icon.bar-section__add-new-folder-icon_active {
   color: red;
 }
 
-.bar-section__add-new-folder-icon.bar-section__add-new-folder-icon_active {
-  transform: rotate(45deg);
+.bar-section__add-new-list-icon {
+  transition: all .3s linear;
 }
 
 
+.bar-section.bar-section_theme_dark .bar-section__add-new-list-icon {
+  color: #279b37;
+}
 
+.bar-section__add-new-list-icon.bar-section__add-new-list-icon_active {
+  fill: red;
+}
 
 
 .bar-section__edit-todo-list-menu {
@@ -377,4 +382,20 @@
 
 .edit-list-label.edit-list-label_theme-dark {
   background-color: rgba(123, 142, 142, 0.9);
+}
+
+.folder__add-new-list {
+  width: 100%;
+  margin-top: 5px;
+  height: 25px;
+  border-radius: 4px;
+  border: none;
+  font-size: 2rem;
+  line-height: 0;
+  background-color: transparent;
+  color: #b4b2b2;
+}
+
+.add-label-wrapper {
+  display: flex;
 }

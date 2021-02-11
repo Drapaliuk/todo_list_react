@@ -4,8 +4,9 @@ import { defaultBiography, defaultSettings, isInitialized, updateSettings, logOu
          saveNewList, selectTasksList, defaultTasks, selectAppList, clearPersonalData, createFolder, createListInFolder } from '../../../redux/actions';
 import { getAmountTasksForAppLists, getSelectedListId, getSelectedListsIds, getTasksFolders } from '../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from '.';
-import { FiPlus } from 'react-icons/fi';
-
+import { FiPlus } from 'react-icons/fi'
+import { AiOutlineFolderAdd } from 'react-icons/ai'
+import { BsClipboard } from 'react-icons/bs'
 import classNames from 'classnames';
 import { CreateNewFolder } from './create_new_folder/CreateNewFolder';
 import { FolderLabel } from './folder_label/FolderLabel';
@@ -17,6 +18,7 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
     const {selectedUserListId, selectedDefaultListId} = useSelector(state => getSelectedListsIds(state))
     const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false);
     const [isVisibleNewFolderInput, setVisibleNewFolderInput] = React.useState(false);
+
     const [openedEditListId, setOpenEditListId] = React.useState('')
 
 
@@ -85,17 +87,21 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
                     })
                 }
                 {isVisibleNewListInput && 
-                    <CreateNewList onSave = {onSaveNewList} onVisible = {onVisibleNewList} />}
+                    <CreateNewList onVisibleNewList = {onVisibleNewList} onSave = {onSaveNewList} onVisible = {onVisibleNewList} />}
                 {isVisibleNewFolderInput &&
                     <CreateNewFolder onSave = {onSaveNewFolder} onVisible = {onVisibleNewFolder} />}
                     
             </ul>
-            <button onClick = {onVisibleNewFolder} class="bar-section__add-new-folder-btn">
-                add folder
-            </button>
-            <button onClick = {onVisibleNewList} class="bar-section__add-new-folder-btn">
-                <FiPlus className = {classNames('bar-section__add-new-folder-icon', {'bar-section__add-new-folder-icon_active': isVisibleNewListInput})} />
-            </button>
+            <div className = 'add-label-wrapper'>
+                <button onClick = {onVisibleNewFolder} class="bar-section__add-new-folder-btn">
+                    <AiOutlineFolderAdd className = {classNames('bar-section__add-new-folder-icon', {'bar-section__add-new-folder-icon_active': isVisibleNewFolderInput})}  />
+                </button>
+                <button onClick = {onVisibleNewList} class="bar-section__add-new-folder-btn">
+                    <BsClipboard className = {classNames('bar-section__add-new-list-icon', {'bar-section__add-new-list-icon_active': isVisibleNewListInput})} />
+                </button>
+            </div>
+
+            
         </section>
 )
 }

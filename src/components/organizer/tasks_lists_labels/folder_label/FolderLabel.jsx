@@ -46,11 +46,14 @@ export function FolderLabel(props) {
                             />
                 })}
             </ul>
-            <button onClick = {onVisibleNewList}>+</button>
 
             {isVisibleNewListInput && 
              <CreateNewList onSave = {onCreateListInFolder} onVisible = {onVisibleNewList} />}
-            </>}
+            <button className = 'folder__add-new-list' onClick = {onVisibleNewList}>+</button>
+
+            </>
+            }
+
         </li>
     )
 }

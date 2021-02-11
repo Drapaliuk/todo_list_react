@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 import { defaultTasksListsIds,  } from "../../../service";
 import { appListsData } from "../../../service/app_lists_data/app_lists_data";
-import { sortHandler } from "../../../utils";
+import { sortHandler, ReducerSelector, StateTool } from "../../../utils";
 
 const isCreatedTasksLists = state => state.organizer.userTasksLists.length > 0;
 const isSelectedDefaultAppList = state => state.organizer.isSelectedAppList;
@@ -190,45 +190,25 @@ export const getTasks = createSelector(
     return resultCreator(separatedTasks) 
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const getSelectedTaskProperty = (state, property) => {
-    const selectedListId = state.organizer.selectedListId;
-    const selectedTaskId = state.organizer.selectedTaskId;
-    
-    if(defaultTasksListsIds.DEFAULT_LIST__today === selectedListId) {
-        const foundList = state.organizer.defaultTasksLists[defaultTasksListsIds.DEFAULT_LIST__today]
-        if(!foundList) return 
-        const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
-        if(!property) return selectedTask
-        return selectedTask[property]
-    }
-
+    const {selectedFolderID, selectedListId, selectedTaskId} = state.organizer
     if(!isCreatedTasksLists(state)) return
 
-
-    const foundList = state.organizer.userTasksLists.find(list => list._id === selectedListId)
-    if(!foundList) return 
-    const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
+    const selectedTask = StateTool.getTask(state, selectedFolderID, selectedListId, selectedTaskId)
+    if(!selectedTask) return 
     if(!property) return selectedTask
     return selectedTask[property]
+
+
+    // if(defaultTasksListsIds.DEFAULT_LIST__today === selectedListId) {
+    //     const foundList = state.organizer.defaultTasksLists[defaultTasksListsIds.DEFAULT_LIST__today]
+    //     if(!foundList) return 
+    //     const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
+    //     if(!property) return selectedTask
+    //     return selectedTask[property]
+    // }
+
+    // const foundList = state.organizer.userTasksLists.find(list => list._id === selectedListId)
+    // const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
+
 }

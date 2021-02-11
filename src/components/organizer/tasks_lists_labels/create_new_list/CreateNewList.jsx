@@ -4,9 +4,10 @@ import { KEY_ENTER } from '../../../../service';
 import classNames from 'classnames';
 
 
-export function CreateNewList({onSave, onVisible}) {
-    const [listName, setListName] = React.useState('')
-    const [isInvalidName, setInvalidFlag] = React.useState(false)
+export function CreateNewList({onVisibleNewList, onSave, onVisible}) {
+    const [listName, setListName] = React.useState('');
+    const [isInvalidName, setInvalidFlag] = React.useState(false);
+
     const onWriteName = event => {
         setListName(event.target.value)
         setInvalidFlag(false)
@@ -40,7 +41,6 @@ export function CreateNewList({onSave, onVisible}) {
                        placeholder={isInvalidName ? 'This field can`t be empty!' : 'list name'}
                        onKeyDown = {saveHandler}
                 />
-               
             </div>
         </li>
     )

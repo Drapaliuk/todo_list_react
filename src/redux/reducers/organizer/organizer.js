@@ -1,12 +1,15 @@
 import produce from "immer";
-import {defaultTasksListsIds} from "../../../service";
-import { changeListById, changeSubTaskById, changeTaskById, StateSelectors } from "../../../utils";
+import { defaultTasksListsIds } from "../../../service";
+import { changeListById, changeSubTaskById, changeTaskById, ReducerSelector } from "../../../utils";
 import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS,
          CLOSE_FULL_INFO, CREATE_SUBTASK, DEFAULT_TASKS, DELETE_SUBTASK,
          DELETE_TASK, DELETE_TASKS_LIST, INITIALIZED_TASKS, CREATE_LIST,
          CREATE_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
          UPDATE_SUBTASK, CREATE_COMMENT, DELETE_COMMENT,
-         SELECT_APP_LIST, UPDATE_TASKS_LIST, SEARCH_BY_LETTERS, CREATE_FOLDER, CREATE_LIST_IN_FOLDER, SELECT_LIST_FROM_FOLDER } from "../../actions_types"
+         SELECT_APP_LIST, UPDATE_TASKS_LIST, SEARCH_BY_LETTERS,
+         CREATE_FOLDER, CREATE_LIST_IN_FOLDER, SELECT_LIST_FROM_FOLDER } from "../../actions_types"
+
+
 
 const initialState = {
     defaultTasksLists: {},
@@ -147,27 +150,8 @@ export const organizer = (prevState = initialState, action) => {
       
         case CREATE_TASK:
             return produce(prevState, draftState => {
-                console.log(payload)
                 const {listId, savedTask, folderID} = payload;
-                console.log('payload', payload)
-                if(payload.listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    draftState.defaultTasksLists[listId].tasks.unshift(savedTask)
-                    return
-                }
-
-                StateSelectors.getList(draftState, folderID, listId).tasks.unshift(savedTask)
-                // if(folderID) {
-                //     draftState.userTasksFolders.find(folder => folder._id === folderID)
-                //                                .tasksLists.find(list => list._id === listId)
-                //                                .tasks.unshift(savedTask)
-                //     return
-                // }
-                
-                // draftState.userTasksLists = changeListById(draftState.userTasksLists, listId, selectedList => {
-                    
-                //     selectedList.tasks.unshift(savedTask)
-                //     return selectedList
-                // })
+                ReducerSelector.getList(draftState, folderID, listId).tasks.unshift(savedTask)
             })
 
 
@@ -175,42 +159,17 @@ export const organizer = (prevState = initialState, action) => {
             return produce(prevState, draftState => {
                 const {folderID, listId, taskId, updatedValue} = payload;
                 const [key, value] = Object.entries(updatedValue)[0]
-                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    draftState.defaultTasksLists[listId].tasks.map(task => {
-                        if(task._id === taskId) {
-                            task[key] = value
-                            return task
-                        }
-                        return task
-                    })
-                    return
-                }
-                StateSelectors.getTask(draftState, folderID, listId, taskId)[key] = value
-              
-    
-                // draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
-                //     selectedTask[key] = value
-                //     return selectedTask
-                // } )
+
+                ReducerSelector.getTask(draftState, folderID, listId, taskId)[key] = value
             })
 
         case DELETE_TASK:
             return produce(prevState, draftState => {
-                const {listId, taskId} = payload;
+                const {listId, taskId, folderID} = payload;
+                const {tasks} = ReducerSelector.getList(draftState, folderID, listId)
+                const deletedTaskIndex = tasks.findIndex(task => task._id === taskId)
+                tasks.splice(deletedTaskIndex, 1)
 
-                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    const tasks = draftState.defaultTasksLists[listId].tasks
-                    const deletedTaskIndex = tasks.findIndex(task => taskId === task._id)
-                    tasks.splice(deletedTaskIndex, 1)
-                    draftState.selectedTaskId = '';
-                    return
-                }
-    
-                draftState.userTasksLists = changeListById(draftState.userTasksLists, listId, selectedList => {
-                    const deletedTaskIndex = selectedList.tasks.findIndex(task => task._id === taskId)
-                    selectedList.tasks.splice(deletedTaskIndex, 1)
-                    return selectedList
-                })
                 draftState.selectedTaskId = '';
             })
 
@@ -262,55 +221,39 @@ export const organizer = (prevState = initialState, action) => {
         
         case CREATE_SUBTASK:
             return produce(prevState, draftState => {
-                const {listId, taskId, createdSubtask} = payload;
-
-                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
-                    selectedTask.subtasks.unshift(createdSubtask)
-                    return
-                }
-    
-                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
-                    selectedTask.subtasks.unshift(createdSubtask)
-                    return selectedTask
-                })
+                const {listId, taskId, createdSubtask, folderID} = payload;
+                const selectedTask = ReducerSelector.getTask(draftState, folderID, listId, taskId)
+                selectedTask.subtasks.unshift(createdSubtask)
             })
         
         case UPDATE_SUBTASK: 
             return produce(prevState, draftState => {
-                const {listId, taskId, subtaskId, changedSubTask} = payload;
+                const {listId, taskId, subtaskId, changedSubTask, folderID} = payload;
                 const [key, value] = Object.entries(changedSubTask)[0];
+                
+                const updatedSubtask = ReducerSelector.getSubTask(draftState, folderID, listId, taskId, subtaskId)
+                updatedSubtask[key] = value
 
-                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
-                    const updatedSubtask = selectedTask.subtasks.find(subtask => subtask._id === subtaskId)
-                    updatedSubtask[key] = value
-                    return
-                }
+                // if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
+                //     const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
+                //     const updatedSubtask = selectedTask.subtasks.find(subtask => subtask._id === subtaskId)
+                //     updatedSubtask[key] = value
+                //     return
+                // }
 
-                draftState.userTasksLists = changeSubTaskById(draftState.userTasksLists, listId, taskId, subtaskId, selectedSubtask => {
-                    selectedSubtask[key] = value
-                    return selectedSubtask
-                })
+                // draftState.userTasksLists = changeSubTaskById(draftState.userTasksLists, listId, taskId, subtaskId, selectedSubtask => {
+                //     selectedSubtask[key] = value
+                //     return selectedSubtask
+                // })
             })
            
 
         case DELETE_SUBTASK: 
             return produce(prevState, draftState => {
-                const {listId, taskId, subtaskId} = payload
-
-                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
-                    const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === subtaskId)
-                    selectedTask.subtasks.splice(deletedSubtaskIndex, 1)
-                    return
-                }
-                
-                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
-                    const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === subtaskId)
-                    selectedTask.subtasks.splice(deletedSubtaskIndex, 1)
-                    return selectedTask 
-                })
+                const {listId, taskId, subtaskId, folderID} = payload
+                const selectedTask = ReducerSelector.getTask(draftState, folderID, listId, taskId)
+                const deletedSubtaskIndex = selectedTask.subtasks.findIndex(subtask => subtask._id === subtaskId)
+                selectedTask.subtasks.splice(deletedSubtaskIndex, 1)
             });
 
             
@@ -323,36 +266,20 @@ export const organizer = (prevState = initialState, action) => {
 
         case CREATE_COMMENT:
             return produce(prevState, draftState => {
-                const {listId, taskId, createdElement} = payload;
-                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
-                    selectedTask.comments.push(createdElement)
-                }
-
-                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
-                    selectedTask.comments.push(createdElement)
-                    return selectedTask
-                })
+                const {listId, taskId, createdElement, folderID} = payload;
+                const selectedTask = ReducerSelector.getTask(draftState, folderID, listId, taskId)
+                selectedTask.comments.push(createdElement)
             })
         
 
         case DELETE_COMMENT:
             return produce(prevState, draftState => {
-                const {listId, taskId, deletedCommentId} = payload;
-
-                if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                    const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
-                    const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === deletedCommentId)
-                    selectedTask.comments.splice(deletedCommentIndex, 1)
-                    return
-                }
-        
-                draftState.userTasksLists = changeTaskById(draftState.userTasksLists, listId, taskId, selectedTask => {
-                        const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === deletedCommentId)
-                        selectedTask.comments.splice(deletedCommentIndex, 1)
-                        return selectedTask 
-                    })
+                const {listId, taskId, deletedCommentId, folderID} = payload;
+                const selectedTask = ReducerSelector.getTask(draftState, folderID, listId, taskId)
+                const deletedCommentIndex = selectedTask.comments.findIndex(subtask => subtask._id === deletedCommentId)
+                selectedTask.comments.splice(deletedCommentIndex, 1)
             })
+
         case SEARCH_BY_LETTERS:
             return {
                 ...prevState,

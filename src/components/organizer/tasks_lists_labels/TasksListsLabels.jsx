@@ -1,7 +1,7 @@
 import React from 'react'
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { defaultBiography, defaultSettings, isInitialized, updateSettings, logOut, selectListFromFolder,
-         saveNewList, selectTasksList, defaultTasks, selectAppList, clearPersonalData, createFolder, createListInFolder } from '../../../redux/actions';
+         saveNewList, selectTasksList, defaultTasks, selectAppList, clearPersonalData, createFolder, createListInFolder, selectFolder } from '../../../redux/actions';
 import { getAmountTasksForAppLists, getSelectedListId, getSelectedListsIds, getTasksFolders } from '../../../redux/selectors';
 import { CreateNewList, DefaultAppLabels, Header, TasksListLabel } from '.';
 import { FiPlus } from 'react-icons/fi'
@@ -18,6 +18,7 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
     const {selectedUserListId, selectedDefaultListId} = useSelector(state => getSelectedListsIds(state))
     const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false);
     const [isVisibleNewFolderInput, setVisibleNewFolderInput] = React.useState(false);
+    const lastOpenedFolderID = useSelector(state => state.organizer.lastOpenedFolderID)
 
     const [openedEditListId, setOpenEditListId] = React.useState('')
 
@@ -30,7 +31,7 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
     const onSaveNewList = newListName => dispatch(saveNewList(newListName))
     const onCreateListInFolder = belongToFolder => newListName  => dispatch(createListInFolder(newListName, belongToFolder))
     const onSaveNewFolder = newFolderName => dispatch(createFolder(newFolderName))
-    
+    const onSelectFolder = folderID => () => dispatch(selectFolder(folderID))
     
 
 
@@ -67,6 +68,10 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
                                          selectedUserListId = {selectedUserListId} openedEditListId = {openedEditListId}
                                          setOpenEditListId = {setOpenEditListId} name = {folder.name} 
                                          onCreateListInFolder = {onCreateListInFolder(folder._id)}
+                                         onSelect = {onSelectFolder(folder._id)}
+                                         isLastOpenedFolderID = {lastOpenedFolderID === folder._id}
+                                         isVisibleNewListInput = {isVisibleNewListInput}
+                                         onVisibleNewList = {onVisibleNewList}
                             />
                   })  
                 }
@@ -86,7 +91,7 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
                                 />
                     })
                 }
-                {isVisibleNewListInput && 
+                {isVisibleNewListInput && !lastOpenedFolderID &&
                     <CreateNewList onVisibleNewList = {onVisibleNewList} onSave = {onSaveNewList} onVisible = {onVisibleNewList} />}
                 {isVisibleNewFolderInput &&
                     <CreateNewFolder onSave = {onSaveNewFolder} onVisible = {onVisibleNewFolder} />}
@@ -99,7 +104,7 @@ export function Bar({tasksLists, currentTheme, isVisibleInMobVer}) {
                 <button onClick = {onVisibleNewList} class="bar-section__add-new-folder-btn">
                     <BsClipboard className = {classNames('bar-section__add-new-list-icon', {'bar-section__add-new-list-icon_active': isVisibleNewListInput})} />
                 </button>
-            </div>
+            </div>                
 
             
         </section>

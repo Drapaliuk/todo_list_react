@@ -7,7 +7,7 @@ import { CHANGE_TASK, CHANGE_TASKS_LIST_SETTINGS,
          CREATE_TASK, SELECT_SUBTASK, SELECT_TASK, SELECT_TASKS_LIST,
          UPDATE_SUBTASK, CREATE_COMMENT, DELETE_COMMENT,
          SELECT_APP_LIST, UPDATE_TASKS_LIST, SEARCH_BY_LETTERS,
-         CREATE_FOLDER, CREATE_LIST_IN_FOLDER, SELECT_LIST_FROM_FOLDER } from "../../actions_types"
+         CREATE_FOLDER, CREATE_LIST_IN_FOLDER, SELECT_LIST_FROM_FOLDER, SELECT_FOLDER } from "../../actions_types"
 
 
 
@@ -24,7 +24,7 @@ const initialState = {
     isSelectedAppList: true,
     searchByLettersPattern: '',
     isSelectedListFromFolder: false, 
-    selectedFolderID: ''
+    lastOpenedFolderID: ''
 
 }
 
@@ -94,6 +94,12 @@ export const organizer = (prevState = initialState, action) => {
                 draftState.isSelectedAppList = false
                 draftState.isSelectedListFromFolder = true
                 draftState.selectedFolderID = payload.folderID
+            })
+        
+        case SELECT_FOLDER:
+            return produce(prevState, draftState => {
+                const isTheSameFolderID = draftState.lastOpenedFolderID === payload.folderID
+                draftState.lastOpenedFolderID = isTheSameFolderID ? '' : payload.folderID
             })
 
         case CREATE_FOLDER:
@@ -191,19 +197,13 @@ export const organizer = (prevState = initialState, action) => {
             }
 
         case CHANGE_TASKS_LIST_SETTINGS:
+            
             return produce(prevState, draftState => {
+                const {listId, folderID} = payload;
                 console.log('payload', payload)
                 const [key, value] = Object.entries(payload.changedValue)[0]
-
-                if(defaultTasksListsIds.hasOwnProperty(payload.listId)) {
-                    draftState.defaultTasksLists[payload.listId].settings[key] = value
-                    return 
-                }
-
-                draftState.userTasksLists = changeListById(draftState.userTasksLists, payload.listId, selectedList => {
-                    selectedList.settings[key] = value
-                    return selectedList
-                } )
+                const {settings} = ReducerSelector.getList(draftState, folderID, listId)
+                settings[key] = value
             })
             
 
@@ -233,18 +233,6 @@ export const organizer = (prevState = initialState, action) => {
                 
                 const updatedSubtask = ReducerSelector.getSubTask(draftState, folderID, listId, taskId, subtaskId)
                 updatedSubtask[key] = value
-
-                // if(listId === defaultTasksListsIds.DEFAULT_LIST__today) {
-                //     const selectedTask = draftState.defaultTasksLists[listId].tasks.find(task => task._id === taskId)
-                //     const updatedSubtask = selectedTask.subtasks.find(subtask => subtask._id === subtaskId)
-                //     updatedSubtask[key] = value
-                //     return
-                // }
-
-                // draftState.userTasksLists = changeSubTaskById(draftState.userTasksLists, listId, taskId, subtaskId, selectedSubtask => {
-                //     selectedSubtask[key] = value
-                //     return selectedSubtask
-                // })
             })
            
 

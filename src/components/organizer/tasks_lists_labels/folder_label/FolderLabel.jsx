@@ -7,15 +7,21 @@ import { CreateNewList } from '../create_new_list/CreateNewList'
 
 
 export function FolderLabel(props) {
-    const {tasksLists, onSelectListFromFolder, selectedUserListId,
-           openedEditListId, setOpenEditListId, name, onCreateListInFolder} = props
-    const [isOpen, setOpen] = React.useState(false) 
-    const [isVisibleNewListInput, setVisibleNewListInput] = React.useState(false)
-    const onFolderOpen = () => setOpen(!isOpen)
-    const onVisibleNewList = () => setVisibleNewListInput(!isVisibleNewListInput)
+    const {tasksLists, onSelectListFromFolder, selectedUserListId, onSelect,
+           openedEditListId, setOpenEditListId, name, isVisibleNewListInput,
+           onCreateListInFolder, isLastOpenedFolderID, onVisibleNewList} = props
 
+
+
+    const [isOpen, setOpen] = React.useState(false) 
+    const onFolderOpen = () => setOpen(!isOpen)
+    const selectFolderHandler = () => {
+        // if(!isOpen) {
+            onSelect()
+        // }
+    }
     return (
-        <li class="bar-section__labels-list-item bar-section__labels-list-item_folder_wrapper">
+        <li onClick = {selectFolderHandler} class="bar-section__labels-list-item bar-section__labels-list-item_folder_wrapper">
             <div onClick = {onFolderOpen} class="todo-lists-folder todo-list-label todo-list-label_with_correct_btn">
                 {isOpen ? <FcOpenedFolder className="todo-list-label__icon" />
                         : <FcFolder className="todo-list-label__icon" />}
@@ -47,10 +53,10 @@ export function FolderLabel(props) {
                 })}
             </ul>
 
-            {isVisibleNewListInput && 
+            {isVisibleNewListInput && isLastOpenedFolderID && 
              <CreateNewList onSave = {onCreateListInFolder} onVisible = {onVisibleNewList} />}
-            <button className = 'folder__add-new-list' onClick = {onVisibleNewList}>+</button>
 
+            {/* <button className = 'folder__add-new-list' onClick = {onVisibleNewList}>+</button> */}
             </>
             }
 

@@ -1,7 +1,7 @@
-import { createSelector } from "reselect";
-import { defaultTasksListsIds,  } from "../../../service";
-import { appListsData } from "../../../service/app_lists_data/app_lists_data";
-import { sortHandler, ReducerSelector, StateTool } from "../../../utils";
+import { createSelector } from "reselect"
+import { defaultTasksListsIds,  } from "../../../service"
+import { appListsData } from "../../../service/app_lists_data/app_lists_data"
+import { sortHandler, ReducerSelector, StateTool } from "../../../utils"
 
 const isCreatedTasksLists = state => state.organizer.userTasksLists.length > 0;
 const isSelectedDefaultAppList = state => state.organizer.isSelectedAppList;
@@ -9,33 +9,22 @@ const getCurrentDefaultListId = state => state.organizer.selectedAppListId;
 const getSelectedListTasks = state => getSelectedListProperty(state, 'tasks');
 const getUserTasksLists = state => state.organizer.userTasksLists;
 const getDefaultListTasks = state => state.organizer.defaultTasksLists[defaultTasksListsIds.DEFAULT_LIST__today].tasks;
-const getSelectedDefaultListId = state => state.organizer.selectedAppListId
-const getSelectedUserListId = state => state.organizer.selectedListId;
-const getDefaultTasksLists = state => state.organizer.defaultTasksLists
 const throwParams = (state, params) => params
+const getFolderID = state => state.organizer.selectedFolderID
+const getSelectedListID = ({organizer}) => organizer.selectedAppListId || organizer.selectedListId
+const getStatePart = state => state.organizer
 
 export const getSelectedListSettings = createSelector(
-    [isSelectedDefaultAppList, isCreatedTasksLists,
-     getDefaultTasksLists,
-     getSelectedDefaultListId, getSelectedUserListId,
-     getDefaultListTasks, getUserTasksLists, throwParams], 
-    (isSelectedDefaultAppList, isCreatedTasksLists,
-     defaultTasksLists,
-     selectedDefaultListId, selectedUserListId,
-     defaultListTasks, userTasksLists, property) => {
+    [isCreatedTasksLists, throwParams,
+     getSelectedListID, getStatePart, getFolderID], 
+    (isCreatedTasksLists, property,
+    selectedListID, statePart, folderID) => {
 
-    if(isSelectedDefaultAppList) {
-        if(!property) return defaultListTasks.settings
-        return defaultTasksLists[selectedDefaultListId].settings[property]
-    }
+    const selectedList = ReducerSelector.getList(statePart, folderID, selectedListID)
 
-    if(!isCreatedTasksLists) return;
-
-    const selectedUserList = userTasksLists.find(list => list._id === selectedUserListId);
-
-    if(!selectedUserList) return false
-    if(!property) return selectedUserList.settings
-    return selectedUserList.settings[property]
+    if(!isCreatedTasksLists || !selectedList) return
+    if(!property) return selectedList.settings
+    return selectedList.settings[property]
 })
 
 const getCurrentSortCriteria = state => getSelectedListSettings(state, 'sort');
@@ -115,18 +104,6 @@ const getSearchByLettersPattern = state => state.organizer.searchByLettersPatter
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 export const getTasks = createSelector(
     [ getUserTasksLists, getDefaultListTasks,
       getCurrentSortCriteria, isSelectedDefaultAppList,
@@ -135,7 +112,7 @@ export const getTasks = createSelector(
       isSelectedDefaultAppList, currentDefaultListId, selectedListTasks, searchByLettersPattern ) => {
     
     
-        const {sortBy, order} = currentSortCriteria
+    const {sortBy, order} = currentSortCriteria
     const forTaskSort = sortHandler(sortBy, order, searchByLettersPattern)
     let separatedTasks;
 
@@ -195,20 +172,10 @@ export const getSelectedTaskProperty = (state, property) => {
     if(!isCreatedTasksLists(state)) return
 
     const selectedTask = StateTool.getTask(state, selectedFolderID, selectedListId, selectedTaskId)
+    // const selectedTask = ReducerSelector.getTask(state.organizer, selectedFolderID, selectedListId, selectedTaskId)
+
+    console.log('selectedTask', selectedTask)
     if(!selectedTask) return 
     if(!property) return selectedTask
     return selectedTask[property]
-
-
-    // if(defaultTasksListsIds.DEFAULT_LIST__today === selectedListId) {
-    //     const foundList = state.organizer.defaultTasksLists[defaultTasksListsIds.DEFAULT_LIST__today]
-    //     if(!foundList) return 
-    //     const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
-    //     if(!property) return selectedTask
-    //     return selectedTask[property]
-    // }
-
-    // const foundList = state.organizer.userTasksLists.find(list => list._id === selectedListId)
-    // const selectedTask = foundList.tasks.find(task => task._id === selectedTaskId)
-
 }

@@ -18,7 +18,8 @@ import { INITIALIZED_TASKS,
          UPDATE_FOLDER,
          INSERT_LIST_TO_FOLDER,
          CREATE_LIST_IN_FOLDER,
-         SELECT_LIST_FROM_FOLDER
+         SELECT_LIST_FROM_FOLDER,
+         SELECT_FOLDER
         } from "../../actions_types";
 
 export const initializeTasks = payload => ({type: INITIALIZED_TASKS, payload})
@@ -55,13 +56,13 @@ export const changeTask = (selectedListId, selectedTaskId, newValue, folderID) =
 
 export const selectTask = (taskId, selectedListId) => ({type: SELECT_TASK, payload: {taskId, selectedListId}});
 
-export const changeListSettings = (selectedListId, newValue) => async dispatch => {
-    const {data: payload} = await listsAPI.changeSettings(selectedListId, newValue)
+export const changeListSettings = (selectedListId, newValue, folderID) => async dispatch => {
+    const {data: payload} = await listsAPI.changeSettings(selectedListId, newValue, folderID)
     dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload})
 }
 
-export const searchTaskByLetters = (listId, changedValue) => async dispatch => {
-    dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload: {listId, changedValue}})
+export const searchTaskByLetters = (listId, changedValue, folderID) => async dispatch => {
+    dispatch({type: CHANGE_TASKS_LIST_SETTINGS, payload: {listId, changedValue, folderID}})
 }
 
 export const defaultTasks = () => ({type: DEFAULT_TASKS});
@@ -86,6 +87,8 @@ export const deleteFolder = folderID => async dispatch => {
     const {data: payload} = (await folderAPI.delete(folderID));
     return dispatch({type: DELETE_FOLDER, payload})
 }
+
+export const selectFolder = folderID => ({type: SELECT_FOLDER, payload: {folderID} })
 
 export const insertListToFolder = (selectedFolderID, insertedListID) => async dispatch => {
     const {data: payload} = (await folderAPI.insertList(selectedFolderID, insertedListID));

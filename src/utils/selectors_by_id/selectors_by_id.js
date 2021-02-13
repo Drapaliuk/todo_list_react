@@ -15,12 +15,13 @@ export class ReducerSelector {
     }
 
     static getList(statePart, folderID, listID) {
+        console.log('statePart', statePart)
         if(this.isDefaultAppList(listID)) {
             return this.getDefaultAppList(statePart, listID)
         }
 
         if(!folderID) {
-            return statePart.userTasksLists.find(({_id}) => _id === listID)
+            return statePart?.userTasksLists?.find(({_id}) => _id === listID)
         }
 
         return this.getFolder(statePart, folderID).tasksLists.find(({_id}) => _id === listID)
